@@ -1,0 +1,8 @@
+1、 模块说明
+   sys 系统管理
+   ptarget 年度计划指标
+   pkpi 月度绩效考核指标
+   basic 基础数据
+   report 报表
+   
+ 

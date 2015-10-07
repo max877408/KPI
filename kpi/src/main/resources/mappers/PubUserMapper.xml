@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fantasia.dao.PubUserMapper">
+	<resultMap id="BaseResultMap" type="com.fantasia.bean.PubUser">
+		<id column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="dept_id" property="deptId" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		<result column="job_level" property="jobLevel" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="pingying" property="pingying" jdbcType="VARCHAR" />
+		<result column="ipingying" property="ipingying" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="is_charge" property="isCharge" jdbcType="CHAR" />
+		<result column="status" property="status" jdbcType="CHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="getUsers"  resultMap="BaseResultMap">
+		SELECT
+			d.dept_name AS dept_id,
+			p.position,
+			p.job_level,
+			p.user_name,
+			p.pingying,
+			p.ipingying,
+			p.phone,
+			CASE
+		WHEN p.is_charge = '0' THEN
+			'否'
+		WHEN p.is_charge = '1' THEN
+			'是'
+		END AS is_charge
+		FROM
+			pub_user p
+		LEFT JOIN pub_dept d ON d.ID = p.dept_id
+		WHERE
+			p. STATUS = 1
+		ORDER BY
+			p.dept_id
+		LIMIT #{0} ,#{1}
+	</select>
+
+	<insert id="saveUser" parameterType="com.fantasia.bean.PubUser">
+		insert into pub_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="deptId != null">
+				dept_id,
+			</if>
+			<if test="position != null">
+				position,
+			</if>
+			<if test="jobLevel != null">
+				job_level,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="pingying != null">
+				pingying,
+			</if>
+			<if test="ipingying != null">
+				ipingying,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="isCharge != null">
+				is_charge,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="modifyBy != null">
+				modify_by,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="deptId != null">
+				#{deptId,jdbcType=VARCHAR},
+			</if>
+			<if test="position != null">
+				#{position,jdbcType=VARCHAR},
+			</if>
+			<if test="jobLevel != null">
+				#{jobLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="pingying != null">
+				#{pingying,jdbcType=VARCHAR},
+			</if>
+			<if test="ipingying != null">
+				#{ipingying,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="isCharge != null">
+				#{isCharge,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=CHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				#{modifyBy,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateUser" parameterType="com.fantasia.bean.PubUser">
+		update pub_user
+		<set>
+			<if test="deptId != null">
+				dept_id = #{deptId,jdbcType=VARCHAR},
+			</if>
+			<if test="position != null">
+				position = #{position,jdbcType=VARCHAR},
+			</if>
+			<if test="jobLevel != null">
+				job_level = #{jobLevel,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="pingying != null">
+				pingying = #{pingying,jdbcType=VARCHAR},
+			</if>
+			<if test="ipingying != null">
+				ipingying = #{ipingying,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="isCharge != null">
+				is_charge = #{isCharge,jdbcType=CHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=CHAR},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=VARCHAR},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+
+</mapper>

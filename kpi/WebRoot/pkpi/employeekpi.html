@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+
+<link rel="stylesheet" href="../themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/icon.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/color.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/demo.css" type="text/css"></link>
+
+<script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../scripts/pkpi/employeekpi.js?time=New Date()"></script>
+</head>
+<body>
+	<div id="tb" style="padding:2px 5px; padding-top:12px !important; height:40px">
+		<table cellpadding="5">
+           	<tr>
+                <td>关键任务:</td>
+                <td>	                   	
+               	   <input class="easyui-textbox" style="width:180px">
+                </td>
+                <td>年份：</td>
+                <td>
+                	<select class="easyui-combobox" panelHeight="auto"
+						style="width:100px" name="kpiYear">
+						<option value="2014">2014</option>
+						<option value="2015" selected="selected">2015</option>
+						<option value="2016">2016</option>
+						<option value="2017">2017</option>
+						<option value="2018">2018</option>
+					</select>
+                </td>
+                <td>月份：</td>
+                <td>
+                	<select class="easyui-combobox" panelHeight="auto"
+						style="width:100px" name="kpiMonth">
+						<option value="9">9</option>
+						<option value="10" selected="selected">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+					</select>
+                </td>
+                <td><a href="#" class="easyui-linkbutton" iconCls="icon-search">查找</a></td>
+            </tr>
+         </table>	
+		
+	</div>
+	
+	<table id="dg_list" title="员工月度绩效考核方案" class="easyui-datagrid" 
+		 toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="false" singleSelect="true">
+		<thead data-options="frozen:true">
+            <tr>
+                <th field="id"hidden="true">id</th>		
+                <th field="keyTask" width="150px">关键任务</th>
+				<th field="keyItem" width="150px">主要事项</th>
+				<th field="detailItem" width="150px">具体事项</th>	
+				<th field="keyPoint" width="150px" >关键节点(部门)</th>	
+            </tr>
+        </thead>
+		<thead>
+			<tr>
+				<th field="workStage" width="250px" data-options="styler:cellStyler">考核指标名称</th>	
+				<th field="weight" width="80px" >权重</th>
+				<th field="content" width="250px">目标值</th>				
+				<th field="standard" width="250px">衡量标准</th>				
+				<th field="responsiblePerson" width="100px">责任人</th>
+				<th field="kpiMonth" width="80px">月份</th>												
+			</tr>
+		</thead>
+	</table>
+
+	<div id="toolbar">		
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-edit" plain="true" onclick="editEmployeeKpi()">新增</a>
+	    <a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-remove" plain="true" onclick="">删除</a>
+	</div> 
+
+	<div id="dlg" class="easyui-dialog"
+		style="width:900px;height:550px;padding:1px 2px" closed="true"
+		buttons="#dlg-buttons">
+
+		<form id="fm" method="post" novalidate>			
+			
+		   <table cellpadding="5">
+	            	<tr>
+	                    <td>具体事项:</td>
+	                    <td colspan="3">	                   	
+	                   	 <input type="text" name="detailItem" class="easyui-textbox" readonly="readonly">
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>关键节点:</td>
+	                    <td colspan="3"> 
+	                      <input type="text" name="keyPoint" class="easyui-textbox" readonly="readonly">	                      
+	                   	</td>
+	                </tr>
+	                
+	                 <tr>
+	                    <td>开始日期:</td>
+	                    <td > 	                     
+	                       <input type="text" name="startTime" class="easyui-textbox" readonly="readonly">
+	                   	</td>
+	                   	 <td>结束日期:</td>
+	                    <td > 	                      
+	                      <input type="text" name="endTime" class="easyui-textbox" readonly="readonly">
+	                   	</td>
+	                </tr>	                
+	         </table>
+	         <br/>
+
+			<table id="dg_add" title="请在下面列表中填写工作阶段" rownumbers="true" data-options="
+                iconCls: 'icon-edit',
+                singleSelect: true,               
+                onClickCell: onClickCell"
+				style="width:800px;height:350px;">
+				<thead>
+					<tr>
+						<th data-options="field:'workStage',width:180,editor:'text'">工作阶段</th>
+						<th data-options="field:'taskDivision',width:120,
+		                        formatter:function(value,row){
+		                            return row.taskDivision;
+		                        },
+		                        editor:{
+		                            type:'combobox',
+		                            options:{
+		                                valueField:'userName',
+		                                textField:'userName',
+		                                method:'get',
+		                                multiple:true,
+		                                url:'../user/queryUser.action',
+		                                required:false
+		                            }
+		                        }">任务分工</th>
+						<th data-options="field:'workContent',width:150,editor:'text'">阶段工作内容</th>
+						<th data-options="field:'stageResult',width:150,editor:'text'">阶段成果</th>
+						<th data-options="field:'startTime',width:100,editor:'datebox'">开始日期</th>
+						<th data-options="field:'endTime',width:100,editor:'datebox'">结束日期</th>
+					</tr>
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+	
+	<div id="dlg-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton c6"
+			iconCls="icon-ok" onclick="saveEmployeeKpi()" style="width:90px">保存</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')"
+			style="width:90px">取消</a>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+    
+	<!-- 要调用的工作类(tokenTimeOutJob是com.excegroup.core.TokenTimeOutJob的实例化) -->
+	<!-- <bean id="tokenTimeOutJob" class="com.excegroup.core.TokenTimeOutJob"></bean>
+	
+	<bean id="subscribeTimeOutJob" class="com.excegroup.core.SubscribeTimeOutJob"></bean>
+	
+	定义调用对象和调用对象的方法
+	<bean id="jobtask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		调用的类(targetObject是固定写法,tokenTimeOutJob是要调用的对象)
+		<property name="targetObject">
+			<ref bean="tokenTimeOutJob" />
+		</property>
+		调用类中的方法(targetMethod是固定写法,work是要调用的方法)
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	定义触发时间
+	<bean id="doTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		需要定时调度的任务(jobtask为调度工厂)
+		<property name="jobDetail">
+			<ref bean="jobtask" />
+		</property>
+		cron表达式,每5分钟执行一次  0 0/5 * * * ?
+		<property name="cronExpression">
+			<value>0 0 0/1 * * ?</value>
+		</property>
+	</bean>
+	总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序
+	<bean id="startQuertz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		触发需要执行的时间计划
+		<property name="triggers">
+			<list>
+				<ref bean="doTime" />
+			</list>
+		</property>
+	</bean> -->
+</beans>

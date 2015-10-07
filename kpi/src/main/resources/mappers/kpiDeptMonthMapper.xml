@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fantasia.dao.kpiDeptMonthMapper" >
+  <resultMap id="BaseResultMap" type="com.fantasia.bean.kpiDeptMonth" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="kpi_id" property="kpiId" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="VARCHAR" />
+    <result column="year_target" property="yearTarget" jdbcType="VARCHAR" />
+    <result column="standard" property="standard" jdbcType="VARCHAR" />
+    <result column="kpi_month" property="kpiMonth" jdbcType="INTEGER" />
+    <result column="kpi_year" jdbcType="INTEGER" property="kpiYear" />
+    <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
+    <result column="finish_value" property="finishValue" jdbcType="DOUBLE" />
+    <result column="finish_desc" property="finishDesc" jdbcType="VARCHAR" />
+    <result column="seft_score" property="seftScore" jdbcType="DOUBLE" />
+    <result column="exam_score" property="examScore" jdbcType="DOUBLE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_score" property="isScore" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="DeptMonthMap" type="com.fantasia.bean.KpiDeptMonthBean" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="key_task" property="keyTask" jdbcType="VARCHAR" />
+    <result column="key_item" property="keyItem" jdbcType="VARCHAR" />
+    <result column="detail_item" property="detailItem" jdbcType="VARCHAR" />
+    <result column="dept" property="dept" jdbcType="VARCHAR" />
+    <result column="ower" property="ower" jdbcType="VARCHAR" />
+    
+    <result column="dept_kpi_id" property="deptKpiId" jdbcType="VARCHAR" />
+    <result column="key_point" property="keyPoint" jdbcType="VARCHAR" />
+    <result column="lead_person" property="leadPerson" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />  
+   
+    <result column="kpi_id" property="kpiId" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="VARCHAR" />
+    <result column="year_target" property="yearTarget" jdbcType="VARCHAR" />
+    <result column="standard" property="standard" jdbcType="VARCHAR" />
+    <result column="kpi_month" property="kpiMonth" jdbcType="INTEGER" />
+    <result column="kpi_year" jdbcType="INTEGER" property="kpiYear" />
+    <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
+    <result column="finish_value" property="finishValue" jdbcType="DOUBLE" />
+    <result column="finish_desc" property="finishDesc" jdbcType="VARCHAR" />
+    <result column="seft_score" property="seftScore" jdbcType="DOUBLE" />
+    <result column="exam_score" property="examScore" jdbcType="DOUBLE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_score" property="isScore" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="getKpiDeptMonth"  resultMap="DeptMonthMap">		
+	SELECT
+		M.ID,
+		G.KEY_TASK,
+		G.KEY_ITEM,
+		G.DETAIL_ITEM,
+		D.KEY_POINT,
+		M.WEIGHT,
+		M.YEAR_TARGET,
+		M.STANDARD,
+		M.KPI_MONTH,
+		M.KPI_YEAR,
+		Y.RESPONSIBLE_PERSON
+	FROM
+		KPI_DEPT_MONTH M
+	LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON M.KPI_ID = D.ID
+	LEFT JOIN KPI_DEPT_YEAR Y ON D.DEPT_KPI_ID = Y.ID
+	LEFT JOIN KPI_GROUP_YEAR G ON Y.GROUP_ID = G.ID
+	WHERE M.KPI_YEAR = #{0} AND  M.KPI_MONTH = #{1} AND M.`STATUS` = '1' 
+	ORDER BY M.CREATE_TIME DESC,D.KEY_POINT
+	LIMIT #{2} ,#{3}
+  </select>
+
+  <insert id="insert" parameterType="com.fantasia.bean.kpiDeptMonth" >
+    insert into kpi_dept_month
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="kpiId != null" >
+        kpi_id,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="yearTarget != null" >
+        year_target,
+      </if>
+      <if test="standard != null" >
+        standard,
+      </if>
+      <if test="kpiMonth != null" >
+        kpi_month,
+      </if>
+      <if test="kpiYear != null" >
+        kpi_year,
+      </if>
+      <if test="responsiblePerson != null" >
+        responsible_person,
+      </if>
+      <if test="finishValue != null" >
+        finish_value,
+      </if>
+      <if test="finishDesc != null" >
+        finish_desc,
+      </if>
+      <if test="seftScore != null" >
+        seft_score,
+      </if>
+      <if test="examScore != null" >
+        exam_score,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isScore != null" >
+        is_score,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="kpiId != null" >
+        #{kpiId,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="yearTarget != null" >
+        #{yearTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="standard != null" >
+        #{standard,jdbcType=VARCHAR},
+      </if>
+      <if test="kpiMonth != null" >
+        #{kpiMonth,jdbcType=INTEGER},
+      </if>
+      <if test="kpiYear != null" >
+        #{kpiYear,jdbcType=INTEGER},
+      </if>
+      <if test="responsiblePerson != null" >
+        #{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="finishValue != null" >
+        #{finishValue,jdbcType=DOUBLE},
+      </if>
+      <if test="finishDesc != null" >
+        #{finishDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="seftScore != null" >
+        #{seftScore,jdbcType=DOUBLE},
+      </if>
+      <if test="examScore != null" >
+        #{examScore,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isScore != null" >
+        #{isScore,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.fantasia.bean.kpiDeptMonth" >
+    update kpi_dept_month
+    <set >
+      <if test="kpiId != null" >
+        kpi_id = #{kpiId,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="yearTarget != null" >
+        year_target = #{yearTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="standard != null" >
+        standard = #{standard,jdbcType=VARCHAR},
+      </if>
+      <if test="kpiMonth != null" >
+        kpi_month = #{kpiMonth,jdbcType=INTEGER},
+      </if>
+      <if test="kpiYear != null" >
+        kpi_year = #{kpiYear,jdbcType=INTEGER},
+      </if>
+      <if test="responsiblePerson != null" >
+        responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="finishValue != null" >
+        finish_value = #{finishValue,jdbcType=DOUBLE},
+      </if>
+      <if test="finishDesc != null" >
+        finish_desc = #{finishDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="seftScore != null" >
+        seft_score = #{seftScore,jdbcType=DOUBLE},
+      </if>
+      <if test="examScore != null" >
+        exam_score = #{examScore,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isScore != null" >
+        is_score = #{isScore,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=DATE},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

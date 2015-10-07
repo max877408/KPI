@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    
+	<link rel="stylesheet" href="../themes/gray/easyui.css" type="text/css"></link>
+	<link rel="stylesheet" href="../themes/icon.css" type="text/css"></link>
+	<link rel="stylesheet" href="../themes/color.css" type="text/css"></link>
+	<link rel="stylesheet" href="../css/demo.css" type="text/css"></link>
+	
+	
+	<script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
+	<script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
+</head>
+<body>    
+    <table id="dg" title="用户列表" class="easyui-datagrid" style="width:100%;height:100%"
+            url="http://www.jeasyui.com/demo/main/get_users.php"
+            toolbar="#toolbar" pagination="true"
+            rownumbers="true" fitColumns="false" singleSelect="true">
+        <thead>
+            <tr>
+                <th field="username" width="150px">用户名</th>
+                <th field="dept" width="150px">部门</th>
+                <th field="position" width="150px">职位</th>
+                <th field="Phone" width="150px">邮箱</th>
+                <th field="Email" width="150px">电话</th>
+               
+            </tr>
+        </thead>
+    </table>
+ 
+    
+    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+            closed="true" >
+        
+    </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+
+<link rel="stylesheet" href="../themes/gray/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/icon.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/color.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/demo.css" type="text/css"></link>
+
+
+<script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../scripts/sys/role.js?time=New Date()"></script>
+</head>
+<body>
+	<table id="tt" class="easyui-datagrid"   toolbar="#toolbar" striped="true"
+		url="../user/getUser" title="角色列表" 
+		rownumbers="true" pagination="true">
+		<thead>
+			<tr>				
+				<th field="id" hidden="true">id</th>
+				<th field="position" width="180" >角色名</th>
+				<th field="jobLevel" width="250" >描述</th>
+				<th field="userName" width="150" align="center">状态</th>	
+				<th field="userName" width="150" align="center">创建人</th>
+				<th field="userName" width="150" align="center">创建时间</th>	
+			</tr>
+		</thead>
+	</table>
+	
+	<div id="toolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-add" plain="true" onclick="newKpi()">新增</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-edit" plain="true" onclick="editKpi()">修改</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-remove" plain="true" onclick="destroyKpi()">删除</a> 
+	</div>
+</body>

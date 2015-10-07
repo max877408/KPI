@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+
+<link rel="stylesheet" href="../themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/icon.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/color.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/demo.css" type="text/css"></link>
+
+<script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../scripts/pkpi/deptkpi.js?time=New Date()"></script>
+</head>
+<body>
+	<div id="tb"
+		style="padding:2px 5px; padding-top:12px !important; height:40px">
+		
+		 <table cellpadding="5">
+           	<tr>
+                <td>关键任务:</td>
+                <td>	                   	
+               	   <input class="easyui-textbox" style="width:180px">
+                </td>
+                <td>年份：</td>
+                <td>
+                	<select class="easyui-combobox" panelHeight="auto"
+						style="width:100px" name="kpiYear">
+						<option value="2014">2014</option>
+						<option value="2015" selected="selected">2015</option>
+						<option value="2016">2016</option>
+						<option value="2017">2017</option>
+						<option value="2018">2018</option>
+					</select>
+                </td>
+                <td>月份：</td>
+                <td>
+                	<select class="easyui-combobox" panelHeight="auto"
+						style="width:100px" name="kpiMonth">
+						<option value="9">9</option>
+						<option value="10" selected="selected">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+					</select>
+                </td>
+                <td><a href="#" class="easyui-linkbutton" iconCls="icon-search">查找</a></td>
+            </tr>
+         </table>	
+		
+	</div>
+	
+	<table id="dg_list" title="部门月度考核方案" class="easyui-datagrid" 
+		 toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="false" singleSelect="true">
+		<thead data-options="frozen:true">
+            <tr>
+                <th field="id"hidden="true">id</th>
+				<th field="keyTask" width="150px">关键任务</th>
+				<th field="keyItem" width="150px">主要事项</th>
+				<th field="detailItem" width="150px">具体事项</th>
+				<th field="keyPoint" width="180px">考核指标名称</th>
+            </tr>
+        </thead>
+		<thead>
+			<tr>			
+				<th field="weight" width="80px" >权重</th>
+				<th field="content" width="250px">目标值</th>				
+				<th field="standard" width="250px">衡量标准</th>				
+				<th field="responsiblePerson" width="100px">责任人</th>
+				<th field="kpiMonth" width="80px">月份</th>						
+			</tr>
+		</thead>	
+	
+	</table>
+
+	<div id="toolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-add" plain="true" onclick="newDeptKpi()">新增</a>		
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-remove" plain="true" onclick="destroyDeptKpi()">删除</a> 
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-save" plain="true" onclick="newDeptKpi()">提交</a>
+	</div> 
+
+	<div id="dlg" class="easyui-dialog"
+		style="width:800px;height:550px;padding:10px 10px" closed="true"
+		buttons="#dlg-buttons">
+
+		<form id="fm" method="post" novalidate>
+
+			<div class="easyui-panel" title="基本信息" style="width:700px">
+				<input type="hidden" name="id">
+				<div style="padding:10px 60px 20px 60px">
+					<table cellpadding="5">
+						<tr>
+							<td>关键任务:</td>
+							<td colspan="3"><input
+								class="easyui-textbox easyui-validatebox" name="keyTask"
+								data-options="multiline:true,required:true"
+								style="height:35px;width:400px"> </input></td>
+						</tr>
+						<tr>
+							<td>主要事项:</td>
+							<td colspan="3"><input class="easyui-textbox" name="keyItem"
+								data-options="multiline:true,required:true"
+								style="height:35px;width:400px"> </input></td>
+						</tr>
+						<tr>
+							<td>具体事项:</td>
+							<td colspan="3"><input class="easyui-textbox" name="detailItem"
+								data-options="multiline:true,required:true"
+								style="height:35px;width:400px"> </input></td>
+						</tr>
+						<tr>
+							<td>开始日期:</td>
+							<td><input class="easyui-datebox" type="text" name="startTime"
+								data-options="required:true,editor:'datebox'"></input>
+							</td>
+							<td>结束日期:</td>
+							<td><input class="easyui-datebox" type="text" name="endTime"
+								data-options="required:true,editor:'datebox'"></input>
+							</td>							
+						</tr>						
+						
+						<tr>
+							<td>难度系数:</td>
+							<td><select class="easyui-combobox" name="difficulty"
+								style="width:150px" data-options="required:true">
+									<option value="☆">☆</option>
+									<option value="☆☆">☆☆</option>
+									<option value="☆☆☆" selected="selected">☆☆☆</option>
+							</select></td>
+							<td>权重:</td>
+							<td><input class="easyui-textbox" type="text" name="weight"
+								data-options="required:true"></input>
+							</td>
+						</tr>
+						<tr>							
+							<td>项目等级:</td>
+							<td colspan="3">
+							  <input class="easyui-textbox" type="text" name="projectLevel"
+								data-options="required:true" style="height:45px;width:400px"></input>
+							</td>							
+						</tr>
+						<tr>
+							<td>指标内容及相关说明:</td>
+							<td colspan="3"><input class="easyui-textbox" name="content"
+								data-options="multiline:true,required:true" style="height:45px;width:400px">
+								</input></td>
+						</tr>
+						<tr>
+							<td>年度目标:</td>
+							<td colspan="3"><input class="easyui-textbox" name="yearTarget"
+								data-options="multiline:true,required:true" style="height:45px;width:400px">
+								</input></td>
+						</tr>
+						<tr>
+							<td>衡量标准:</td>
+							<td colspan="3"><input class="easyui-textbox" name="standard"
+								data-options="multiline:true,required:true" style="height:45px;width:400px">
+								</input></td>
+						</tr>
+					</table>
+
+				</div>
+			</div>
+
+			<br />
+			<table id="dg_add" title="请在下面列表中填写关键节点" rownumbers="true" 
+				data-options="
+                iconCls: 'icon-edit',              
+                singleSelect: true,               
+                onClickCell: onClickCell"
+				style="width:700px;height:350px">
+				<thead>
+					<tr>
+						<th data-options="field:'keyPoint',width:250,editor:'text'">关键节点</th>						
+						<th
+							data-options="field:'leadPerson',width:150,
+		                        formatter:function(value,row){
+		                            return row.leadPerson;
+		                        },
+		                        editor:{
+		                            type:'combobox',
+		                            options:{
+		                                valueField:'userName',
+		                                textField:'userName',
+		                                method:'get',
+		                                multiple:true,
+		                                url:'../user/queryUser.action',
+		                                required:false
+		                            }
+		                        }">牵头人</th>
+						<th data-options="field:'startTime',width:100,editor:'datebox'">开始日期</th>
+						<th data-options="field:'endTime',width:100,editor:'datebox'">结束日期</th>
+
+					</tr>
+					</tr>
+				</thead>
+			</table>		 
+		</form>
+	</div>
+	
+	<div id="dlg-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton c6"
+			iconCls="icon-ok" onclick="saveDeptKpi()" style="width:90px">保存</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')"
+			style="width:90px">取消</a>
+	</div>
+
+</body>
+</html>

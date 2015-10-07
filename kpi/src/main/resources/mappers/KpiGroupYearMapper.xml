@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fantasia.dao.KpiGroupYearMapper" >
+  <resultMap id="BaseResultMap" type="com.fantasia.bean.KpiGroupYear" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="key_task" property="keyTask" jdbcType="VARCHAR" />
+    <result column="key_item" property="keyItem" jdbcType="VARCHAR" />
+    <result column="detail_item" property="detailItem" jdbcType="VARCHAR" />
+    <result column="dept" property="dept" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="ower" property="ower" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <select id="getKpiGroup"  resultMap="BaseResultMap">
+		SELECT
+			*			
+		FROM
+			kpi_group_year p	
+		WHERE
+			p. STATUS = 1
+		ORDER BY
+			p.create_time DESC,key_item
+		LIMIT #{0} ,#{1}
+	</select>
+  
+  <insert id="insert" parameterType="com.fantasia.bean.KpiGroupYear" >
+    insert into kpi_group_year
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="keyTask != null" >
+        key_task,
+      </if>
+      <if test="keyItem != null" >
+        key_item,
+      </if>
+      <if test="detailItem != null" >
+        detail_item,
+      </if>
+      <if test="dept != null" >
+        dept,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="ower != null" >
+        ower,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="keyTask != null" >
+        #{keyTask,jdbcType=VARCHAR},
+      </if>
+      <if test="keyItem != null" >
+        #{keyItem,jdbcType=VARCHAR},
+      </if>
+      <if test="detailItem != null" >
+        #{detailItem,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ower != null" >
+        #{ower,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.fantasia.bean.KpiGroupYear" >
+    update kpi_group_year
+    <set >
+      <if test="keyTask != null" >
+        key_task = #{keyTask,jdbcType=VARCHAR},
+      </if>
+      <if test="keyItem != null" >
+        key_item = #{keyItem,jdbcType=VARCHAR},
+      </if>
+      <if test="detailItem != null" >
+        detail_item = #{detailItem,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        dept = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ower != null" >
+        ower = #{ower,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

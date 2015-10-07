@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fantasia.dao.KpiEmployeeYearMapper" >
+  <resultMap id="BaseResultMap" type="com.fantasia.bean.KpiEmployeeYear" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="kpi_id" property="kpiId" jdbcType="VARCHAR" />
+    <result column="work_stage" property="workStage" jdbcType="VARCHAR" />
+    <result column="task_division" property="taskDivision" jdbcType="VARCHAR" />
+    <result column="work_content" property="workContent" jdbcType="VARCHAR" />
+    <result column="stage_result" property="stageResult" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="EmployeeMap" type="com.fantasia.bean.KpiEmployeeYearBean" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="key_task" property="keyTask" jdbcType="VARCHAR" />
+    <result column="key_item" property="keyItem" jdbcType="VARCHAR" />
+    <result column="detail_item" property="detailItem" jdbcType="VARCHAR" />
+    <result column="dept" property="dept" jdbcType="VARCHAR" />  
+    <result column="ower" property="ower" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="group_id" property="groupId" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="year_target" property="yearTarget" jdbcType="VARCHAR" />
+    <result column="standard" property="standard" jdbcType="VARCHAR" />
+    <result column="project_level" property="projectLevel" jdbcType="VARCHAR" />
+    <result column="difficulty" property="difficulty" jdbcType="VARCHAR" />
+    <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
+    <result column="dept_kpi_id" property="deptKpiId" jdbcType="VARCHAR" />
+    <result column="key_point" property="keyPoint" jdbcType="VARCHAR" />
+    <result column="lead_person" property="leadPerson" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <select id="getKpiEmployee"  resultMap="EmployeeMap">
+		SELECT
+			d.*, y.group_id,
+			y.weight,
+			y.content,
+			y.year_target,
+			y.standard,
+			y.project_level,
+			y.difficulty,
+			y.responsible_person,
+			p.key_task,
+		    p.key_item,
+		    p.detail_item
+		FROM
+			kpi_dept_year_detail d
+		LEFT JOIN kpi_dept_year y ON d.dept_kpi_id = y.id
+		LEFT JOIN kpi_group_year p ON p.ID = y.group_id
+		ORDER BY d.create_time DESC
+		LIMIT #{0} ,#{1}
+  </select>
+  
+  <select id="getKpiEmployeeById"  resultMap="EmployeeMap">
+  	  SELECT
+			d.*, y.group_id,
+			y.weight,
+			y.content,
+			y.year_target,
+			y.standard,
+			y.project_level,
+			y.difficulty,
+			y.responsible_person,
+			p.key_task,
+		    p.key_item,
+		    p.detail_item
+		FROM
+			kpi_dept_year_detail d
+		LEFT JOIN kpi_dept_year y ON d.dept_kpi_id = y.id
+		LEFT JOIN kpi_group_year p ON p.ID = y.group_id
+		WHERE
+			p.STATUS = 1 and d.id = #{0}
+		ORDER BY d.create_time DESC			
+	</select>
+
+  <select id="getKpiEmployeeDetail"  resultMap="BaseResultMap">
+		SELECT
+			y.*
+		FROM
+			kpi_employee_year y		
+		WHERE
+			y.STATUS = 1 and y.kpi_id = #{0}
+		ORDER BY y.create_time DESC		
+  </select>
+   
+  <insert id="insert" parameterType="com.fantasia.bean.KpiEmployeeYear" >
+    insert into kpi_employee_year
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="kpiId != null" >
+        kpi_id,
+      </if>
+      <if test="workStage != null" >
+        work_stage,
+      </if>
+      <if test="taskDivision != null" >
+        task_division,
+      </if>
+      <if test="workContent != null" >
+        work_content,
+      </if>
+      <if test="stageResult != null" >
+        stage_result,
+      </if>
+     <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="kpiId != null" >
+        #{kpiId,jdbcType=VARCHAR},
+      </if>
+      <if test="workStage != null" >
+        #{workStage,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDivision != null" >
+        #{taskDivision,jdbcType=VARCHAR},
+      </if>
+      <if test="workContent != null" >
+        #{workContent,jdbcType=VARCHAR},
+      </if>
+      <if test="stageResult != null" >
+        #{stageResult,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="update" parameterType="com.fantasia.bean.KpiEmployeeYear" >
+    update kpi_employee_year
+    <set >
+      <if test="kpiId != null" >
+        kpi_id = #{kpiId,jdbcType=VARCHAR},
+      </if>
+      <if test="workStage != null" >
+        work_stage = #{workStage,jdbcType=VARCHAR},
+      </if>
+      <if test="taskDivision != null" >
+        task_division = #{taskDivision,jdbcType=VARCHAR},
+      </if>
+      <if test="workContent != null" >
+        work_content = #{workContent,jdbcType=VARCHAR},
+      </if>
+      <if test="stageResult != null" >
+        stage_result = #{stageResult,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>
