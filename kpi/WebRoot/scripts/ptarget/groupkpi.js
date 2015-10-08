@@ -184,16 +184,45 @@
 		}
 		$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
 		
-		$('#dlg').dialog('open').dialog('center').dialog('setTitle',
-		'新增年度关键任务');
+		$('#dlg').dialog('open').dialog('center').dialog('setTitle','新增年度关键任务');
 		$('#fm').form('clear');
 		
 	}
+	
+	var dg_index = 1;
 	function editKpi() {
 		var row = $('#dg_list').datagrid('getSelected');
-		if (row) {
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle',
-					'编辑年度关键任务');
+		if (row) {			
+			
+			$('#dg_add').datagrid({
+				 striped: true, //行背景交换
+				 url:"../kpiYear/getKpiGroupList.action?keyTask=" + row.keyTask,
+				 onLoadSuccess : function(data) {
+					 if(data.rows.length == 0 && dg_index == 1){
+						 dg_index++;
+						//新增默认行	
+						$('#dg_add').datagrid('loadData', { total: 0, rows: [] }); 
+						var data_add = [];
+						for(var i =1 ; i<= 9; i++){
+							data_add.push({
+								"id" :"",
+								"keyItem" : "",
+								"detailItem":"",	
+								"dept":"",
+								"startTime" : "",
+								"endTime" : ""
+							})
+						}
+						$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
+						dg_index = 1;
+					 }
+					 else{
+						 //alert('11111111');
+					 }								
+				 }
+			});
+			
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑年度关键任务');
 			$('#fm').form('load', row);			
 		}
 	}
@@ -288,5 +317,5 @@
 						}
 					});
 		}
-	}	
+	}
 	

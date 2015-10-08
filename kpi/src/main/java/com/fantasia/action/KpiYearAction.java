@@ -112,6 +112,29 @@ public class KpiYearAction extends BaseAction {
 	}
 	
 	/**
+	 * 获取关键任务列表
+	 * @param keyTask
+	 * @return
+	 */
+	@RequestMapping(value = "/getKpiGroupList")
+	@ResponseBody
+	public List<KpiGroupYear> getKpiGroupList(String keyTask){
+		return kpiDeptGroupService.getKpiGroupList(keyTask);
+	}
+	
+	/**
+	 * 查询关键任务列表
+	 * @param keyTask
+	 * @param year
+	 * @return
+	 */
+	@RequestMapping(value = "/searchKpiGroupList")
+	@ResponseBody
+	public List<KpiGroupYear> searchKpiGroupList(String keyTask,String year){
+		return kpiDeptGroupService.searchKpiGroupList(keyTask, year);
+	}
+	
+	/**
 	 * 删除集团绩效考核指标
 	 * @param id
 	 * @return

@@ -17,6 +17,21 @@ public interface KpiGroupService {
 	public ResultData getKpiGroup(PageData page);
 	
 	/**
+	 * 获取关键任务列表
+	 * @param keyTask
+	 * @return
+	 */
+	public List<KpiGroupYear> getKpiGroupList(String keyTask);
+	
+	/**
+	 * 查询关键任务列表
+	 * @param keyTask
+	 * @param year
+	 * @return
+	 */
+	public List<KpiGroupYear> searchKpiGroupList(String keyTask,String year);
+	
+	/**
 	 * 新增集团绩效考核指标
 	 * @param list
 	 */
