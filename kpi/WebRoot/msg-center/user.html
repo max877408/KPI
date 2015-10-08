@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+
+<link rel="stylesheet" href="../themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/icon.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/color.css" type="text/css"></link>
+<link rel="stylesheet" href="../css/demo.css" type="text/css"></link>
+
+
+<script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
+</head>
+<body>
+	<table id="tt" class="easyui-datagrid" 
+		url="../user/getUser" title="用户列表" 
+		rownumbers="true" pagination="true"  striped="true">
+		<thead>
+			<tr>				
+				<th field="deptId" width="200">部门</th>
+				<th field="position" width="180" >岗位</th>
+				<th field="jobLevel" width="180" >职级</th>
+				<th field="userName" width="160" align="center">姓名</th>
+				<th field="phone" width="200">手机</th>				
+				<th field="isCharge" width="160" align="center">是否部门负责人</th>		
+			</tr>
+		</thead>
+	</table>
+	<script type="text/javascript">
+	
+		$(function(){
+		   $('#tt').datagrid({
+		   		pageSize:20,
+		   		loadmsg:'正在加载,请稍后....',
+				onLoadSuccess : function(data) {
+					onLoadSuccess(data);					
+				}
+			});
+	
+			//合并单元格
+			function onLoadSuccess(data) {
+			/* 	var merges = [ {
+					index : 0,
+					rowspan : 3
+				}, {
+					index : 3,
+					rowspan : 3
+				} ]; */
+				var merges = [];
+				
+				var deptId = '';
+				var rows = 0;
+				var index = 0;
+				$(data.rows).each(function(i){
+					if(i == 0){
+						deptId = this.deptId;
+					}
+					else{
+						if(deptId == this.deptId){
+							rows++;
+						}
+						else{
+							merges.push({index:index,rowspan:rows+1});
+							deptId = this.deptId;
+							index = index + rows + 1;
+							rows = 0;							
+						}
+						
+						//行结束
+						if(i == data.rows.length - 1){
+							merges.push({index:index,rowspan:rows+1});
+						}
+					}					
+				});
+				
+				
+				for ( var i = 0; i < merges.length; i++) {
+					$('#tt').datagrid('mergeCells', {
+						index : merges[i].index,
+						field : 'deptId',
+						rowspan : merges[i].rowspan
+					});
+				}
+			}
+		});
+		
+        function changeP(){
+            var dg = $('#tt');
+            dg.datagrid('loadData',[]);
+            dg.datagrid({pagePosition:$('#p-pos').val()});
+            dg.datagrid('getPager').pagination({
+                layout:['list','sep','first','prev','sep',$('#p-style').val(),'sep','next','last','sep','refresh']
+            });
+        }
+    </script>
+</body>
