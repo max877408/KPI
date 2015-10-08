@@ -158,4 +158,9 @@
     where ID = #{id,jdbcType=VARCHAR}
   </update>
  
+  <delete id="DeleteKpiGroup" parameterType="java.lang.String">
+    delete from kpi_group_year
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  
 </mapper>

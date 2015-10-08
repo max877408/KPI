@@ -185,17 +185,16 @@
 		$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
 		
 		$('#dlg').dialog('open').dialog('center').dialog('setTitle',
-		'新增集团绩效考核指标');
+		'新增年度关键任务');
 		$('#fm').form('clear');
 		
 	}
 	function editKpi() {
-		var row = $('#dlg').datagrid('getSelected');
+		var row = $('#dg_list').datagrid('getSelected');
 		if (row) {
 			$('#dlg').dialog('open').dialog('center').dialog('setTitle',
-					'Edit User');
-			$('#fm').form('load', row);
-			url = 'update_user.php?id=' + row.id;
+					'编辑年度关键任务');
+			$('#fm').form('load', row);			
 		}
 	}
 	
@@ -263,40 +262,21 @@
 					$.messager.alert("提示", "提交错误了！");
 				});
 			}			
-		}
-		//return false;
-		/*$('#fm').form('submit', {
-			url : url,
-			onSubmit : function() {
-				return $(this).form('validate');
-			},
-			success : function(result) {
-				var result = eval('(' + result + ')');
-				if (result.code == "000") {
-					$('#dlg').dialog('close'); // close the dialog
-					$('#dg_list').datagrid('reload'); // reload the user data
-					
-				} else {
-					$.messager.show({
-						title : 'Error',
-						msg : result.errorMsg
-					});
-				}
-			}
-		});*/
+		}	
 	}
 	
 	function destroyKpi() {
 		var row = $('#dg_list').datagrid('getSelected');
 		if (row) {
 			$.messager.confirm('确认',
-					'你确定要删除当前的集团绩效考核指标吗?',
+					'你确定要删除当前的年度关键任务吗?',
 					function(r) {
 						if (r) {
 							$.post('../kpiYear/delKpiGroup.action', {
 								id : row.id
 							}, function(result) {
 								if (result.code == "000") {
+									$.messager.alert("提示", "删除成功！");
 									$('#dg_list').datagrid('reload'); // reload the user data
 								} else {
 									$.messager.show({ // show error message
