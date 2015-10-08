@@ -11,7 +11,27 @@
     <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <insert id="insertSelective" parameterType="com.fantasia.bean.PubRole" >
+  
+  <select id="queryRoleList"  resultMap="BaseResultMap">
+		SELECT
+			p.ID,
+			p.role,
+			p.description,
+			CASE
+		WHEN p. STATUS = '0' THEN
+			'禁用'
+		WHEN p. STATUS = '1' THEN
+			'启用'
+		END AS STATUS
+		FROM
+			pub_role p
+		WHERE
+			p. STATUS = 1
+		ORDER BY
+			p.create_time DESC
+  </select>
+  
+  <insert id="insert" parameterType="com.fantasia.bean.PubRole" >
     insert into pub_role
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -67,7 +87,7 @@
     </trim>
   </insert>
  
-  <update id="updateByPrimaryKeySelective" parameterType="com.fantasia.bean.PubRole" >
+  <update id="update" parameterType="com.fantasia.bean.PubRole" >
     update pub_role
     <set >
       <if test="role != null" >

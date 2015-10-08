@@ -1,18 +1,20 @@
 package com.fantasia.dao;
 
+import java.util.List;
+
 import com.fantasia.bean.PubRole;
 
 public interface PubRoleMapper {
    
     int deleteByPrimaryKey(String id);
 
-    int insert(PubRole record);
+    int insert(PubRole record);   
 
-    int insertSelective(PubRole record);
-  
-    PubRole selectByPrimaryKey(String id);
-  
-    int updateByPrimaryKeySelective(PubRole record);
-
-    int updateByPrimaryKey(PubRole record);
+    int update(PubRole record);
+    
+    /**
+	 * 查询角色列表
+	 * @return
+	 */
+	public List<PubRole> queryRoleList();
 }
