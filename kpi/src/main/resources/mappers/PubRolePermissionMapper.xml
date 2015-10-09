@@ -12,6 +12,18 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
    
+   
+   <select id="getRolePermission"  resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			pub_role_permission p
+		WHERE
+			p. STATUS = 1 and p.role_id = #{0}
+		ORDER BY
+			p.create_time DESC
+  </select>
+   
   <insert id="insert" parameterType="com.fantasia.bean.PubRolePermission" >
     insert into pub_role_permission
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -98,6 +110,6 @@
  
   <delete id="delete" parameterType="java.lang.String">
     delete from pub_role_permission
-    where ID = #{id,jdbcType=VARCHAR}
+    where role_id = #{roleId,jdbcType=VARCHAR}
   </delete>
 </mapper>

@@ -14,8 +14,19 @@
     <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
+    
+  <select id="queryMenuList"  resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			pub_menu p
+		WHERE
+			p. STATUS = 1
+		ORDER BY
+			p.sort
+  </select>
   
-  <insert id="insertSelective" parameterType="com.fantasia.bean.PubMenu" >
+  <insert id="insert" parameterType="com.fantasia.bean.PubMenu" >
     insert into pub_menu
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -89,7 +100,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="com.fantasia.bean.PubMenu" >
+  <update id="update" parameterType="com.fantasia.bean.PubMenu" >
     update pub_menu
     <set >
       <if test="menuName != null" >

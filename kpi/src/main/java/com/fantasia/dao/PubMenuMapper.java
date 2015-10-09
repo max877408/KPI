@@ -1,16 +1,16 @@
 package com.fantasia.dao;
 
+import java.util.List;
+
 import com.fantasia.bean.PubMenu;
 
-public interface PubMenuMapper {  
+public interface PubMenuMapper {
 
-    int deleteByPrimaryKey(String id);
-    int insert(PubMenu record);
-    int insertSelective(PubMenu record);
+	int delete(String id);
 
-    PubMenu selectByPrimaryKey(String id);
- 
-    int updateByPrimaryKeySelective(PubMenu record);
+	int insert(PubMenu record);
 
-    int updateByPrimaryKey(PubMenu record);
+	int update(PubMenu record);
+	
+	public List<PubMenu> queryMenuList();
 }

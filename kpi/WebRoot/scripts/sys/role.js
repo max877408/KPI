@@ -1,3 +1,6 @@
+	$(function(){
+		//$("#dlg_permission").
+	});
 	
 	/*
 	 * 工具条菜单栏目
@@ -10,7 +13,7 @@
 	
 	function saveRole(){
 		$('#fm').form('submit', {
-			url : "../sys/saveRole",
+			url : "../role/saveRole",
 			onSubmit : function() {
 				return $(this).form('validate');
 			},
@@ -34,6 +37,7 @@
 	function editRole() {
 		var row = $('#role_list').datagrid('getSelected');
 		if (row) {
+			
 			$('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑角色');
 			$('#fm').form('load', row);			
 		}
@@ -46,10 +50,11 @@
 					'你确定要删除当前的角色吗?',
 					function(r) {
 						if (r) {
-							$.post('../kpiYear/delKpiGroup.action', {
+							$.post('../role/delRole.action', {
 								id : row.id
 							}, function(result) {
 								if (result.code == "000") {
+									$.messager.alert("提示", "删除成功！");
 									$('#role_list').datagrid('reload'); // reload the user data
 								} else {
 									$.messager.show({ // show error message
@@ -62,3 +67,52 @@
 					});
 		}
 	}
+	
+	/**
+	 * 角色权限
+	 */
+	function rolePermission() {
+		var row = $('#role_list').datagrid('getSelected');
+		if (row) {
+			$.post("../role/getRolePermission.action?roleId="+row.id, function(rsp) {
+				$(rsp).each(function(){					
+				  var node=$('#tt').combotree('tree').tree('find',this.objectCode);
+				  $('#tt').combotree('tree').tree('check',node.target);
+				  //$('#s1').combotree('tree').tree('expandAll', node.target);					
+					
+				})
+			}, "JSON").error(function() {
+				$.messager.alert("提示", "提交错误了！");
+			});
+			
+			$('#dlg_permission').dialog('open').dialog('center').dialog('setTitle','角色权限');
+			$('#fm_per').form('load', row);			
+		}
+	}
+	
+	/**
+	 * 保存角色权限
+	 */
+	function saveRolePermission(){
+        var nodes = $('#tt').tree('getChecked');
+        var perId = '';
+        for(var i=0; i<nodes.length; i++){
+            if (perId != '') perId += ',';
+            perId += nodes[i].id;
+        }   
+        
+        $('#fm_per').form('submit', {
+			url : "../role/saveRolePermission?perId="+perId,			
+			success : function(result) {
+				var result = eval('(' + result + ')');
+				if (result.code == "000") {
+					$.messager.alert("提示", "提交成功！");	
+				} else {
+					$.messager.show({
+						title : 'Error',
+						msg : result.errorMsg
+					});
+				}
+			}
+		});
+    }
