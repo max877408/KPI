@@ -115,4 +115,8 @@
     where ID = #{id,jdbcType=VARCHAR}
   </update>
   
+  <delete id="delete" parameterType="java.lang.String">
+    delete from pub_role
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
 </mapper>

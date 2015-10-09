@@ -27,7 +27,31 @@
 		ORDER BY
 			p.create_time DESC,key_item
 		LIMIT #{0} ,#{1}
-	</select>
+  </select>
+  
+  <select id="getKpiGroupList"  resultMap="BaseResultMap">
+		SELECT
+			*			
+		FROM
+			kpi_group_year p	
+		WHERE
+			p. STATUS = 1 and key_task = #{0}
+		ORDER BY
+			p.create_time DESC
+  </select>
+  
+  <select id="searchKpiGroupList"  resultMap="BaseResultMap">
+		SELECT
+			*			
+		FROM
+			kpi_group_year p	
+		WHERE
+			p. STATUS = 1 and keyTask like '%#{0}%' 
+			and startTime = #{1} and end_time = #{2}
+		ORDER BY
+			p.create_time DESC
+		
+  </select>
   
   <insert id="insert" parameterType="com.fantasia.bean.KpiGroupYear" >
     insert into kpi_group_year
@@ -158,4 +182,9 @@
     where ID = #{id,jdbcType=VARCHAR}
   </update>
  
+  <delete id="DeleteKpiGroup" parameterType="java.lang.String">
+    delete from kpi_group_year
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  
 </mapper>

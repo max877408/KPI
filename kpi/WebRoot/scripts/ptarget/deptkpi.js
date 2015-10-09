@@ -274,17 +274,18 @@
 		}		
 	}
 	function destroyDeptKpi() {
-		var row = $('#dg').datagrid('getSelected');
+		var row = $('#dg_list').datagrid('getSelected');
 		if (row) {
 			$.messager.confirm('Confirm',
-					'Are you sure you want to destroy this user?',
+					'您确定要删除当前部门年度计划吗?',
 					function(r) {
 						if (r) {
-							$.post('destroy_user.php', {
+							$.post('../kpiYear/delKpiGroup.action', {
 								id : row.id
 							}, function(result) {
-								if (result.success) {
-									$('#dg').datagrid('reload'); // reload the user data
+								if (result.code == "000") {
+									$.messager.alert("提示", "删除成功！");
+									$('#dg_list').datagrid('reload'); // reload the user data
 								} else {
 									$.messager.show({ // show error message
 										title : 'Error',

@@ -184,18 +184,46 @@
 		}
 		$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
 		
-		$('#dlg').dialog('open').dialog('center').dialog('setTitle',
-		'新增集团绩效考核指标');
+		$('#dlg').dialog('open').dialog('center').dialog('setTitle','新增年度关键任务');
 		$('#fm').form('clear');
 		
 	}
+	
+	var dg_index = 1;
 	function editKpi() {
-		var row = $('#dlg').datagrid('getSelected');
-		if (row) {
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle',
-					'Edit User');
-			$('#fm').form('load', row);
-			url = 'update_user.php?id=' + row.id;
+		var row = $('#dg_list').datagrid('getSelected');
+		if (row) {			
+			
+			$('#dg_add').datagrid({
+				 striped: true, //行背景交换
+				 url:"../kpiYear/getKpiGroupList.action?keyTask=" + row.keyTask,
+				 onLoadSuccess : function(data) {
+					 if(data.rows.length == 0 && dg_index == 1){
+						 dg_index++;
+						//新增默认行	
+						$('#dg_add').datagrid('loadData', { total: 0, rows: [] }); 
+						var data_add = [];
+						for(var i =1 ; i<= 9; i++){
+							data_add.push({
+								"id" :"",
+								"keyItem" : "",
+								"detailItem":"",	
+								"dept":"",
+								"startTime" : "",
+								"endTime" : ""
+							})
+						}
+						$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
+						dg_index = 1;
+					 }
+					 else{
+						 //alert('11111111');
+					 }								
+				 }
+			});
+			
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑年度关键任务');
+			$('#fm').form('load', row);			
 		}
 	}
 	
@@ -263,40 +291,21 @@
 					$.messager.alert("提示", "提交错误了！");
 				});
 			}			
-		}
-		//return false;
-		/*$('#fm').form('submit', {
-			url : url,
-			onSubmit : function() {
-				return $(this).form('validate');
-			},
-			success : function(result) {
-				var result = eval('(' + result + ')');
-				if (result.code == "000") {
-					$('#dlg').dialog('close'); // close the dialog
-					$('#dg_list').datagrid('reload'); // reload the user data
-					
-				} else {
-					$.messager.show({
-						title : 'Error',
-						msg : result.errorMsg
-					});
-				}
-			}
-		});*/
+		}	
 	}
 	
 	function destroyKpi() {
 		var row = $('#dg_list').datagrid('getSelected');
 		if (row) {
 			$.messager.confirm('确认',
-					'你确定要删除当前的集团绩效考核指标吗?',
+					'你确定要删除当前的年度关键任务吗?',
 					function(r) {
 						if (r) {
 							$.post('../kpiYear/delKpiGroup.action', {
 								id : row.id
 							}, function(result) {
 								if (result.code == "000") {
+									$.messager.alert("提示", "删除成功！");
 									$('#dg_list').datagrid('reload'); // reload the user data
 								} else {
 									$.messager.show({ // show error message
@@ -308,5 +317,5 @@
 						}
 					});
 		}
-	}	
+	}
 	

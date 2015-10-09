@@ -6,7 +6,7 @@ import com.fantasia.bean.PubRole;
 
 public interface PubRoleMapper {
    
-    int deleteByPrimaryKey(String id);
+    int delete(String id);
 
     int insert(PubRole record);   
 

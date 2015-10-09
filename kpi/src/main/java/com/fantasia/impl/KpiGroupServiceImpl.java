@@ -14,6 +14,7 @@ import com.fantasia.core.DbcContext;
 import com.fantasia.core.Utils;
 import com.fantasia.dao.KpiGroupYearMapper;
 import com.fantasia.service.KpiGroupService;
+import com.fantasia.util.StringUtils;
 
 @Service("KpiGroupService")
 public class KpiGroupServiceImpl implements KpiGroupService {
@@ -34,14 +35,44 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 		return data;
 	}
 	
+	/**
+	 * 获取关键任务列表
+	 * @param keyTask
+	 * @return
+	 */
+	@Override
+	public List<KpiGroupYear> getKpiGroupList(String keyTask){
+		return kpiGroupYearMapper.getKpiGroupList(keyTask);
+	}
+	
+	/**
+	 * 查询关键任务列表
+	 * @param keyTask
+	 * @param year
+	 * @return
+	 */
+	@Override
+	public List<KpiGroupYear> searchKpiGroupList(String keyTask,String year){
+		return kpiGroupYearMapper.searchKpiGroupList(keyTask, year);
+	}
+	
 	@Override
 	public void SaveKpiGroup(List<KpiGroupYear> list) {
 		for (KpiGroupYear kpiGroupYear : list) {
-			kpiGroupYear.setId(Utils.getGUID());
-			kpiGroupYear.setCreateBy(DbcContext.getAdminId());
-			kpiGroupYear.setCreateTime(new Date());
+			if(StringUtils.isNotEmpty(kpiGroupYear.getId())){			
+				kpiGroupYear.setModifyBy(DbcContext.getAdminId());
+				kpiGroupYear.setModifyTime(new Date());
 
-			kpiGroupYearMapper.insert(kpiGroupYear);
+				kpiGroupYearMapper.update(kpiGroupYear);
+			}
+			else{
+				kpiGroupYear.setId(Utils.getGUID());
+				kpiGroupYear.setCreateBy(DbcContext.getAdminId());
+				kpiGroupYear.setCreateTime(new Date());
+
+				kpiGroupYearMapper.insert(kpiGroupYear);
+			}
+			
 		}	
 	}
 
