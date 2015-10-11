@@ -14,6 +14,10 @@
 <script type="text/javascript" src="scripts/jquery.easyui.min.js"></script>
 
 <script type="text/javascript">
+   $(function(){
+   	  $(".panel-tool-close").hide();
+   })
+   
 	/**
 	*用户登录
 	*/
@@ -48,7 +52,7 @@
 				<tr style="height:60px">
 					<td>用户名:</td>
 					<td>
-						 <select name="token" class="easyui-combobox" panelHeight="auto" style="width:150px" data-options="required:true,
+						 <select name="token" class="easyui-combobox" panelHeight="auto" style="width:200px" data-options="required:true,
 								url: 'user/queryUser',
 								method: 'get',
 								valueField:'id',
@@ -58,8 +62,8 @@
 				</tr>
 				<tr>
 					<td>密码:</td>
-					<td><input class="easyui-textbox easyui-validatebox" type="password"
-						name="pwd" data-options="required:true"></td>
+					<td><input class="easyui-textbox easyui-validatebox" type="password" value="123456"
+						name="pwd" data-options="required:true" style="width:200px"></td>
 				</tr>
 			</table>
 		</form>

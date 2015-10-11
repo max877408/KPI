@@ -108,7 +108,7 @@ public class KpiYearAction extends BaseAction {
 	@RequestMapping(value = "/getKpiGroup")
 	@ResponseBody
 	public ResultData getKpiGroup(PageData page) throws ServiceException {
-		return kpiDeptGroupService.getKpiGroup(page);
+		return kpiDeptGroupService.getKpiGroup(page);		
 	}
 	
 	/**
