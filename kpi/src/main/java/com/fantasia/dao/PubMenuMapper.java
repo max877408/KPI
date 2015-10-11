@@ -12,5 +12,15 @@ public interface PubMenuMapper {
 
 	int update(PubMenu record);
 	
+	/**
+	 * 获取所有的菜单列表
+	 * @return
+	 */
 	public List<PubMenu> queryMenuList();
+	
+	/**
+	 * 根据用户id获取所有的菜单
+	 * @return
+	 */
+	public List<PubMenu> getMenuList(String userId);
 }

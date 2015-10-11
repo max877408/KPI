@@ -12,7 +12,7 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
-  <select id="queryRoleList"  resultMap="BaseResultMap">
+  <select id="queryRoleList" parameterType="com.fantasia.bean.PubRole"  resultMap="BaseResultMap">
 		SELECT
 			p.ID,
 			p.role,
@@ -25,8 +25,15 @@
 		END AS STATUS
 		FROM
 			pub_role p
-		WHERE
-			p. STATUS = 1
+			
+	   <where>
+			<if test="role != null">
+				role  = #{role}
+			</if>		
+			<if test="status!=null">
+				and p.status= #{status}
+			</if>
+		</where>			
 		ORDER BY
 			p.create_time DESC
   </select>

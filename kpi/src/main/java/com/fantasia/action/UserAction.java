@@ -13,6 +13,9 @@ import com.fantasia.base.bean.ResultData;
 import com.fantasia.base.bean.ResultMsg;
 import com.fantasia.bean.PubDept;
 import com.fantasia.bean.PubUser;
+import com.fantasia.core.CookieTool;
+import com.fantasia.core.UserPermission;
+import com.fantasia.dao.PubUserMapper;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.PubDeptService;
 import com.fantasia.service.PubUserService;
@@ -29,6 +32,9 @@ public class UserAction extends BaseAction {
 	@Autowired
 	private PubDeptService pubDeptService;
 	
+	@Autowired
+	private PubUserMapper pubUserMapper;
+	
 	/**
 	 * 用户登录
 	 * 
@@ -38,10 +44,16 @@ public class UserAction extends BaseAction {
 	 */
 	@RequestMapping(value = "/login")
 	@ResponseBody
-	public ResultMsg login() throws ServiceException {
-		ResultMsg rtnMsg = new ResultMsg();
-
-		return rtnMsg;
+	public ResultMsg login(PubUser user){		
+		
+		PubUser pubUser  = pubUserMapper.queryUser(user.getToken());
+		pubUser.setToken(user.getToken());
+		UserPermission.loginUsers.put(user.getToken(), pubUser);
+		
+		ResultMsg  resultMsg = new ResultMsg();		
+		CookieTool.addCookie(response, "token", user.getToken(), 3600);
+		
+		return resultMsg;
 	}
 	
 	/**
@@ -78,4 +90,18 @@ public class UserAction extends BaseAction {
 	public ResultData getUserInfo(PageData page) throws ServiceException {
 		return userService.getUsers(page);
 	}
+	
+	/**
+	 * 保存用户角色
+	 * @param id 用户ID
+	 * @param roleId
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/saveUserRole")
+	@ResponseBody
+	public ResultMsg saveUserRole(String id,String roleId)  {
+		return userService.saveUserRole(id, roleId);
+	}
+	
 }

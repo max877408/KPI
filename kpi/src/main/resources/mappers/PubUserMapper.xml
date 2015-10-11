@@ -11,15 +11,17 @@
 		<result column="ipingying" property="ipingying" jdbcType="VARCHAR" />
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
 		<result column="is_charge" property="isCharge" jdbcType="CHAR" />
+		<result column="roleId" property="roleId" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="CHAR" />
 		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
 		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
 	</resultMap>
-
-	<select id="getUsers"  resultMap="BaseResultMap">
+	
+	<select id="queryUser"  resultMap="BaseResultMap">
 		SELECT
+			p.ID,
 			d.dept_name AS dept_id,
 			p.position,
 			p.job_level,
@@ -32,12 +34,55 @@
 			'否'
 		WHEN p.is_charge = '1' THEN
 			'是'
-		END AS is_charge
+		END AS is_charge,
+		 pr.role AS roleId,
+		 CASE
+		WHEN p. STATUS = '0' THEN
+			'禁用'
+		WHEN p. STATUS = '1' THEN
+			'启用'
+		END AS STATUS
 		FROM
 			pub_user p
 		LEFT JOIN pub_dept d ON d.ID = p.dept_id
+		LEFT JOIN pub_user_role r ON r.user_id = p.ID
+		LEFT JOIN pub_role pr ON pr.ID = r.role_id
 		WHERE
-			p. STATUS = 1
+			p. STATUS = 1 and p.user_name != '' and p.id = #{0}
+		ORDER BY
+			p.dept_id		
+	</select>
+
+	<select id="getUsers"  resultMap="BaseResultMap">
+		SELECT
+			p.ID,
+			d.dept_name AS dept_id,
+			p.position,
+			p.job_level,
+			p.user_name,
+			p.pingying,
+			p.ipingying,
+			p.phone,
+			CASE
+		WHEN p.is_charge = '0' THEN
+			'否'
+		WHEN p.is_charge = '1' THEN
+			'是'
+		END AS is_charge,
+		 pr.role AS roleId,
+		 CASE
+		WHEN p. STATUS = '0' THEN
+			'禁用'
+		WHEN p. STATUS = '1' THEN
+			'启用'
+		END AS STATUS
+		FROM
+			pub_user p
+		LEFT JOIN pub_dept d ON d.ID = p.dept_id
+		LEFT JOIN pub_user_role r ON r.user_id = p.ID
+		LEFT JOIN pub_role pr ON pr.ID = r.role_id
+		WHERE
+			p. STATUS = 1 and p.user_name != ''
 		ORDER BY
 			p.dept_id
 		LIMIT #{0} ,#{1}

@@ -2,59 +2,65 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>花样年绩效考核系统</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>花样年绩效考核系统</title>
 <link rel="stylesheet" href="css/default.css" type="text/css"></link>
 <link rel="stylesheet" href="themes/default/easyui.css" type="text/css"></link>
 <link rel="stylesheet" href="themes/icon.css" type="text/css"></link>
 
 <script type="text/javascript" src="scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="scripts/data.js"></script>
+<script type="text/javascript" src="scripts/sys/cookie.js"></script>
 <script type="text/javascript" src="scripts/outlook.js"></script>
 
-
 </head>
-<body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
-<noscript>
-<div style=" position:absolute; z-index:100000; height:2046px;top:0px;left:0px; width:100%; background:white; text-align:center;">
-    <img src="images/noscript.gif" alt='抱歉，请开启脚本支持！' />
-</div></noscript>
-    
-  <div region="north" split="true" border="true" class="easyui-panel" style="overflow: hidden; height:40px; background:rgb(210, 224, 242); 
+<body class="easyui-layout" style="overflow-y: hidden" scroll="no">
+	<noscript>
+		<div
+			style=" position:absolute; z-index:100000; height:2046px;top:0px;left:0px; width:100%; background:white; text-align:center;">
+			<img src="images/noscript.gif" alt='抱歉，请开启脚本支持！' />
+		</div>
+	</noscript>
+
+	<div region="north" split="true" border="true" class="easyui-panel"
+		style="overflow: hidden; height:40px; background:rgb(210, 224, 242); 
         line-height:25px; font-family:FangSong">
-        
-        <div style="float:left; padding-top: 8px; padding-left: 10px;font-weight: bolder;letter-spacing: 2px">		
+
+		<div
+			style="float:left; padding-top: 8px; padding-left: 10px;font-weight: bolder;letter-spacing: 2px">
 			<span style="font-size: 18px">花样年绩效考核系统</span>
 		</div>
-		
-		<div style="float: right;padding-top: 10px; padding-right: 10px;font-size:12px;letter-spacing: 2px">
-			<span >欢迎 admin</span>
-			<a href="#" id="loginOut">安全退出</a>
-		</div> 		
-	</div> 	
-	
-   	<div region="south" split="true"
+
+		<div
+			style="float: right;padding-top: 10px; padding-right: 10px;font-size:12px;letter-spacing: 2px">
+			<span id="userName"></span> <a href="login.html" target="_self"
+				id="loginOut" onclick="logout()">安全退出</a>
+		</div>
+	</div>
+
+	<div region="south" split="true"
 		style="height: 30px; background:rgb(210, 224, 242); ">
 		<div class="footer">www.cnfantasia.com 2015-2017 © All Rights
 			Reserved.</div>
 	</div>
-    <div region="west" hide="true" split="true" title="导航菜单" style="width:200px;" id="west">
-    <div id='wnav' class="easyui-accordion" fit="true" border="false">
-		<!--  导航内容 -->
-				
-	</div>
+	<div region="west" hide="true" split="true" title="导航菜单"
+		style="width:200px;" id="west">
+		<div id='wnav' class="easyui-accordion" fit="true" border="false">
+			<!--  导航内容 -->
 
-    </div>
-    <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
-        <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
+		</div>
+
+	</div>
+	<div id="mainPanle" region="center"
+		style="background: #eee; overflow-y:hidden">
+		<div id="tabs" class="easyui-tabs" fit="true" border="false">
 			<div title="欢迎使用" style="padding:20px;overflow:hidden;" id="home">
-				
-			<h1>待处理任务列表</h1>
+
+				<h1>待处理任务列表</h1>
 
 			</div>
 		</div>
-    </div>    
+	</div>
 
 	<div id="mm" class="easyui-menu" style="width:150px;">
 		<div id="mm-tabupdate">刷新</div>

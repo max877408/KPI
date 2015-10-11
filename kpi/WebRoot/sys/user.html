@@ -1,98 +1,77 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title></title>
 
-<link rel="stylesheet" href="../themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="../themes/default/easyui.css"
+	type="text/css"></link>
 <link rel="stylesheet" href="../themes/icon.css" type="text/css"></link>
 <link rel="stylesheet" href="../themes/color.css" type="text/css"></link>
 <link rel="stylesheet" href="../css/demo.css" type="text/css"></link>
 
-
 <script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../scripts/sys/user.js?time=New Date()"></script>
 </head>
 <body>
-	<table id="tt" class="easyui-datagrid" 
+	<table id="tt" class="easyui-datagrid" toolbar="#toolbar"
 		url="../user/getUser" title="用户列表" singleSelect="true"
-		rownumbers="true" pagination="true"  striped="true">
+		rownumbers="true" pagination="true" striped="true">
 		<thead>
-			<tr>				
-				<th field="deptId" width="200">部门</th>
-				<th field="position" width="180" >岗位</th>
-				<th field="jobLevel" width="180" >职级</th>
+			<tr>
+			    <th field="id" hidden="true">id</th>
+			    <th field="roleId" hidden="true">roleId</th>
+				<th field="deptId" width="150">部门</th>
+				<th field="position" width="180">岗位</th>
+				<th field="jobLevel" width="180">职级</th>
 				<th field="userName" width="160" align="center">姓名</th>
-				<th field="phone" width="200">手机</th>				
-				<th field="isCharge" width="160" align="center">是否部门负责人</th>		
+				<th field="phone" width="150">手机</th>
+				<th field="email" width="150">邮箱</th>
+				<th field="status" width="80">状态</th>
+				<th field="isCharge" width="120" align="center">是否部门负责人</th>
 			</tr>
 		</thead>
 	</table>
-	<script type="text/javascript">
+
+	<div id="toolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-save" plain="true" onclick="userRole()">用户角色</a>
+	</div>
 	
-		$(function(){
-		   $('#tt').datagrid({
-		   		pageSize:20,
-		   		loadmsg:'正在加载,请稍后....',
-				onLoadSuccess : function(data) {
-					onLoadSuccess(data);					
-				}
-			});
-	
-			//合并单元格
-			function onLoadSuccess(data) {
-			/* 	var merges = [ {
-					index : 0,
-					rowspan : 3
-				}, {
-					index : 3,
-					rowspan : 3
-				} ]; */
-				var merges = [];
-				
-				var deptId = '';
-				var rows = 0;
-				var index = 0;
-				$(data.rows).each(function(i){
-					if(i == 0){
-						deptId = this.deptId;
-					}
-					else{
-						if(deptId == this.deptId){
-							rows++;
-						}
-						else{
-							merges.push({index:index,rowspan:rows+1});
-							deptId = this.deptId;
-							index = index + rows + 1;
-							rows = 0;							
-						}
-						
-						//行结束
-						if(i == data.rows.length - 1){
-							merges.push({index:index,rowspan:rows+1});
-						}
-					}					
-				});
-				
-				
-				for ( var i = 0; i < merges.length; i++) {
-					$('#tt').datagrid('mergeCells', {
-						index : merges[i].index,
-						field : 'deptId',
-						rowspan : merges[i].rowspan
-					});
-				}
-			}
-		});
-		
-        function changeP(){
-            var dg = $('#tt');
-            dg.datagrid('loadData',[]);
-            dg.datagrid({pagePosition:$('#p-pos').val()});
-            dg.datagrid('getPager').pagination({
-                layout:['list','sep','first','prev','sep',$('#p-style').val(),'sep','next','last','sep','refresh']
-            });
-        }
-    </script>
+	<div id="dlg" class="easyui-dialog"
+		style="width:550px;height:350px;padding:10px 20px" closed="true"
+		buttons="#dlg-buttons">
+
+		<form id="fm" method="post">
+		    <input type="hidden" name="id"> 		
+			<table cellpadding="5">
+				<tr style="height:50px">
+					<td>姓名:</td>
+					<td ><input
+						class="easyui-textbox" name="userName" readonly="readonly"> </input></td>
+				</tr>
+				<tr>
+					<td>角色:</td>
+					<td >
+						 <select name="roleId" class="easyui-combobox" panelHeight="auto" style="width:150px" data-options="required:true,
+								url: '../role/queryRoleList',
+								method: 'get',
+								valueField:'id',
+								textField:'role'">							
+						</select>
+					</td>
+				</tr>
+		    </table>		
+		</form> 
+	</div>
+	<div id="dlg-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton c6"
+			iconCls="icon-ok" onclick="saveUserRole()" style="width:90px">保存</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')"
+			style="width:90px">取消</a>
+	</div>	
 </body>
+</html>

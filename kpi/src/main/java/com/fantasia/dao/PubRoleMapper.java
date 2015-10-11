@@ -16,5 +16,5 @@ public interface PubRoleMapper {
 	 * 查询角色列表
 	 * @return
 	 */
-	public List<PubRole> queryRoleList();
+	public List<PubRole> queryRoleList(PubRole role);
 }

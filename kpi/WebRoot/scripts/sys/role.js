@@ -25,10 +25,7 @@
 					$('#role_list').datagrid('reload'); // reload the user data
 					
 				} else {
-					$.messager.show({
-						title : 'Error',
-						msg : result.errorMsg
-					});
+					$.messager.alert("提示", result.errorMsg);					
 				}
 			}
 		});
@@ -40,6 +37,9 @@
 			
 			$('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑角色');
 			$('#fm').form('load', row);			
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
 		}
 	}
 	
@@ -66,6 +66,9 @@
 						}
 					});
 		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
+		}
 	}
 	
 	/**
@@ -74,19 +77,27 @@
 	function rolePermission() {
 		var row = $('#role_list').datagrid('getSelected');
 		if (row) {
+			
+			//clear tree select
+			var root = $('#tt').tree('getRoot');  
+			$("#tt").tree('uncheck',root.target); 
+			
 			$.post("../role/getRolePermission.action?roleId="+row.id, function(rsp) {
 				$(rsp).each(function(){					
-				  var node=$('#tt').combotree('tree').tree('find',this.objectCode);
-				  $('#tt').combotree('tree').tree('check',node.target);
-				  //$('#s1').combotree('tree').tree('expandAll', node.target);					
+				  var node = $('#tt').tree('find',this.objectCode);
+				  $('#tt').tree('check',node.target);
+				   //$('#s1').combotree('tree').tree('expandAll', node.target);					
 					
 				})
 			}, "JSON").error(function() {
 				$.messager.alert("提示", "提交错误了！");
-			});
-			
+			});					
+				
 			$('#dlg_permission').dialog('open').dialog('center').dialog('setTitle','角色权限');
-			$('#fm_per').form('load', row);			
+			$('#fm_per').form('load', row);	
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
 		}
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -72,7 +73,21 @@ public class CommonInterceptor implements HandlerInterceptor {
 		if (containsUrl(requestUrl)) {
 			_log.info("当前访问URL：" + requestUrl + " 不需要登录认证!");
 		} else {
-			//UserPermission.checkLogin(request.getParameter("token"));
+		
+			Cookie token = CookieTool.getCookieByName(request, "token");
+			if(token != null){
+				Boolean result = UserPermission.checkLogin(token.getValue());
+				if(result == false){
+					response.sendRedirect("login.html");
+					return false;
+				}
+			}
+			else{
+				response.sendRedirect("/kpi/login.html");	
+				response.flushBuffer();
+				return false;
+			}
+			
 		}		
 
 		return true;

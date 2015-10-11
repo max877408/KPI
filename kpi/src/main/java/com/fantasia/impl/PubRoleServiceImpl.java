@@ -1,5 +1,6 @@
 package com.fantasia.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class PubRoleServiceImpl implements PubRoleService{
 	@Autowired
 	private PubRolePermissionMapper pubRolePermissionMapper;
 	
+	/**
+	 * 新增角色
+	 */
 	@Override
 	public void insert(PubRole pubRole) {
 		pubRole.setId(Utils.getGUID());
@@ -33,14 +37,20 @@ public class PubRoleServiceImpl implements PubRoleService{
 		pubRoleMapper.insert(pubRole);		
 	}
 
+	/**
+	 * 更新角色
+	 */
 	@Override
 	public void update(PubRole pubRole) {
 		pubRoleMapper.update(pubRole);			
 	}
 
+	/**
+	 * 查询角色列表
+	 */
 	@Override
-	public List<PubRole> queryRoleList() {
-		return pubRoleMapper.queryRoleList();
+	public List<PubRole> queryRoleList(PubRole role) {
+		return pubRoleMapper.queryRoleList(role);
 	}	
 	
 	/**
@@ -49,6 +59,7 @@ public class PubRoleServiceImpl implements PubRoleService{
 	 */
 	@Override
 	public void delRole(String id){
+		pubRolePermissionMapper.delete(id);
 		pubRoleMapper.delete(id);
 	}
 	
@@ -64,6 +75,7 @@ public class PubRoleServiceImpl implements PubRoleService{
 		if(!StringUtils.isEmpty(perId)){
 			String[] perIds = perId.split(",");
 			
+			List<PubRolePermission> list = new ArrayList<PubRolePermission>();
 			if(perIds != null && perIds.length > 0 ){
 				for (int i = 0; i < perIds.length; i++) {
 					PubRolePermission record = new PubRolePermission();
@@ -73,9 +85,11 @@ public class PubRoleServiceImpl implements PubRoleService{
 					record.setId(Utils.getGUID());
 					record.setCreateBy(DbcContext.getAdminId());
 					record.setCreateTime(new Date());
-					pubRolePermissionMapper.insert(record);
+					list.add(record);
+					//pubRolePermissionMapper.insert(record);
 				}
 			}
+			pubRolePermissionMapper.batchInsert(list);
 		}
 	}
 	

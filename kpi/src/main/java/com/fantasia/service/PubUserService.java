@@ -14,9 +14,10 @@ public interface PubUserService {
 	 * @return 用户列表
 	 */
 	public ResultData getUsers(PageData page);
-	
+
 	/**
 	 * 查询用户信息
+	 * 
 	 * @return
 	 */
 	public List<PubUser> queryUser();
@@ -31,10 +32,18 @@ public interface PubUserService {
 	 */
 	public ResultMsg saveUser(PubUser user);
 
-	
 	/**
 	 * 更新用户
+	 * 
 	 * @param user
 	 */
 	public ResultMsg updateUser(PubUser user);
+
+	/**
+	 * 保存用户角色
+	 * @param id
+	 * @param roleId
+	 * @return
+	 */
+	public ResultMsg saveUserRole(String id, String roleId);
 }

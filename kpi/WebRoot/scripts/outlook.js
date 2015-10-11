@@ -1,25 +1,42 @@
-﻿$(function() {
+﻿_menus = [];
+$(function() {
 	tabClose();
 	tabCloseEven();
 
 	$('#css3menu a').click(function() {
 		$('#css3menu a').removeClass('active');
 		$(this).addClass('active');
-		
-		var d = _menus[$(this).attr('name')];
+
+		// var d = _menus[$(this).attr('name')];
 		Clearnav();
-		addNav(d);
+		addNav(_menus);
 		InitLeftMenu();
 	});
 
 	// 导航菜单绑定初始化
-	$("#wnav").accordion( {
+	$("#wnav").accordion({
 		animate : false
 	});
 
-	var firstMenuName = "basic";
-	addNav(_menus[firstMenuName]);
-	InitLeftMenu();
+	// 获取菜单数据
+	$.post("sys/getMenuList.action", function(data) {
+		var data = eval('(' + data + ')');
+		_menus = data;
+		addNav(data.menus);
+		InitLeftMenu();
+	});
+
+	// 获取用户信息
+	$.post("sys/getUserContext.action", function(data) {
+		var userContext = eval('(' + data + ')');
+		if(userContext.user.userName == ''){
+			window.location.href = "login.html?time=New Date()";
+		}
+		else{
+			$("#userName").text("欢迎您" + userContext.user.userName);
+		}
+	});
+
 });
 
 function Clearnav() {
@@ -68,7 +85,7 @@ function addNav(data) {
 
 // 初始化左侧
 function InitLeftMenu() {
-	
+
 	hoverMenuItem();
 
 	$('#wnav li a').live('click', function() {
@@ -101,7 +118,7 @@ function getIcon(menuid) {
 	var icon = 'icon ';
 	$.each(_menus, function(i, n) {
 		$.each(n, function(j, o) {
-			$.each(o.menus, function(k, m){
+			$.each(o.menus, function(k, m) {
 				if (m.menuid == menuid) {
 					icon += m.icon;
 					return false;
@@ -128,7 +145,8 @@ function addTab(subtitle, url, icon) {
 }
 
 function createFrame(url) {
-	var s = '<iframe scrolling="auto" frameborder="0"  src="' + url + '" style="width:100%;height:100%;"></iframe>';
+	var s = '<iframe scrolling="auto" frameborder="0"  src="' + url
+			+ '" style="width:100%;height:100%;"></iframe>';
 	return s;
 }
 
@@ -221,4 +239,27 @@ function msgShow(title, msgString, msgType) {
 	$.messager.alert(title, msgString, msgType);
 }
 
-
+// 退出登录
+function logout() {
+	var cookies = document.cookie.split(";");
+	for ( var i = 0; i < cookies.length; i++) {
+		var cookie = cookies[i];
+		var eqPos = cookie.indexOf("=");
+		var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+		document.cookie = name
+				+ "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+	}
+	if (cookies.length > 0) {
+		for ( var i = 0; i < cookies.length; i++) {
+			var cookie = cookies[i];
+			var eqPos = cookie.indexOf("=");
+			var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+			var domain = location.host.substr(location.host.indexOf('.'));
+			document.cookie = name
+					+ "=;expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain="
+					+ domain;
+		}
+	}
+	// return false;
+	// clearCookie("token");
+}

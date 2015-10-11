@@ -22,7 +22,15 @@
 			p. STATUS = 1 and p.role_id = #{0}
 		ORDER BY
 			p.create_time DESC
-  </select>
+  </select> 
+	
+  <insert id="batchInsert"  parameterType="java.util.List">  	     
+	    insert into pub_role_permission (id,role_id,object_code,create_by,create_time)  
+	    values 
+	    <foreach collection="list" item="item" index="index" separator="," > 
+	        (#{item.id},#{item.roleId},#{item.objectCode},#{item.createBy},#{item.createTime}) 
+	    </foreach>  
+  </insert> 
    
   <insert id="insert" parameterType="com.fantasia.bean.PubRolePermission" >
     insert into pub_role_permission

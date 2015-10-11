@@ -49,7 +49,7 @@
 			<mvc:mapping path="/**" />
 			<bean  class="com.fantasia.core.CommonInterceptor">
 				<!-- 访问服务不拦截的action -->
-				<property name="ignoresUrl" value="openservice,requestCode,checkCode,login,registerUser,forgetCode,updatePassword,buildSync,file/download"></property>
+				<property name="ignoresUrl" value="login,file/download,.css,.js,.png,queryUser"></property>
 			</bean>
 		</mvc:interceptor>
 	</mvc:interceptors>

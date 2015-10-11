@@ -38,12 +38,21 @@ public class RoleAction extends BaseAction {
 	@ResponseBody
 	public ResultMsg saveRole(PubRole pubRole) {
 		ResultMsg rtnMsg = new ResultMsg();
-		if(StringUtils.isEmpty(pubRole.getId())){
-			pubRoleService.insert(pubRole);
+		
+		List<PubRole> list = pubRoleService.queryRoleList(pubRole);
+		
+		if(list != null && list.size() > 0){
+			rtnMsg.setCode("100");
+			rtnMsg.setErrorMsg("角色已存在!");
 		}
 		else{
-			pubRoleService.update(pubRole);
-		}
+			if(StringUtils.isEmpty(pubRole.getId())){
+				pubRoleService.insert(pubRole);
+			}
+			else{
+				pubRoleService.update(pubRole);
+			}
+		}		
 		
 		return rtnMsg;
 	}
@@ -83,7 +92,7 @@ public class RoleAction extends BaseAction {
 	@RequestMapping(value = "/queryRoleList")
 	@ResponseBody
 	public List<PubRole> queryRoleList() {		
-		List<PubRole> list = pubRoleService.queryRoleList();		
+		List<PubRole> list = pubRoleService.queryRoleList(null);		
 		return list;
 	}
 	

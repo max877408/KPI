@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<title>登录</title>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<link rel="stylesheet" href="themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="themes/icon.css" type="text/css"></link>
+<link rel="stylesheet" href="themes/color.css" type="text/css"></link>
+<link rel="stylesheet" href="css/demo.css" type="text/css"></link>
+
+<script type="text/javascript" src="scripts/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="scripts/jquery.easyui.min.js"></script>
+
+<script type="text/javascript">
+	/**
+	*用户登录
+	*/
+	function login(){
+		$('#fm').form('submit', {
+			url : "user/login",			
+			success : function(result) {
+				var result = eval('(' + result + ')');
+				if (result.code == "000") {
+					$.messager.alert("提示", "提交成功！");	
+					window.location.href = "default.html";	
+				} else {
+					$.messager.show({
+						title : 'Error',
+						msg : result.errorMsg
+					});
+				}
+			}
+		});
+	}
+</script>
+
+</head>
+
+<body>
+	<div id="dlg" class="easyui-dialog" title="用户登录"
+		style="width:500px;height:300px;padding:10px 20px" closed="false"
+		buttons="#dlg-buttons">
+
+		<form id="fm" method="post">			
+			<table cellpadding="5">
+				<tr style="height:60px">
+					<td>用户名:</td>
+					<td>
+						 <select name="token" class="easyui-combobox" panelHeight="auto" style="width:150px" data-options="required:true,
+								url: 'user/queryUser',
+								method: 'get',
+								valueField:'id',
+								textField:'userName'">							
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>密码:</td>
+					<td><input class="easyui-textbox easyui-validatebox" type="password"
+						name="pwd" data-options="required:true"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id="dlg-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton c6"
+			iconCls="icon-ok" onclick="login()" style="width:90px">登录</a>
+	</div>
+
+</body>
+</html>

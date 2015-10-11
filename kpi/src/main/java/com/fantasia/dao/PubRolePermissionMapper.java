@@ -16,6 +16,12 @@ public interface PubRolePermissionMapper {
     int delete(String roleId);
 
     int insert(PubRolePermission record);
+    
+    /**
+     * 批量新增
+     * @param list
+     */
+    public void batchInsert(List<PubRolePermission> list);
 
     int update(PubRolePermission record);
 }

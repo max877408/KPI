@@ -3,6 +3,8 @@ package com.fantasia.bean;
 import java.util.Date;
 
 public class PubUser {
+	private String token;
+	
     private String id;
 
     private String deptId;
@@ -22,8 +24,18 @@ public class PubUser {
     private String isCharge;
 
     private String status;
+    
+    private String roleId;
 
-    private String createBy;
+    public String getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
+
+	private String createBy;
 
     private Date createTime;
 
@@ -142,4 +154,12 @@ public class PubUser {
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 }

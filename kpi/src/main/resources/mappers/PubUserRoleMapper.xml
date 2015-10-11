@@ -12,7 +12,7 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
-  <insert id="insertSelective" parameterType="com.fantasia.bean.PubUserRole" >
+  <insert id="insert" parameterType="com.fantasia.bean.PubUserRole" >
     insert into pub_user_role
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -68,7 +68,7 @@
     </trim>
   </insert>
    
-  <update id="updateByPrimaryKeySelective" parameterType="com.fantasia.bean.PubUserRole" >
+  <update id="update" parameterType="com.fantasia.bean.PubUserRole" >
     update pub_user_role
     <set >
       <if test="roleId != null" >
@@ -95,5 +95,9 @@
     </set>
     where ID = #{id,jdbcType=VARCHAR}
   </update>
-  
+    
+  <delete id="delete" parameterType="java.lang.String">
+    delete from pub_user_role
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
 </mapper>

@@ -12,6 +12,13 @@ public interface PubUserMapper {
 	 * @return 用户列表
 	 */
 	public List<PubUser> getUsers(int start,int rows);
+	
+	/**
+	 * 根据用户id获取用户
+	 * @param id
+	 * @return
+	 */
+	public PubUser queryUser(String id);
 
 	/**
 	 * 保存用户

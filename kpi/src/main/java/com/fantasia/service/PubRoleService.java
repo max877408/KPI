@@ -5,7 +5,7 @@ import java.util.List;
 import com.fantasia.bean.PubRole;
 import com.fantasia.bean.PubRolePermission;
 
-public interface PubRoleService {
+public interface PubRoleService {	
 
 	/**
 	 * 新增角色
@@ -23,7 +23,7 @@ public interface PubRoleService {
 	 * 查询角色列表
 	 * @return
 	 */
-	public List<PubRole> queryRoleList();
+	public List<PubRole> queryRoleList(PubRole role);
 	
 	/**
 	 * 删除角色信息

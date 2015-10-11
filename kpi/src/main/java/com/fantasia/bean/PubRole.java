@@ -9,7 +9,7 @@ public class PubRole {
 
     private String description;
 
-    private String status;
+    private String status = "1";
 
     private String createBy;
 

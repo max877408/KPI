@@ -15,6 +15,48 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
     
+    
+   <select id="getMenuList"  resultMap="BaseResultMap">
+		SELECT
+			*
+		FROM
+			PUB_MENU P
+		WHERE
+			P. STATUS = 1
+		AND P.ID IN (
+			SELECT
+				M.OBJECT_CODE
+			FROM
+				PUB_USER U,
+				PUB_USER_ROLE UR,
+				PUB_ROLE R,
+				PUB_ROLE_PERMISSION M
+			WHERE
+				U.ID = UR.USER_ID
+			AND UR.ROLE_ID = R.ID
+			AND R.ID = M.ROLE_ID
+			AND U.ID = #{0}
+		)
+		or P.ID IN(
+			SELECT pm.parent_menu  from pub_menu pm where pm.id in (
+					SELECT
+					M.OBJECT_CODE
+				FROM
+					PUB_USER U,
+					PUB_USER_ROLE UR,
+					PUB_ROLE R,
+					PUB_ROLE_PERMISSION M
+				WHERE
+					U.ID = UR.USER_ID
+				AND UR.ROLE_ID = R.ID
+				AND R.ID = M.ROLE_ID
+				AND U.ID = #{0}
+		  )
+		)
+		ORDER BY
+		P.SORT
+  </select>
+  
   <select id="queryMenuList"  resultMap="BaseResultMap">
 		SELECT
 			*
