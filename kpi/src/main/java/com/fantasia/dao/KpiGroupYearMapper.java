@@ -2,11 +2,12 @@ package com.fantasia.dao;
 
 import java.util.List;
 
+import com.fantasia.base.bean.PageData;
 import com.fantasia.bean.KpiGroupYear;
 
 public interface KpiGroupYearMapper {
 	
-	public  List<KpiGroupYear> getKpiGroup(int start,int rows);
+	public  List<KpiGroupYear> getKpiGroup(PageData page);
 	
 	/**
 	 * 获取关键任务列表
@@ -26,6 +27,12 @@ public interface KpiGroupYearMapper {
 	public void insert(KpiGroupYear record);
 
 	public void update(KpiGroupYear record);
+	
+	/**
+	 * 任务下发，更新状态
+	 * @param page
+	 */
+	public void updateTask(PageData page);
 	
 	public void DeleteKpiGroup(String id);
 }

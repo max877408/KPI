@@ -47,6 +47,8 @@ public class KpiYearAction extends BaseAction {
 	@Autowired
 	private KpiEmployeeService kpiEmployeeService;
 
+	/***************************** 年度关键任务部分 *********************************/
+	
 	/**
 	 * 保存集团年度计划
 	 * 
@@ -145,6 +147,21 @@ public class KpiYearAction extends BaseAction {
 	public ResultMsg delKpiGroup(String id) throws ServiceException {
 		return kpiDeptGroupService.DeleteKpiGroup(id);
 	}
+	
+	/**
+	 * 年度关键任务下发
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/saveTask")
+	@ResponseBody
+	public ResultMsg saveTask(PageData page)  {
+		return kpiDeptGroupService.saveTask(page);
+	}
+	
+	
+	/***************************** 部门年度计划部分 *********************************/
 	
 	/**
 	 * 查询部门绩效考核指标
@@ -251,6 +268,8 @@ public class KpiYearAction extends BaseAction {
 		return resultMsg;		
 	}
 	
+	
+	/***************************** 员工年度计划部分 *********************************/
 	
 	/**
 	 * 查询员工绩效考核指标

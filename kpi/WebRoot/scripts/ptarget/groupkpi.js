@@ -10,7 +10,10 @@
 			 width: 'auto',
 		     height: 'auto',
 			 onLoadSuccess : function(data) {
-				onLoadSuccess(data);					
+				onLoadSuccess(data);	
+				
+				 var row = $('#dg_list').datagrid('getData').rows[0];
+				 tooBar.menuStatus(row.status);
 			 }
 		});
 		
@@ -190,7 +193,7 @@
 	}
 	
 	var dg_index = 1;
-	function editKpi() {
+	function editKpi(title) {
 		var row = $('#dg_list').datagrid('getSelected');
 		if (row) {			
 			
@@ -198,6 +201,7 @@
 				 striped: true, //行背景交换
 				 url:"../kpiYear/getKpiGroupList.action?keyTask=" + row.keyTask,
 				 onLoadSuccess : function(data) {
+					 tooBar.menuStatus(row.status);
 					 if(data.rows.length == 0 && dg_index == 1){
 						 dg_index++;
 						//新增默认行	
@@ -218,12 +222,15 @@
 					 }
 					 else{
 						 //alert('11111111');
-					 }								
+					 }
 				 }
 			});
 			
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑年度关键任务');
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle',title + '年度关键任务');
 			$('#fm').form('load', row);			
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
 		}
 	}
 	
@@ -317,5 +324,34 @@
 						}
 					});
 		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
+		}
+	}
+	
+	/**
+	 * 任务下发
+	 */
+	function saveTask() {
+		var year = $("select[comboname=kpiYear]").combobox("getValue")
+		$.messager.confirm('确认','任务下发之后,年度关键任务将不可编辑!',
+			function(r) {
+			if (r) {
+				$.post('../kpiYear/saveTask.action', {
+					year : year
+				}, function(result) {
+					if (result.code == "000") {
+						$.messager.alert("提示", "操作成功！");
+						
+						//
+					} else {
+						$.messager.show({ // show error message
+							title : 'Error',
+							msg : result.errorMsg
+						});
+					}
+				}, 'json');
+			}
+		 });
 	}
 	

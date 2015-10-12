@@ -50,4 +50,11 @@ public interface KpiGroupService {
 	 */
 	public ResultMsg DeleteKpiGroup(String id);	
 	
+	/**
+	 * 年度关键任务下发
+	 * @param year
+	 * @return	
+	 */
+	public ResultMsg saveTask(PageData page);
+	
 }

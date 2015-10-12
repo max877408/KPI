@@ -14,6 +14,7 @@
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="../scripts/ptarget/groupkpi.js?time=New Date()"></script>
 <script type="text/javascript" src="../scripts/common/search-tool.js?time=New Date()"></script>
+<script type="text/javascript" src="../scripts/common/toolbar.js?time=New Date()"></script>
 </head>
 <body>
 	<div id="tb" style="padding:2px 5px; padding-top:12px !important; height:40px">
@@ -40,7 +41,8 @@
 		rownumbers="true" fitColumns="false" singleSelect="true">
 		<thead data-options="frozen:true">
             <tr>
-                <th field="id"hidden="true">id</th>
+                <th field="id" hidden="true">id</th>
+                <th field="status" hidden="true">id</th>
 				<th field="keyTask" width="250px">关键任务</th>
 				<th field="keyItem" width="300px">主要事项</th>
             </tr>
@@ -56,14 +58,16 @@
 	</table>
 
 	<div id="toolbar">
-		<a href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-add" plain="true" onclick="newKpi()">新增</a> <a
-			href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-edit" plain="true" onclick="editKpi()">修改</a> <a
-			href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="destroyKpi()">删除</a> <a
-			href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="destroyKpi()">任务下发</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
+			iconCls="icon-add" plain="true" onclick="newKpi()">新增</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
+			iconCls="icon-edit" plain="true" onclick="editKpi('编辑')">编辑</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
+			iconCls="icon-tip" plain="true" onclick="editKpi('查看')">查看</a>
+		<a	href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
+			iconCls="icon-remove" plain="true" onclick="destroyKpi()">删除</a> 
+		<a	href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
+			iconCls="icon-save" plain="true" onclick="saveTask()">任务下发</a>
 	</div>
 
 	<div id="dlg" class="easyui-dialog"
@@ -116,8 +120,8 @@
 	</div>
 	<div id="dlg-buttons">
 		<a href="javascript:void(0)" class="easyui-linkbutton c6"
-			iconCls="icon-ok" onclick="saveKpiGroup()" style="width:90px">保存</a> <a
-			href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-ok" onclick="saveKpiGroup()" style="width:90px">保存</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton"
 			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')"
 			style="width:90px">取消</a>
 	</div>

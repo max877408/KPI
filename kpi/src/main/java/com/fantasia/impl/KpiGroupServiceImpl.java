@@ -18,19 +18,27 @@ import com.fantasia.util.StringUtils;
 
 @Service("KpiGroupService")
 public class KpiGroupServiceImpl implements KpiGroupService {
-
+	
 	@Autowired
 	private KpiGroupYearMapper kpiGroupYearMapper;
+
 
 	@Override
 	public ResultData getKpiGroup(PageData page){
 		ResultData data = new ResultData();
-		int start = (page.getPage() -1) * page.getRows();
-		List<KpiGroupYear> list = kpiGroupYearMapper.getKpiGroup(start,page.getRows());
+		page.setStart((page.getPage() -1) * page.getRows());		
+		
+		List<KpiGroupYear> list = kpiGroupYearMapper.getKpiGroup(page);
 		data.setRows(list);
 		
 		//TotalRows 
-		list = kpiGroupYearMapper.getKpiGroup(0,PageData.MAX_ROWS);	
+		PageData totalPage = new PageData();
+		totalPage.setKeyTask(page.getKeyTask());
+		totalPage.setStartTime(page.getStartTime());
+		totalPage.setEndTime(page.getEndTime());
+		totalPage.setStart(0);
+		totalPage.setRows(PageData.MAX_ROWS);
+		list = kpiGroupYearMapper.getKpiGroup(totalPage);	
 		data.setTotal(list.size());
 		return data;
 	}
@@ -90,6 +98,17 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 	public ResultMsg DeleteKpiGroup(String id) {	
 		ResultMsg msg = new ResultMsg();
 		kpiGroupYearMapper.DeleteKpiGroup(id);
+		return msg;
+	}
+	
+	/**
+	 * 年度关键任务下发
+	 * @param year
+	 * @return	
+	 */
+	public ResultMsg saveTask(PageData page){
+		ResultMsg msg = new ResultMsg();
+		kpiGroupYearMapper.updateTask(page);		
 		return msg;
 	}
 

@@ -17,16 +17,25 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   
-  <select id="getKpiGroup"  resultMap="BaseResultMap">
+  <select id="getKpiGroup" parameterType="com.fantasia.base.bean.PageData"  resultMap="BaseResultMap">
 		SELECT
 			*			
 		FROM
-			kpi_group_year p	
-		WHERE
-			p. STATUS = 1
+			kpi_group_year p
+		<where>			
+			<if test="keyTask != null">
+				and key_task like '%${keyTask}%'
+			</if>			
+			<if test="startTime != null" >
+	        	and start_time &gt;= #{startTime}
+	        </if>
+	        <if test="endTime != null" >
+	        	and end_time &lt;= #{endTime}
+	        </if>
+		</where>			
 		ORDER BY
 			p.create_time DESC,key_item
-		LIMIT #{0} ,#{1}
+		LIMIT #{start} ,#{rows}			
   </select>
   
   <select id="getKpiGroupList"  resultMap="BaseResultMap">
@@ -182,6 +191,12 @@
     where ID = #{id,jdbcType=VARCHAR}
   </update>
  
+   <update id="updateTask" parameterType="com.fantasia.base.bean.PageData" >
+    update kpi_group_year 
+    set status = '2'   
+    where start_time &gt;= #{startTime,jdbcType=VARCHAR} and  end_time &lt;= #{endTime,jdbcType=VARCHAR}
+  </update>
+  
   <delete id="DeleteKpiGroup" parameterType="java.lang.String">
     delete from kpi_group_year
     where ID = #{id,jdbcType=VARCHAR}
