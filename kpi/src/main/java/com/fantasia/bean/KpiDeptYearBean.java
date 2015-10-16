@@ -39,6 +39,8 @@ public class KpiDeptYearBean {
 	private String responsiblePerson;
 
 	private String status;
+	
+	private String auditStatus;
 
 	private String createBy;
 
@@ -54,6 +56,14 @@ public class KpiDeptYearBean {
 
 	public void setKeyTask(String keyTask) {
 		this.keyTask = keyTask;
+	}
+
+	public String getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(String auditStatus) {
+		this.auditStatus = auditStatus;
 	}
 
 	public String getKeyItem() {

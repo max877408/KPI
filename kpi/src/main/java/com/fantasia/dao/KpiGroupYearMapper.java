@@ -29,6 +29,12 @@ public interface KpiGroupYearMapper {
 	public void update(KpiGroupYear record);
 	
 	/**
+	 * 根据部门id更新
+	 * @param record
+	 */
+	public void updateDeptId(KpiGroupYear record);
+	
+	/**
 	 * 任务下发，更新状态
 	 * @param page
 	 */

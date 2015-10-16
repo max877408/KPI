@@ -12,6 +12,7 @@
     <result column="difficulty" property="difficulty" jdbcType="VARCHAR" />
     <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
@@ -28,6 +29,7 @@
     <result column="end_time" property="endTime" jdbcType="VARCHAR" />
     <result column="ower" property="ower" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
@@ -44,25 +46,48 @@
   
    <select id="getKpiDept"  resultMap="DeptMap">
 		SELECT
-			p.*, y.group_id,
+			p.key_task, 
+			p.key_item,
+			p.detail_item,
+			p.dept,
+			p.start_time,
+			p.end_time,
+			y.id,
+		    y.group_id,
 			y.weight,
 			y.content,
 			y.year_target,
 			y.standard,
 			y.project_level,
 			y.difficulty,
-			y.responsible_person
+			y.responsible_person,
+			y.audit_status
 		FROM
 			kpi_group_year p
-		LEFT JOIN kpi_dept_year y ON p.ID = y.group_id		
-		WHERE
-			p. STATUS = 1
+		INNER JOIN kpi_dept_year y ON p.ID = y.group_id	
+		<where>	
+			p.audit_status = '2' AND Y.STATUS = '1'	
+			<if test="keyTask != null">
+				and key_task like '%${keyTask}%'
+			</if>			
+			<if test="startTime != null" >
+	        	and start_time &gt;= #{startTime}
+	        </if>
+	        <if test="endTime != null" >
+	        	and end_time &lt;= #{endTime}
+	        </if>
+	        <if test="deptId != null" >
+	        	and p.dept = #{deptId}
+	        </if>
+	        
+		</where>
+			
 		ORDER BY
 			p.create_time DESC,key_item
-		LIMIT #{0} ,#{1}
+		LIMIT #{start} ,#{rows}	
 	</select>
 	
-	<select id="getKpiDeptById"  resultMap="DeptMap">
+   <select id="getKpiDeptById"  resultMap="DeptMap">
 		SELECT
 			p.*, y.group_id,
 			y.weight,
@@ -76,7 +101,7 @@
 			kpi_group_year p
 		LEFT JOIN kpi_dept_year y ON p.ID = y.group_id	
 		WHERE
-			p.STATUS = 1 and p.id = #{0}
+			p.STATUS = 2 and y.id = #{0}
 		ORDER BY
 			p.create_time DESC,key_item		
 	</select>
@@ -176,10 +201,7 @@
  
   <update id="update" parameterType="com.fantasia.bean.KpiDeptYear" >
     update kpi_dept_year
-    <set >
-      <if test="groupId != null" >
-        group_id = #{groupId,jdbcType=VARCHAR},
-      </if>
+    <set >    
       <if test="weight != null" >
         weight = #{weight,jdbcType=VARCHAR},
       </if>
@@ -204,6 +226,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
       </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=CHAR},
+      </if>
       <if test="createBy != null" >
         create_by = #{createBy,jdbcType=VARCHAR},
       </if>
@@ -217,7 +242,30 @@
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where ID = #{id,jdbcType=VARCHAR}
+    where group_id = #{groupId,jdbcType=VARCHAR}
   </update>
+ 
+  <update id="updateTask" parameterType="com.fantasia.base.bean.PageData" >
+    update kpi_dept_year 
+    set audit_status = '2'   
+    where group_id in(
+    	select id from kpi_group_year
+    	where  start_time &gt;= #{startTime,jdbcType=VARCHAR} and  end_time &lt;= #{endTime,jdbcType=VARCHAR}
+    )   
+  </update>
+ 
+  <delete id="delDeptKpiGroup" parameterType="java.lang.String">
+  <!--   update kpi_group_year
+    set  status = '0' 
+    where id in(
+    	select group_id from  kpi_dept_year  
+    	 where ID = #{id,jdbcType=VARCHAR}
+    ) -->
+    
+    update kpi_dept_year
+    set  status = '0' 
+    where id = #{id,jdbcType=VARCHAR}
+   
+  </delete>
  
 </mapper>

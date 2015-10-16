@@ -42,7 +42,7 @@
 		<thead data-options="frozen:true">
             <tr>
                 <th field="id" hidden="true">id</th>
-                <th field="status" hidden="true">id</th>
+                <th field="auditStatus" hidden="true">auditStatus</th>
 				<th field="keyTask" width="250px">关键任务</th>
 				<th field="keyItem" width="300px">主要事项</th>
             </tr>
@@ -61,9 +61,9 @@
 		<a href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
 			iconCls="icon-add" plain="true" onclick="newKpi()">新增</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
-			iconCls="icon-edit" plain="true" onclick="editKpi('编辑')">编辑</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
-			iconCls="icon-tip" plain="true" onclick="editKpi('查看')">查看</a>
+			iconCls="icon-edit" plain="true" onclick="editKpi()">编辑</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" style="display: none;" 
+			iconCls="icon-ok" plain="true" onclick="viewKpi()" id="view">查看</a>
 		<a	href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
 			iconCls="icon-remove" plain="true" onclick="destroyKpi()">删除</a> 
 		<a	href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"

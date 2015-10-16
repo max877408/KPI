@@ -8,6 +8,8 @@ public class PubUser {
     private String id;
 
     private String deptId;
+    
+    private String deptName;
 
     private String position;
 
@@ -59,7 +61,15 @@ public class PubUser {
         this.deptId = deptId == null ? null : deptId.trim();
     }
 
-    public String getPosition() {
+    public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+	public String getPosition() {
         return position;
     }
 

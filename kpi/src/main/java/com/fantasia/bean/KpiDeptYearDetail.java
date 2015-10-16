@@ -16,8 +16,18 @@ public class KpiDeptYearDetail {
     private String endTime;
 
     private String status;
+    
+    private String auditStatus;
 
-    private String createBy;
+    public String getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(String auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+
+	private String createBy;
 
     private Date createTime;
 

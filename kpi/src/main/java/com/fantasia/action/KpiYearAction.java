@@ -36,7 +36,7 @@ public class KpiYearAction extends BaseAction {
 	private static Logger _log = LoggerFactory.getLogger(KpiYearAction.class);
 
 	@Autowired
-	private KpiGroupService kpiDeptGroupService;
+	private KpiGroupService kpiGroupService;
 	
 	@Autowired
 	private KpiDeptService kpiDeptService; 
@@ -72,7 +72,7 @@ public class KpiYearAction extends BaseAction {
 						listData.getInserted(),
 						new TypeReference<List<KpiGroupYear>>() {
 						});
-				kpiDeptGroupService.SaveKpiGroup(kpiGroups);
+				kpiGroupService.SaveKpiGroup(kpiGroups);
 			}
 
 			if (!StringUtils.isEmpty(listData.getUpdated())) {
@@ -81,7 +81,7 @@ public class KpiYearAction extends BaseAction {
 						listData.getUpdated(),
 						new TypeReference<List<KpiGroupYear>>() {
 						});
-				 kpiDeptGroupService.SaveKpiGroup(kpiGroups);
+				 kpiGroupService.SaveKpiGroup(kpiGroups);
 			}
 
 			if (!StringUtils.isEmpty(listData.getDeleted())) {
@@ -110,7 +110,7 @@ public class KpiYearAction extends BaseAction {
 	@RequestMapping(value = "/getKpiGroup")
 	@ResponseBody
 	public ResultData getKpiGroup(PageData page) throws ServiceException {
-		return kpiDeptGroupService.getKpiGroup(page);		
+		return kpiGroupService.getKpiGroup(page);		
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public class KpiYearAction extends BaseAction {
 	@RequestMapping(value = "/getKpiGroupList")
 	@ResponseBody
 	public List<KpiGroupYear> getKpiGroupList(String keyTask){
-		return kpiDeptGroupService.getKpiGroupList(keyTask);
+		return kpiGroupService.getKpiGroupList(keyTask);
 	}
 	
 	/**
@@ -133,7 +133,7 @@ public class KpiYearAction extends BaseAction {
 	@RequestMapping(value = "/searchKpiGroupList")
 	@ResponseBody
 	public List<KpiGroupYear> searchKpiGroupList(String keyTask,String year){
-		return kpiDeptGroupService.searchKpiGroupList(keyTask, year);
+		return kpiGroupService.searchKpiGroupList(keyTask, year);
 	}
 	
 	/**
@@ -145,7 +145,7 @@ public class KpiYearAction extends BaseAction {
 	@RequestMapping(value = "/delKpiGroup")
 	@ResponseBody
 	public ResultMsg delKpiGroup(String id) throws ServiceException {
-		return kpiDeptGroupService.DeleteKpiGroup(id);
+		return kpiGroupService.DeleteKpiGroup(id);
 	}
 	
 	/**
@@ -157,7 +157,7 @@ public class KpiYearAction extends BaseAction {
 	@RequestMapping(value = "/saveTask")
 	@ResponseBody
 	public ResultMsg saveTask(PageData page)  {
-		return kpiDeptGroupService.saveTask(page);
+		return kpiGroupService.saveTask(page);
 	}
 	
 	
@@ -204,68 +204,36 @@ public class KpiYearAction extends BaseAction {
 	 * @param listData
 	 * @return
 	 * @throws ServiceException
-	 */
-	@SuppressWarnings("unchecked")
+	 */	
 	@RequestMapping(value = "/SaveKpiDept")
 	@ResponseBody
 	public ResultMsg SaveKpiDept(ListData listData) throws ServiceException {
+		return kpiDeptService.SaveKpiDept(listData);				
+	}
+	
 
-		ResultMsg resultMsg = new ResultMsg();
-		String deptKpi = "";
-		ObjectMapper objectMapper = new ObjectMapper();
-		List<KpiDeptYearDetail> kpiDeptDetail = new ArrayList<KpiDeptYearDetail>();
-
-		try {
-			
-			//保存部门绩效相关信息
-			if (!StringUtils.isEmpty(listData.getData())) {
-
-				KpiDeptYearBean kpiBean = objectMapper.readValue(listData.getData(),KpiDeptYearBean.class);
-				deptKpi = kpiDeptService.SaveKpiDept(kpiBean);
-			}
-			
-			/**
-			 * 新增部门绩效明细信息
-			 */
-			if (!StringUtils.isEmpty(listData.getInserted())) {
-
-				kpiDeptDetail = (List<KpiDeptYearDetail>) objectMapper.readValue(
-						listData.getInserted(),
-						new TypeReference<List<KpiDeptYearDetail>>() {
-						});
-				kpiDeptDetailService.SaveKpiDetail(kpiDeptDetail,deptKpi);
-			}
-
-			/**
-			 * 修改部门绩效明细信息
-			 */
-			if (!StringUtils.isEmpty(listData.getUpdated())) {
-
-				kpiDeptDetail = (List<KpiDeptYearDetail>) objectMapper.readValue(
-						listData.getUpdated(),
-						new TypeReference<List<KpiDeptYearDetail>>() {
-						});
-				kpiDeptDetailService.SaveKpiDetail(kpiDeptDetail,deptKpi);
-			}
-
-			/**
-			 * 删除部门绩效明细信息
-			 */
-			if (!StringUtils.isEmpty(listData.getDeleted())) {
-
-				kpiDeptDetail = (List<KpiDeptYearDetail>) objectMapper.readValue(
-						listData.getDeleted(),
-						new TypeReference<List<KpiDeptYearDetail>>() {
-						});
-				 //kpiDeptGroupService.DeleteKpiGroup(kpiGroups);
-			}
-		} catch (Exception e) {
-			_log.error(e.getMessage());
-			resultMsg.setCode("101");
-			resultMsg.setErrorMsg(e.getMessage());			
-		}
-		
-		return resultMsg;		
+	/**
+	 * 删除部门年度计划
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/delDeptKpiGroup")
+	@ResponseBody
+	public ResultMsg delDeptKpiGroup(String id) throws ServiceException {
+		return kpiDeptService.delDeptKpiGroup(id);
+	}
+	
+	/**
+	 * 部门年度计划任务下发
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/saveDeptTask")
+	@ResponseBody
+	public ResultMsg saveDeptTask(PageData page)  {
+		return kpiDeptService.saveDeptTask(page);
 	}
 	
 	

@@ -4,6 +4,7 @@
 	<resultMap id="BaseResultMap" type="com.fantasia.bean.PubUser">
 		<id column="ID" property="id" jdbcType="VARCHAR" />
 		<result column="dept_id" property="deptId" jdbcType="VARCHAR" />
+		<result column="dept_name" property="deptName" jdbcType="VARCHAR" />
 		<result column="position" property="position" jdbcType="VARCHAR" />
 		<result column="job_level" property="jobLevel" jdbcType="VARCHAR" />
 		<result column="user_name" property="userName" jdbcType="VARCHAR" />
@@ -22,7 +23,8 @@
 	<select id="queryUser"  resultMap="BaseResultMap">
 		SELECT
 			p.ID,
-			d.dept_name AS dept_id,
+			p.dept_id,
+			d.dept_name,
 			p.position,
 			p.job_level,
 			p.user_name,
@@ -56,7 +58,8 @@
 	<select id="getUsers"  resultMap="BaseResultMap">
 		SELECT
 			p.ID,
-			d.dept_name AS dept_id,
+			p.dept_id,
+			d.dept_name,
 			p.position,
 			p.job_level,
 			p.user_name,

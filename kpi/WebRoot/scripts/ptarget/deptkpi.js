@@ -11,7 +11,10 @@
 			 width: 'auto',
 		     height: 'auto',
 			 onLoadSuccess : function(data) {
-				onLoadSuccess(data);					
+				onLoadSuccess(data);
+				
+				var row = $('#dg_list').datagrid('getData').rows[0];
+				tooBar.menuStatus(row.auditStatus);
 			 }
 		});	
 		
@@ -167,10 +170,22 @@
     * 菜单工具栏
     */    
 	function newDeptKpi() {
-		$('#dlg').dialog('open').dialog('center').dialog('setTitle',
-				'新增部门年度绩效考核指标');
+		$('#dlg').dialog('open').dialog('center').dialog('setTitle','新增部门年度绩效考核指标');
 		$('#fm').form('clear');
 		
+		//新增默认行	
+		$('#dg_add').datagrid('loadData', { total: 0, rows: [] }); 
+		var data_add = [];
+		for(var i =1 ; i<= 9; i++){
+			data_add.push({
+				"id" :"",
+				"keyPoint" : "",
+				"leadPerson":"",				
+				"startTime" : "",
+				"endTime" : ""
+			})
+		}
+		$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
 	}
 	
 	var dg_index = 1;
@@ -213,7 +228,7 @@
 			
 		}
 		else{
-			$.messager.alert("提示", "请选择一个具体事项,进行指定部门绩效考核指标！");
+			$.messager.alert("提示", "请选择一条记录！");
 		}	
 	}
 	
@@ -224,17 +239,24 @@
 		}
 	}
 	
+	/**
+	 * 保存部门绩效
+	 */
 	function saveDeptKpi() {
 		endEdit();
 		var $dg = $("#dg_add");
-		if ($dg.datagrid('getChanges').length) {
+		//if ($dg.datagrid('getChanges').length) {
 			
 			//获取Form 表单内容
 			var formData = $('#fm').serializeArray();	
 			
 			//当前选中行id
 			var row = $('#dg_list').datagrid('getSelected');
-			formData["id"] = row.id;
+			if(row){
+				formData[0]["value"] = row.id;
+				formData[1]["value"] = row.groupId;
+				//formData.push({[name:row.id],[value:]})
+			}			
 			
 			var parame = {};
 			$.each(formData,function(){
@@ -271,8 +293,12 @@
 					$.messager.alert("提示", "提交错误了！");
 				});
 			}		
-		}		
+		//}		
 	}
+	
+	/**
+	 * 删除部门绩效
+	 */
 	function destroyDeptKpi() {
 		var row = $('#dg_list').datagrid('getSelected');
 		if (row) {
@@ -280,7 +306,7 @@
 					'您确定要删除当前部门年度计划吗?',
 					function(r) {
 						if (r) {
-							$.post('../kpiYear/delKpiGroup.action', {
+							$.post('../kpiYear/delDeptKpiGroup.action', {
 								id : row.id
 							}, function(result) {
 								if (result.code == "000") {
@@ -295,6 +321,58 @@
 							}, 'json');
 						}
 					});
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
+		}
+	}
+	
+	/**
+	 * 部门年度计划任务下发
+	 */
+	function saveDeptTask() {
+		var year = $("select[comboname=kpiYear]").combobox("getValue")
+		$.messager.confirm('确认','任务下发之后,部门年度计划将不可编辑!',
+			function(r) {
+			if (r) {
+				$.post('../kpiYear/saveDeptTask.action', {
+					year : year
+				}, function(result) {
+					if (result.code == "000") {
+						$.messager.alert("提示", "操作成功！");
+						$('#dg_list').datagrid('reload');
+						//
+					} else {
+						$.messager.show({ // show error message
+							title : 'Error',
+							msg : result.errorMsg
+						});
+					}
+				}, 'json');
+			}
+		 });
+	}
+	
+	/**
+	 * 查看年度关键任务
+	 */
+	function viewKpi() {
+		var row = $('#dg_list').datagrid('getSelected');
+		if (row) {			
+			
+			$('#dg_add').datagrid({
+				 striped: true, //行背景交换
+				 url:"../kpiYear/getKpiDeptDetail.action?id=" + row.id,
+				 onLoadSuccess : function(data) {
+					 tooBar.menuStatus(row.auditStatus);					
+				 }
+			});
+			
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','查看部门年度计划');
+			$('#fm').form('load', row);			
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
 		}
 	}
 	

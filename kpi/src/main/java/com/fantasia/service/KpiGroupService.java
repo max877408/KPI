@@ -35,7 +35,7 @@ public interface KpiGroupService {
 	 * 新增集团绩效考核指标
 	 * @param list
 	 */
-	public void SaveKpiGroup(List<KpiGroupYear> list);
+	public List<KpiGroupYear> SaveKpiGroup(List<KpiGroupYear> list);
 	
 	/**
 	 * 更新集团绩效考核指标

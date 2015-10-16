@@ -9,6 +9,7 @@
     <result column="start_time" property="startTime" jdbcType="VARCHAR" />
     <result column="end_time" property="endTime" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
@@ -22,7 +23,7 @@
 			kpi_dept_year_detail d
 		LEFT JOIN kpi_dept_year y ON y.ID = d.dept_kpi_id
 		WHERE
-			y.group_id = #{0}
+			y.id = #{0}
 		ORDER BY
 			d.create_time ASC;	
 	</select>
@@ -121,6 +122,9 @@
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=CHAR},
       </if>
       <if test="createBy != null" >
         create_by = #{createBy,jdbcType=VARCHAR},

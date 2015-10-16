@@ -13,26 +13,37 @@
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="../scripts/ptarget/deptkpi.js?time=New Date()"></script>
+<script type="text/javascript" src="../scripts/common/search-tool.js?time=New Date()"></script>
+<script type="text/javascript" src="../scripts/common/toolbar.js?time=New Date()"></script>
 </head>
 <body>
-	<div id="tb"
-		style="padding:2px 5px; padding-top:12px !important; height:40px">
-		关键任务: <input class="easyui-textbox" style="width:180px">
-		 &nbsp &nbsp &nbsp 年份: <select class="easyui-combobox" panelHeight="auto"
-			style="width:100px">
-			<option value="2014">2014</option>
-			<option value="2015" selected="selected">2015</option>
-			<option value="2016">2016</option>
-			<option value="2017">2017</option>
-			<option value="2018">2018</option>
-		</select> &nbsp <a href="#" class="easyui-linkbutton" iconCls="icon-search">查找</a>
+	<div id="tb" style="padding:2px 5px; padding-top:12px !important; height:40px">
+		
+		 <table cellpadding="5">
+           	<tr>
+                <td>关键任务:</td>
+                <td>	                   	
+               	   <input class="easyui-textbox" style="width:180px" id="keyTask">
+                </td>
+                <td>年份：</td>
+                <td>
+                	<select class="easyui-combobox" panelHeight="auto"
+						style="width:100px" name="kpiYear">						
+					</select>
+                </td>               
+                <td><a href="#" class="easyui-linkbutton" iconCls="icon-search" style="width:80px" id="btSearch">查找</a></td>
+            </tr>
+         </table>	
+		
 	</div>
 	
 	<table id="dg_list" title="部门年度绩效考核指标" class="easyui-datagrid" url="../kpiYear/getKpiDeptList.action"
 		 toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="false" singleSelect="true">
 		<thead data-options="frozen:true">
             <tr>
-                <th field="id"hidden="true">id</th>
+                <th field="id" hidden="true">id</th>
+                <th field="groupId" hidden="true">groupId</th>  
+                <th field="auditStatus" hidden="true">auditStatus</th>              
 				<th field="keyTask" width="200px">关键任务</th>
 				<th field="keyItem" width="250px">主要事项</th>
 				<th field="detailItem" width="200px">具体事项</th>
@@ -60,9 +71,11 @@
 		<a href="javascript:void(0)" class="easyui-linkbutton"
 			iconCls="icon-edit" plain="true" onclick="editDeptKpi()">制定</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="destroyDeptKpi()">删除</a> <a
-			href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="destroyDeptKpi()">任务下发</a>
+			iconCls="icon-remove" plain="true" onclick="destroyDeptKpi()">删除</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" style="display: none;" 
+			iconCls="icon-ok" plain="true" onclick="viewKpi()" id="view">查看</a>
+	    <a	href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-remove" plain="true" onclick="saveDeptTask()">任务下发</a>
 	</div> 
 
 	<div id="dlg" class="easyui-dialog"
@@ -73,19 +86,20 @@
 
 			<div class="easyui-panel" title="基本信息" style="width:700px">
 				<input type="hidden" name="id">
+				<input type="hidden" name="groupId"> 
 				<div style="padding:10px 60px 20px 60px">
 					<table cellpadding="5">
 						<tr>
 							<td>关键任务:</td>
 							<td colspan="3"><input
 								class="easyui-textbox easyui-validatebox" name="keyTask"
-								data-options="multiline:true,required:true"
+								data-options="multiline:true" readonly="readonly"
 								style="height:35px;width:400px"> </input></td>
 						</tr>
 						<tr>
 							<td>主要事项:</td>
 							<td colspan="3"><input class="easyui-textbox" name="keyItem"
-								data-options="multiline:true,required:true"
+								data-options="multiline:true" readonly="readonly"
 								style="height:35px;width:400px"> </input></td>
 						</tr>
 						<tr>
@@ -128,19 +142,19 @@
 						<tr>
 							<td>指标内容及相关说明:</td>
 							<td colspan="3"><input class="easyui-textbox" name="content"
-								data-options="multiline:true,required:true" style="height:45px;width:400px">
+								data-options="multiline:true,required:true" style="height:55px;width:400px">
 								</input></td>
 						</tr>
 						<tr>
 							<td>年度目标:</td>
 							<td colspan="3"><input class="easyui-textbox" name="yearTarget"
-								data-options="multiline:true,required:true" style="height:45px;width:400px">
+								data-options="multiline:true,required:true" style="height:60px;width:400px">
 								</input></td>
 						</tr>
 						<tr>
 							<td>衡量标准:</td>
 							<td colspan="3"><input class="easyui-textbox" name="standard"
-								data-options="multiline:true,required:true" style="height:45px;width:400px">
+								data-options="multiline:true,required:true" style="height:60px;width:400px">
 								</input></td>
 						</tr>
 					</table>
@@ -157,6 +171,7 @@
 				style="width:700px;height:350px">
 				<thead>
 					<tr>
+					    <th field="id"hidden="true">id</th>
 						<th data-options="field:'keyPoint',width:250,editor:'text'">关键节点</th>						
 						<th
 							data-options="field:'leadPerson',width:150,

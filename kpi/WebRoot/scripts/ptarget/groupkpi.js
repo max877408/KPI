@@ -13,7 +13,7 @@
 				onLoadSuccess(data);	
 				
 				 var row = $('#dg_list').datagrid('getData').rows[0];
-				 tooBar.menuStatus(row.status);
+				 tooBar.menuStatus(row.auditStatus);
 			 }
 		});
 		
@@ -138,10 +138,7 @@
 			return true
 		}
 	
-		if ($('#dg_add').datagrid('validateRow', editIndex)) {
-			/* var ed = $('#dg_add').datagrid('getEditor', {index:editIndex,field:'dept'});
-             var dept = $(ed.target).combobox('getText');
-             $('#dg_add').datagrid('getRows')[editIndex]['dept'] = dept;*/
+		if ($('#dg_add').datagrid('validateRow', editIndex)) {		
              $('#dg_add').datagrid('endEdit', editIndex);
              editIndex = undefined;
              return true;
@@ -193,7 +190,7 @@
 	}
 	
 	var dg_index = 1;
-	function editKpi(title) {
+	function editKpi() {
 		var row = $('#dg_list').datagrid('getSelected');
 		if (row) {			
 			
@@ -201,7 +198,7 @@
 				 striped: true, //行背景交换
 				 url:"../kpiYear/getKpiGroupList.action?keyTask=" + row.keyTask,
 				 onLoadSuccess : function(data) {
-					 tooBar.menuStatus(row.status);
+					 tooBar.menuStatus(row.auditStatus);
 					 if(data.rows.length == 0 && dg_index == 1){
 						 dg_index++;
 						//新增默认行	
@@ -226,7 +223,7 @@
 				 }
 			});
 			
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle',title + '年度关键任务');
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','编辑年度关键任务');
 			$('#fm').form('load', row);			
 		}
 		else{
@@ -330,6 +327,29 @@
 	}
 	
 	/**
+	 * 查看年度关键任务
+	 */
+	function viewKpi() {
+		var row = $('#dg_list').datagrid('getSelected');
+		if (row) {			
+			
+			$('#dg_add').datagrid({
+				 striped: true, //行背景交换
+				 url:"../kpiYear/getKpiGroupList.action?keyTask=" + row.keyTask,
+				 onLoadSuccess : function(data) {
+					 tooBar.menuStatus(row.auditStatus);					
+				 }
+			});
+			
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','查看年度关键任务');
+			$('#fm').form('load', row);			
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
+		}
+	}
+	
+	/**
 	 * 任务下发
 	 */
 	function saveTask() {
@@ -342,7 +362,7 @@
 				}, function(result) {
 					if (result.code == "000") {
 						$.messager.alert("提示", "操作成功！");
-						
+						$('#dg_list').datagrid('reload');
 						//
 					} else {
 						$.messager.show({ // show error message

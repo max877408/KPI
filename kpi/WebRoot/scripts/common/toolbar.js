@@ -17,10 +17,9 @@
 			 }
 			 if(status == '2'){
 				 $("#toolbar").find("a").hide();
-				 $("#toolbar").find("[iconcls=icon-tip]").show();
+				 $("#toolbar").find("#view").show();
 				 $("#dlg-buttons").find("[iconcls=icon-ok]").hide();				
 				 $("#dlg").find(".datagrid-toolbar").hide();
-				 
 			 }
 		 }
  }

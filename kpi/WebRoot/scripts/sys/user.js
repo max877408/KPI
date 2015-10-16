@@ -11,20 +11,20 @@
 		function onLoadSuccess(data) {			
 			var merges = [];
 			
-			var deptId = '';
+			var deptName = '';
 			var rows = 0;
 			var index = 0;
 			$(data.rows).each(function(i){
 				if(i == 0){
-					deptId = this.deptId;
+					deptName = this.deptName;
 				}
 				else{
-					if(deptId == this.deptId){
+					if(deptName == this.deptName){
 						rows++;
 					}
 					else{
 						merges.push({index:index,rowspan:rows+1});
-						deptId = this.deptId;
+						deptName = this.deptName;
 						index = index + rows + 1;
 						rows = 0;							
 					}
@@ -40,7 +40,7 @@
 			for ( var i = 0; i < merges.length; i++) {
 				$('#tt').datagrid('mergeCells', {
 					index : merges[i].index,
-					field : 'deptId',
+					field : 'deptName',
 					rowspan : merges[i].rowspan
 				});
 			}

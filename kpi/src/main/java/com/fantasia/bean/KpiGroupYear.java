@@ -20,6 +20,8 @@ public class KpiGroupYear {
     private String ower;
 
     private String status;
+    
+    private String auditStatus;
 
     private String createBy;
 
@@ -100,8 +102,16 @@ public class KpiGroupYear {
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
+    
+    public String getAuditStatus() {
+		return auditStatus;
+	}
 
-    public String getCreateBy() {
+	public void setAuditStatus(String auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+
+	public String getCreateBy() {
         return createBy;
     }
 

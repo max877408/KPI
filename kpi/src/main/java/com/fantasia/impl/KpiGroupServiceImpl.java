@@ -64,24 +64,28 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 		return kpiGroupYearMapper.searchKpiGroupList(keyTask, year);
 	}
 	
+	/**
+	 * 保存年度关键任务
+	 */
 	@Override
-	public void SaveKpiGroup(List<KpiGroupYear> list) {
+	public List<KpiGroupYear> SaveKpiGroup(List<KpiGroupYear> list) {
 		for (KpiGroupYear kpiGroupYear : list) {
 			if(StringUtils.isNotEmpty(kpiGroupYear.getId())){			
-				kpiGroupYear.setModifyBy(DbcContext.getAdminId());
+				kpiGroupYear.setModifyBy(DbcContext.getUserId());
 				kpiGroupYear.setModifyTime(new Date());
 
 				kpiGroupYearMapper.update(kpiGroupYear);
 			}
 			else{
-				kpiGroupYear.setId(Utils.getGUID());
-				kpiGroupYear.setCreateBy(DbcContext.getAdminId());
+				kpiGroupYear.setId(Utils.getGUID());				
+				kpiGroupYear.setCreateBy(DbcContext.getUserId());
 				kpiGroupYear.setCreateTime(new Date());
 
 				kpiGroupYearMapper.insert(kpiGroupYear);
 			}
 			
-		}	
+		}
+		return list;
 	}
 
 	@Override

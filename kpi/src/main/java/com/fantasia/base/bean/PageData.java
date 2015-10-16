@@ -52,6 +52,16 @@ public class PageData {
 	public int month;
 	
 	/**
+	 * 部门id
+	 */
+	public String deptId;
+	
+	/**
+	 * 用户id
+	 */
+	public String userId;
+	
+	/**
 	 * 查询最大记录数
 	 */
 	public static Integer MAX_ROWS = Integer.MAX_VALUE;
@@ -139,5 +149,21 @@ public class PageData {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+
+	public String getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(String deptId) {
+		this.deptId = deptId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}	
 }
