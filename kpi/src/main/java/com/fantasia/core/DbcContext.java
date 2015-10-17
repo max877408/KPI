@@ -91,8 +91,21 @@ public class DbcContext {
 	 * 
 	 * @return
 	 */
-	public static String agetAdminName() {
+	public static String getAdminName() {
 		return "Admin";
 	}
-
+	
+	/**
+	 * 当前用户是否管理员
+	 * @return
+	 */
+	public static boolean isAdmin(){
+		if(getUser().getUserName().equalsIgnoreCase(getAdminName())){
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

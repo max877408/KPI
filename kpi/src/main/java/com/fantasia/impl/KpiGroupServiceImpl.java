@@ -112,6 +112,8 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 	 */
 	public ResultMsg saveTask(PageData page){
 		ResultMsg msg = new ResultMsg();
+		page.setModifyBy(DbcContext.getUserId());
+		page.setModifyTime(new Date());
 		kpiGroupYearMapper.updateTask(page);		
 		return msg;
 	}

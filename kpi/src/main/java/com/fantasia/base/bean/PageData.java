@@ -61,6 +61,10 @@ public class PageData {
 	 */
 	public String userId;
 	
+	public String modifyBy;
+	
+	public Date modifyTime;
+	
 	/**
 	 * 查询最大记录数
 	 */
@@ -165,5 +169,23 @@ public class PageData {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getModifyBy() {
+		return modifyBy;
+	}
+
+	public void setModifyBy(String modifyBy) {
+		this.modifyBy = modifyBy;
+	}
+
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}	
+	
+	
 }

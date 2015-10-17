@@ -281,59 +281,21 @@ public class KpiYearAction extends BaseAction {
 	 * @return
 	 * @throws ServiceException
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/SaveKpiEmployee")
 	@ResponseBody
-	public ResultMsg SaveKpiEmployee(ListData listData) throws ServiceException {
-
-		ResultMsg resultMsg = new ResultMsg();
-		String deptKpi = listData.getData();
-		ObjectMapper objectMapper = new ObjectMapper();
-		List<KpiEmployeeYear> kpiEmployee = new ArrayList<KpiEmployeeYear>();
-
-		try {
-						
-			/**
-			 * 新增员工绩效明细信息
-			 */
-			if (!StringUtils.isEmpty(listData.getInserted())) {
-
-				kpiEmployee = (List<KpiEmployeeYear>) objectMapper.readValue(
-						listData.getInserted(),
-						new TypeReference<List<KpiEmployeeYear>>() {
-						});
-				kpiEmployeeService.SaveKpiEmployee(kpiEmployee,deptKpi);
-			}
-
-			/**
-			 * 修改员工绩效明细信息
-			 */
-			if (!StringUtils.isEmpty(listData.getUpdated())) {
-
-				kpiEmployee = (List<KpiEmployeeYear>) objectMapper.readValue(
-						listData.getUpdated(),
-						new TypeReference<List<KpiEmployeeYear>>() {
-						});
-				kpiEmployeeService.SaveKpiEmployee(kpiEmployee,deptKpi);
-			}
-
-			/**
-			 * 删除员工绩效明细信息
-			 */
-			if (!StringUtils.isEmpty(listData.getDeleted())) {
-
-				kpiEmployee = (List<KpiEmployeeYear>) objectMapper.readValue(
-						listData.getDeleted(),
-						new TypeReference<List<KpiEmployeeYear>>() {
-						});
-				 //kpiEmployeeService.DeleteKpiGroup(kpiGroups);
-			}
-		} catch (Exception e) {
-			_log.error(e.getMessage());
-			resultMsg.setCode("101");
-			resultMsg.setErrorMsg(e.getMessage());			
-		}
-		
-		return resultMsg;		
+	public ResultMsg SaveKpiEmployee(ListData listData) throws ServiceException {		
+		return kpiEmployeeService.SaveKpiEmployee(listData);		
+	}
+	
+	/**
+	 * 员工年度计划任务下发
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/saveEmployTask")
+	@ResponseBody
+	public ResultMsg saveEmployTask(PageData page)  {
+		return kpiEmployeeService.saveEmployTask(page);
 	}
 }

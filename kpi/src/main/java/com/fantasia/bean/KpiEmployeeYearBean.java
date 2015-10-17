@@ -36,6 +36,8 @@ public class KpiEmployeeYearBean {
 	private String responsiblePerson;
 
 	private String status;
+	
+	private String auditStatus;
 
 	private String createBy;
 
@@ -247,4 +249,13 @@ public class KpiEmployeeYearBean {
 	public void setLeadPerson(String leadPerson) {
 		this.leadPerson = leadPerson;
 	}
+
+	public String getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(String auditStatus) {
+		this.auditStatus = auditStatus;
+	}
+	
 }

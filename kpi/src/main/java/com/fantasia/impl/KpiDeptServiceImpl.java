@@ -26,7 +26,6 @@ import com.fantasia.dao.KpiGroupYearMapper;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptDetailService;
 import com.fantasia.service.KpiDeptService;
-import com.fantasia.service.KpiGroupService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,9 +37,6 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	
 	@Autowired
 	private KpiGroupYearMapper kpiGroupYearMapper;
-	
-	@Autowired
-	private KpiGroupService kpiGroupService;
 	
 	@Autowired
 	private KpiDeptDetailService  kpiDeptDetailService;
@@ -233,6 +229,8 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	 */	
 	public ResultMsg saveDeptTask(PageData page){
 		ResultMsg msg = new ResultMsg();
+		page.setModifyBy(DbcContext.getUserId());
+		page.setModifyTime(new Date());
 		kpiDeptYearMapper.updateTask(page);		
 		return msg;
 	}

@@ -1,5 +1,4 @@
-  
-	
+  	
 	$(function() {	 
 
 		var dg_list = $('#dg_list').datagrid({
@@ -11,7 +10,10 @@
 			 width: 'auto',
 		     height: 'auto',
 			 onLoadSuccess : function(data) {
-				onLoadSuccess(data);					
+				onLoadSuccess(data);	
+				
+				var row = $('#dg_list').datagrid('getData').rows[0];
+				tooBar.menuStatus(row.auditStatus);
 			 }
 		});	
 		
@@ -181,11 +183,11 @@
 				 }
 			});	
 				
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle','制定员工年度绩效考核指标');
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','制定员工年度计划');
 	        $('#fm').form('clear');			
 		}
 		else{
-			$.messager.alert("提示", "请选择一个具体事项,进行制定员工绩效考核指标！");
+			$.messager.alert("提示", "请选择一条记录！");
 		}	
 	}
 	
@@ -196,6 +198,9 @@
 		}
 	}
 	
+	/**
+	 * 保存员工年度计划
+	 */
 	function saveEmployeeKpi() {
 		endEdit();
 		var $dg = $("#dg_add");
@@ -229,7 +234,10 @@
 			}, "JSON").error(function() {
 				$.messager.alert("提示", "提交错误了！");
 			});	
-		}		
+		}
+		else{
+			$.messager.alert("提示", "请填写工作阶段！");
+		}
 	}
 	
 	/**
@@ -241,6 +249,55 @@
 	 */
 	function cellStyler(value,row,index){
 		return 'background-color:#e6f0ff;';
+	}
+	
+	/**
+	 * 员工年度计划任务下发
+	 */
+	function saveEmployTask() {
+		var year = $("select[comboname=kpiYear]").combobox("getValue")
+		$.messager.confirm('确认','任务下发之后,员工年度计划将不可编辑!',
+			function(r) {
+			if (r) {
+				$.post('../kpiYear/saveEmployTask.action', {
+					year : year
+				}, function(result) {
+					if (result.code == "000") {
+						$.messager.alert("提示", "操作成功！");
+						$('#dg_list').datagrid('reload');
+						//
+					} else {
+						$.messager.show({ // show error message
+							title : 'Error',
+							msg : result.errorMsg
+						});
+					}
+				}, 'json');
+			}
+		 });
+	}
+	
+	/**
+	 * 查看员工年度计划
+	 */
+	function viewKpi() {
+		var row = $('#dg_list').datagrid('getSelected');
+		if (row) {			
+			
+			$('#dg_add').datagrid({
+				 striped: true, //行背景交换
+				 url:"../kpiYear/getKpiEmployeeDetail.action?id=" + row.id,
+				 onLoadSuccess : function(data) {
+					 tooBar.menuStatus(row.auditStatus);					
+				 }
+			});
+			
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','查看部门年度计划');
+			$('#fm').form('load', row);			
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
+		}
 	}
 
 

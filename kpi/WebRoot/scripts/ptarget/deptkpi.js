@@ -354,7 +354,7 @@
 	}
 	
 	/**
-	 * 查看年度关键任务
+	 * 查看部门年度计划
 	 */
 	function viewKpi() {
 		var row = $('#dg_list').datagrid('getSelected');
