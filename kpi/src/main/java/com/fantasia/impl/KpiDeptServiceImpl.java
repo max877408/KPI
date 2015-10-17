@@ -84,18 +84,18 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 					kpiGroupYear.setStartTime(DateTimeUtil.shortDateString());
 				}				
 				if(!StringUtils.isEmpty(kpiBean.getEndTime())){
-					kpiGroupYear.setStartTime(kpiBean.getEndTime());
+					kpiGroupYear.setEndTime(kpiBean.getEndTime());
 				}
 				else{					
 					kpiGroupYear.setEndTime(DateTimeUtil.shortDateString());
 				}	
 				
 				//部门新增
-				kpiGroupYear.setStatus("2");
+				kpiGroupYear.setAuditStatus("2");
 				kpiGroupYear.setOwer("2");
 							
 				
-				if(StringUtils.isEmpty(kpiGroupYear.getId())){
+				if(StringUtils.isEmpty(kpiBean.getGroupId())){
 					kpiGroupYear.setId(Utils.getGUID());				
 					kpiGroupYear.setCreateBy(DbcContext.getUserId());
 					kpiGroupYear.setCreateTime(new Date());
@@ -146,7 +146,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 						listData.getDeleted(),
 						new TypeReference<List<KpiDeptYearDetail>>() {
 						});
-				 //kpiDeptGroupService.DeleteKpiGroup(kpiGroups);
+				kpiDeptDetailService.bachDeleDeptKpi(kpiDeptDetail);
 			}
 		} catch (Exception e) {
 			_log.error(e.getMessage());

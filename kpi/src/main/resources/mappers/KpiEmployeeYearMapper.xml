@@ -65,7 +65,7 @@
 			p.key_task,
 		    p.key_item,
 		    p.detail_item,
-		    y.audit_status
+		    d.audit_status
 		FROM
 			kpi_dept_year_detail d
 		LEFT JOIN kpi_dept_year y ON d.dept_kpi_id = y.id

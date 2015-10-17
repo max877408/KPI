@@ -12,11 +12,16 @@
 <script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../scripts/ptarget/deptkpi.js?time=New Date()"></script>
-<script type="text/javascript" src="../scripts/common/search-tool.js?time=New Date()"></script>
-<script type="text/javascript" src="../scripts/common/toolbar.js?time=New Date()"></script>
+
+
+<script type="text/javascript" src="../scripts/common/search-tool.js" ></script>
+<script type="text/javascript" src="../scripts/common/toolbar.js"></script>
+<script type="text/javascript" src='../scripts/ptarget/deptkpi.js'></script>
 </head>
 <body>
+<!-- 	<script> 		
+	 	document.write("<script src='../scripts/ptarget/deptkpi.js?v="+Math.random()+"'><\/script>");				
+	</script> -->
 	<div id="tb" style="padding:2px 5px; padding-top:12px !important; height:40px">
 		
 		 <table cellpadding="5">
@@ -55,9 +60,9 @@
 				<th field="endTime" width="100px">结束日期</th>
 				
 				<th field="weight" width="80px">权重</th>
-				<th field="content" width="250px">指标内容及相关说明</th>	
-				<th field="yearTarget" width="200px">年度目标</th>	
-				<th field="standard" width="250px">衡量标准</th>	
+				<th data-options="field:'content',width:250,formatter:cellFormat">指标内容及相关说明</th>	
+				<th field="yearTarget" width="200px" data-options="formatter:cellFormat">年度目标</th>	
+				<th field="standard" width="250px" data-options="formatter:cellFormat">衡量标准</th>	
 				<th field="projectLevel" width="100px">项目等级</th>	
 				<th field="difficulty" width="100px">难度系数</th>	
 				<th field="responsible_person" width="100px">责任人</th>						
@@ -77,6 +82,8 @@
 	    <a	href="javascript:void(0)" class="easyui-linkbutton"
 			iconCls="icon-remove" plain="true" onclick="saveDeptTask()">任务下发</a>
 	</div> 
+	
+	
 
 	<div id="dlg" class="easyui-dialog"
 		style="width:800px;height:500px;padding:10px 10px" closed="true"
@@ -205,7 +212,6 @@
 			href="javascript:void(0)" class="easyui-linkbutton"
 			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')"
 			style="width:90px">取消</a>
-	</div>
-
+	</div>	
 </body>
 </html>

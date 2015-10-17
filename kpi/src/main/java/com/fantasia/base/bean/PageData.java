@@ -19,12 +19,12 @@ public class PageData {
 	/**
 	 * 记录条数
 	 */
-	public int rows;
+	public int rows = 15;
 	
 	/**
 	 * 其实位置
 	 */
-	public int start;
+	public int start = 0;
 	
 	/**
 	 * 关键任务
@@ -60,6 +60,8 @@ public class PageData {
 	 * 用户id
 	 */
 	public String userId;
+	
+	public String id;
 	
 	public String modifyBy;
 	
@@ -190,7 +192,14 @@ public class PageData {
 
 	public void setModifyTime(Date modifyTime) {
 		this.modifyTime = modifyTime;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}	
-	
 	
 }

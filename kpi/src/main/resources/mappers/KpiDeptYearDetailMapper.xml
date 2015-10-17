@@ -142,4 +142,8 @@
     where ID = #{id,jdbcType=VARCHAR}
   </update>
  
+  <delete id="delDeptKpi" parameterType="java.lang.String">
+    delete from  kpi_dept_year_detail   
+    where id = #{id,jdbcType=VARCHAR}   
+  </delete>
 </mapper>

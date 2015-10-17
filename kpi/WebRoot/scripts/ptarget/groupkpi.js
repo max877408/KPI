@@ -14,7 +14,12 @@
 				onLoadSuccess(data);	
 				
 				 var row = $('#dg_list').datagrid('getData').rows[0];
-				 tooBar.menuStatus(row.auditStatus);
+				 if(row){
+					 tooBar.menuStatus(row.auditStatus); 
+				 }
+				 else{
+					 tooBar.menuStatus(''); 
+				 }
 			 }
 		});
 		
@@ -296,7 +301,23 @@
 					$.messager.alert("提示", "提交错误了！");
 				});
 			}			
-		}	
+		}
+		else{
+			// 只修改关键任务
+			var row = $('#dg_list').datagrid('getSelected');
+			var id = row.id;
+			var keyTask = $("#fm").find("input[name=keyTask]").val();
+			
+			$.post("../kpiYear/SaveKpiGroupTask.action?id="+id+"&keyTask="+keyTask+"", function(rsp) {
+				if(rsp.code == "000"){
+					$.messager.alert("提示", "提交成功！");
+					$('#dlg').dialog('close'); // close the dialog
+					$('#dg_list').datagrid('reload'); // reload the user data
+				}
+			}, "JSON").error(function() {
+				$.messager.alert("提示", "提交错误了！");
+			});
+		}
 	}
 	
 	function destroyKpi() {

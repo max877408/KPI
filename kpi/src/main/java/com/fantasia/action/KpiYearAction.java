@@ -90,7 +90,7 @@ public class KpiYearAction extends BaseAction {
 						listData.getDeleted(),
 						new TypeReference<List<KpiGroupYear>>() {
 						});
-				 //kpiDeptGroupService.DeleteKpiGroup(kpiGroups);
+				kpiGroupService.batchDelete(kpiGroups);
 			}
 		} catch (Exception e) {
 			_log.error(e.getMessage());
@@ -99,6 +99,24 @@ public class KpiYearAction extends BaseAction {
 		}
 		
 		return resultMsg;		
+	}
+	
+	/**
+	 * 保存年度计划关键任务字段
+	 * 
+	 * @param kpiGroupYear
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/SaveKpiGroupTask")
+	@ResponseBody
+	public ResultMsg SaveKpiGroupTask(String id, String keyTask){
+		
+		KpiGroupYear kpi = new KpiGroupYear();	
+		kpi.setId(id);
+		kpi.setKeyTask(keyTask);
+		
+		return kpiGroupService.SaveKpiGroupTask(kpi);
 	}
 	
 	/**

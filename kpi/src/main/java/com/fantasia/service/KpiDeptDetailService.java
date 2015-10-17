@@ -19,4 +19,10 @@ public interface KpiDeptDetailService {
 	 * @return
 	 */
 	public List<KpiDeptYearDetail> getKpiDeptDetailById(String id);
+	
+	/**
+	 * 批量删除部门年度计划
+	 * @param list
+	 */
+	public void bachDeleDeptKpi(List<KpiDeptYearDetail> list);
 }

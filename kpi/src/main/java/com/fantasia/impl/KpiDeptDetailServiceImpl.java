@@ -59,5 +59,15 @@ public class KpiDeptDetailServiceImpl implements KpiDeptDetailService {
 		return kpiDeptYearDetailMapper.getKpiDeptDetailById(id);
 	}
 	
+	/**
+	 * 批量删除部门年度计划
+	 * @param list
+	 */
+	public void bachDeleDeptKpi(List<KpiDeptYearDetail> list){
+		for (KpiDeptYearDetail kpiDeptYearDetail : list) {
+			kpiDeptYearDetailMapper.delDeptKpi(kpiDeptYearDetail.getId());
+		}
+	}
+	
 	
 }

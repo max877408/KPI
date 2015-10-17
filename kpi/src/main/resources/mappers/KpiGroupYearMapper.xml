@@ -16,7 +16,40 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-  </resultMap>
+  </resultMap>  
+  
+  
+  
+   <select id="getKpiGroupById"  resultMap="BaseResultMap">
+		SELECT
+			*			
+		FROM
+			kpi_group_year p
+		where id = #{0}
+		 
+   </select>
+  
+  <select id="searchKpiGroup" parameterType="com.fantasia.base.bean.PageData"  resultMap="BaseResultMap">
+		SELECT
+			*			
+		FROM
+			kpi_group_year p
+		<where>		
+			ower = '1' 	and status = '1'
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="keyTask != null">
+				and key_task = #{keyTask}
+			</if>						
+			<if test="startTime != null" >
+	        	and start_time &gt;= #{startTime}
+	        </if>
+	        <if test="endTime != null" >
+	        	and end_time &lt;= #{endTime}
+	        </if>
+		</where>
+   </select>
   
   <select id="getKpiGroup" parameterType="com.fantasia.base.bean.PageData"  resultMap="BaseResultMap">
 		SELECT
@@ -25,7 +58,7 @@
 			kpi_group_year p
 		<where>		
 			ower = '1' 	and status = '1'
-			<if test="keyTask != null">
+			<if test="keyTask != null and keyTask !=''">
 				and key_task like '%${keyTask}%'
 			</if>			
 			<if test="startTime != null" >
@@ -48,7 +81,7 @@
 		WHERE
 			key_task = #{0}
 		ORDER BY
-			p.create_time DESC
+			p.create_time DESC,key_item
   </select>
   
   <select id="searchKpiGroupList"  resultMap="BaseResultMap">

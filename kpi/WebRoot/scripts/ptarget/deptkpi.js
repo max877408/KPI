@@ -1,10 +1,8 @@
-  
-	
-	$(function() {	 
+  	$(function() {	 
 
 		var dg_list = $('#dg_list').datagrid({
 			 striped: true, //行背景交换
-			 nowrap: false, //单元格是否可以换行
+			 nowrap: true, //单元格是否可以换行
 			 fit: false,
 			 checkOnSelect: false,
 			 pageSize: 15, //每页显示的记录条数，默认为10     
@@ -14,7 +12,9 @@
 			 onLoadSuccess : function(data) {
 				onLoadSuccess(data);
 				
+				debugger;
 				var row = $('#dg_list').datagrid('getData').rows[0];
+				console.log(row.auditStatus)
 				tooBar.menuStatus(row.auditStatus);
 			 }
 		});	
@@ -194,7 +194,7 @@
 		var row = $('#dg_list').datagrid('getSelected');
 		if (row) {
 			
-			toolOp.loadData(row.id);
+			toolOp.loadData(row.groupId);
 			
 			$('#dg_add').datagrid({
 				 striped: true, //行背景交换
@@ -308,7 +308,7 @@
 					function(r) {
 						if (r) {
 							$.post('../kpiYear/delDeptKpiGroup.action', {
-								id : row.id
+								id : row.groupId
 							}, function(result) {
 								if (result.code == "000") {
 									$.messager.alert("提示", "删除成功！");

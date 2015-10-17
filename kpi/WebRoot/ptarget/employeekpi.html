@@ -12,9 +12,9 @@
 <script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../scripts/ptarget/employeekpi.js?time=New Date()"></script>
-<script type="text/javascript" src="../scripts/common/search-tool.js?time=New Date()"></script>
-<script type="text/javascript" src="../scripts/common/toolbar.js?time=New Date()"></script>
+<script type="text/javascript" src="../scripts/ptarget/employeekpi.js"></script>
+<script type="text/javascript" src="../scripts/common/search-tool.js"></script>
+<script type="text/javascript" src="../scripts/common/toolbar.js"></script>
 </head>
 <body>
 	<div id="tb" style="padding:2px 5px; padding-top:12px !important; height:40px">
@@ -41,7 +41,8 @@
 		 toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="false" singleSelect="true">
 		<thead data-options="frozen:true">
             <tr>
-                <th field="id"hidden="true">id</th>				
+                <th field="id"hidden="true">id</th>	
+                <th field="auditStatus" hidden="true">auditStatus</th> 			
 				<th field="detailItem" width="200px">具体事项</th>
 				<th field="weight" width="60px">权重</th>
 				<th field="projectLevel" width="100px">项目等级</th>	

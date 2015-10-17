@@ -11,5 +11,12 @@ public interface KpiDeptYearDetailMapper {
 	public void insert(KpiDeptYearDetail record);
 
 	public void update(KpiDeptYearDetail record);
+	
+	/**
+	 * 删除部门年度计划
+	 * @param id
+	 * @return
+	 */	
+	public void delDeptKpi(String id);
 
 }

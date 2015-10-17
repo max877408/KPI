@@ -56,7 +56,10 @@ $(function(){
 			regEvent : function(){
 				$("#btSearch").click(function(){
 					var year = searchTool.comYear.combobox("getValue");
-					var month = searchTool.comMonth.combobox("getValue");
+					var month = 0
+					if(searchTool.comMonth.length != 0){
+						month = searchTool.comMonth.combobox("getValue");
+					}						
 					var keyTask = $("#keyTask").val();
 					searchTool.searchData(keyTask,year,month);
 				})

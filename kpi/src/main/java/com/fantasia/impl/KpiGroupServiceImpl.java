@@ -1,5 +1,6 @@
 package com.fantasia.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import com.fantasia.bean.KpiGroupYear;
 import com.fantasia.core.DbcContext;
 import com.fantasia.core.Utils;
 import com.fantasia.dao.KpiGroupYearMapper;
+import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiGroupService;
+import com.fantasia.util.DateTimeUtil;
 import com.fantasia.util.StringUtils;
 
 @Service("KpiGroupService")
@@ -73,6 +76,7 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 			if(StringUtils.isNotEmpty(kpiGroupYear.getId())){			
 				kpiGroupYear.setModifyBy(DbcContext.getUserId());
 				kpiGroupYear.setModifyTime(new Date());
+				kpiGroupYear.setStatus("1");
 
 				kpiGroupYearMapper.update(kpiGroupYear);
 			}
@@ -80,12 +84,50 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 				kpiGroupYear.setId(Utils.getGUID());				
 				kpiGroupYear.setCreateBy(DbcContext.getUserId());
 				kpiGroupYear.setCreateTime(new Date());
-
+				kpiGroupYear.setStatus("1");
+				
 				kpiGroupYearMapper.insert(kpiGroupYear);
 			}
 			
 		}
 		return list;
+	}
+	
+	/**
+	 * 保存年度计划关键任务字段
+	 * 
+	 * @param kpiGroupYear
+	 * @return
+	 * @throws ServiceException
+	 */	
+	public ResultMsg SaveKpiGroupTask(KpiGroupYear kpiGroupYear){
+		ResultMsg msg = new ResultMsg();
+	
+		KpiGroupYear kpiGroup = kpiGroupYearMapper.getKpiGroupById(kpiGroupYear.getId());
+		if(kpiGroup != null ){
+			String task = kpiGroup.getKeyTask();
+			int year = 0;
+			
+			Calendar startTime = Calendar.getInstance();			
+			startTime.setTime(DateTimeUtil.StrToDate(kpiGroup.getStartTime()));
+			year = startTime.get(Calendar.YEAR);
+			
+			PageData page = new PageData();
+			page.setYear(year);
+			page.setKeyTask(task);
+			page.setStart(0);
+			page.setRows(PageData.MAX_ROWS);
+			List<KpiGroupYear> list = kpiGroupYearMapper.searchKpiGroup(page);
+		
+			for (KpiGroupYear kpi : list) {
+				KpiGroupYear record = new KpiGroupYear();
+				record.setId(kpi.getId());
+				record.setKeyTask(kpiGroupYear.getKeyTask());
+				kpiGroupYearMapper.update(record);
+			}
+			
+		}
+		return msg;
 	}
 
 	@Override
@@ -103,6 +145,17 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 		ResultMsg msg = new ResultMsg();
 		kpiGroupYearMapper.DeleteKpiGroup(id);
 		return msg;
+	}
+	
+	/**
+	 * 批量删除
+	 * @param list
+	 */
+	@Override
+	public void batchDelete(List<KpiGroupYear> list){
+		for (KpiGroupYear kpiGroupYear : list) {
+			kpiGroupYearMapper.DeleteKpiGroup(kpiGroupYear.getId());
+		}
 	}
 	
 	/**

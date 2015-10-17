@@ -53,7 +53,7 @@
 			p.start_time,
 			p.end_time,
 			y.id,
-		    y.group_id,
+		    p.id as group_id,
 			y.weight,
 			y.content,
 			y.year_target,
@@ -64,10 +64,10 @@
 			y.audit_status
 		FROM
 			kpi_group_year p
-		INNER JOIN kpi_dept_year y ON p.ID = y.group_id	
+		LEFT JOIN kpi_dept_year y ON p.ID = y.group_id	
 		<where>	
-			p.audit_status = '2' AND Y.STATUS = '1'	
-			<if test="keyTask != null">
+		   p.audit_status = '2' AND  P.STATUS = '1'	 			
+			<if test="keyTask != null and keyTask !=''">
 				and key_task like '%${keyTask}%'
 			</if>			
 			<if test="startTime != null" >
@@ -83,7 +83,7 @@
 		</where>
 			
 		ORDER BY
-			p.create_time DESC,key_item
+			key_task,key_item,p.create_time DESC
 		LIMIT #{start} ,#{rows}	
 	</select>
 	
@@ -101,7 +101,7 @@
 			kpi_group_year p
 		LEFT JOIN kpi_dept_year y ON p.ID = y.group_id	
 		WHERE
-			p.STATUS = 2 and y.id = #{0}
+			p.id = #{0}
 		ORDER BY
 			p.create_time DESC,key_item		
 	</select>
@@ -283,7 +283,7 @@
     	 where ID = #{id,jdbcType=VARCHAR}
     ) -->
     
-    update kpi_dept_year
+    update kpi_group_year
     set  status = '0' 
     where id = #{id,jdbcType=VARCHAR}
    

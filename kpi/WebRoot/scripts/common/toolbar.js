@@ -13,16 +13,41 @@
 			 
 			 if(status == '1'){
 				 $("#toolbar").find("a").show();
-				 $("#toolbar").find(".icon-tip").hide();
+				 $("#toolbar").find("[iconcls=icon-ok]").hide();
+				 $("#dlg-buttons").find("[iconcls=icon-ok]").show();				
+				 $("#dlg").find(".datagrid-toolbar").show();
+				 
 			 }
-			 if(status == '2'){
+			 else if(status == '2'){
 				 $("#toolbar").find("a").hide();
 				 $("#toolbar").find("#view").show();
 				 $("#dlg-buttons").find("[iconcls=icon-ok]").hide();				
 				 $("#dlg").find(".datagrid-toolbar").hide();
 			 }
+			 else{
+				 $("#toolbar").find("a").show();
+				 $("#toolbar").find("[iconcls=icon-ok]").hide(); 
+				 $("#dlg-buttons").find("[iconcls=icon-ok]").show();				
+				 $("#dlg").find(".datagrid-toolbar").show();
+			 }			
 		 }
  }
+ 
+ /**
+  * 单元格格式
+  * @param val
+  * @param row
+  * @returns
+  */
+ function cellFormat(val,row){
+		if (val != null && val.length > 18){
+			//var str = val.substring(0,17) + "...";
+			//return '<span title='+val+' style="color:red;">'+str+'</span>';
+			return '<span title='+val+' style="color:red;">'+val+'</span>';
+		} else {
+			return val;
+		}
+}
  
  $(function(){
 	
