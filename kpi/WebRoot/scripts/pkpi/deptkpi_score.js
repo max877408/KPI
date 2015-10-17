@@ -1,10 +1,5 @@
   
-	
-	$(function() {	 
-		
-		var kpiYear = $("input[name=kpiYear]").val();
-		var kpiMonth = $("input[name=kpiMonth]").val();
-
+	$(function() {	
 		var dg_list = $('#dg_list').datagrid({
 			 striped: true, //行背景交换
 			 nowrap: true, //单元格是否可以换行
@@ -17,8 +12,11 @@
 		    	 return false;
 		    	// $('#dg_list').datagrid("unselectRow",rowIndex);
 		     },
-		     url:'../kpiMonth/getKpiDeptMonthtList.action?kpiYear='+kpiYear+'&kpiMonth='+kpiMonth+'',
+		     url:'../kpiMonth/getKpiDeptMonthtList.action',
 			 onLoadSuccess : function(data) {
+				var row = $('#dg_list').datagrid('getData').rows[0];
+				tooBar.menuStatus(row.auditStatus);
+				 
 				onLoadSuccess(data);	
 				
 				//内容换行
@@ -190,139 +188,12 @@
  				$('#dg_list').datagrid('selectRow', editIndex);
  			}
  		}
-     }
-     
-    /**
-    * 菜单工具栏
-    */    
-	function newDeptKpi() {
-		$('#dlg').dialog('open').dialog('center').dialog('setTitle',
-				'新增部门年度绩效考核指标');
-		$('#fm').form('clear');
-		
-	}
-	
-	var dg_index = 1;
-	function editDeptKpi() {
-		var row = $('#dg_list').datagrid('getSelected');
-		if (row) {
-			
-			toolOp.loadData(row.id);
-			
-			$('#dg_add').datagrid({
-				 striped: true, //行背景交换
-				 url:"../kpiYear/getKpiDeptDetail.action?id=" + row.id,
-				 onLoadSuccess : function(data) {
-					 if(data.rows.length == 0 && dg_index == 1){
-						 dg_index++;
-						//新增默认行	
-						$('#dg_add').datagrid('loadData', { total: 0, rows: [] }); 
-						var data_add = [];
-						for(var i =1 ; i<= 9; i++){
-							data_add.push({
-								"id" :"",
-								"keyPoint" : "",
-								"leadPerson":"",				
-								"startTime" : "",
-								"endTime" : ""
-							})
-						}
-						$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
-						dg_index = 1;
-					 }
-					 else{
-						 //alert('11111111');
-					 }								
-				 }
-			});
-			
-			
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle','制定部门年度绩效考核指标');			 
-			$('#fm').form('clear');
-			
-		}
-		else{
-			$.messager.alert("提示", "请选择一个具体事项,进行指定部门绩效考核指标！");
-		}	
-	}
+     }	
 	
 	function endEdit(){
-		var rows = $('#dg_add').datagrid('getRows');
+		var rows = $('#dg_list').datagrid('getRows');
 		for ( var i = 0; i < rows.length; i++) {
-			$('#dg_add').datagrid('endEdit', i);
-		}
-	}
-	
-	function saveDeptKpi() {
-		endEdit();
-		var $dg = $("#dg_add");
-		if ($dg.datagrid('getChanges').length) {
-			
-			//获取Form 表单内容
-			var formData = $('#fm').serializeArray();	
-			
-			//当前选中行id
-			var row = $('#dg_list').datagrid('getSelected');
-			formData["id"] = row.id;
-			
-			var parame = {};
-			$.each(formData,function(){
-				parame[this.name] = this.value;
-			})
-			formData = JSON.stringify(parame);
-			
-			console.log(formData);
-			
-			var inserted = $dg.datagrid('getChanges', "inserted");
-			var deleted = $dg.datagrid('getChanges', "deleted");
-			var updated = $dg.datagrid('getChanges', "updated");			
-					
-			var effectRow = new Object();
-			if (inserted.length) {				
-				effectRow["inserted"] = JSON.stringify(inserted);
-			}
-			if (deleted.length) {				
-				effectRow["deleted"] = JSON.stringify(deleted);
-			}
-			if (updated.length) {				
-				effectRow["updated"] = JSON.stringify(updated);
-			}
-			effectRow["data"] = formData;
-			
-			if($('#fm').form('validate')){
-				$.post("../kpiYear/SaveKpiDept.action", effectRow, function(rsp) {
-					if(rsp.code == "000"){
-						$.messager.alert("提示", "提交成功！");
-						$('#dlg').dialog('close'); // close the dialog
-						$('#dg_list').datagrid('reload'); // reload the user data
-					}
-				}, "JSON").error(function() {
-					$.messager.alert("提示", "提交错误了！");
-				});
-			}		
-		}		
-	}
-	function destroyDeptKpi() {
-		var row = $('#dg').datagrid('getSelected');
-		if (row) {
-			$.messager.confirm('Confirm',
-					'Are you sure you want to destroy this user?',
-					function(r) {
-						if (r) {
-							$.post('destroy_user.php', {
-								id : row.id
-							}, function(result) {
-								if (result.success) {
-									$('#dg').datagrid('reload'); // reload the user data
-								} else {
-									$.messager.show({ // show error message
-										title : 'Error',
-										msg : result.errorMsg
-									});
-								}
-							}, 'json');
-						}
-					});
+			$('#dg_list').datagrid('endEdit', i);
 		}
 	}
 	
@@ -345,4 +216,69 @@
 						$('#fm').form('load', '../kpiYear/getKpiDept.action?id='+ id);
 					}
 	              
+	}
+	
+	/**
+ 	 * 保存部门月度评价
+ 	 */
+ 	function saveDeptMonthKpi() { 		
+		endEdit();
+ 		var $dg = $("#dg_list");
+ 		if ($dg.datagrid('getChanges').length) {		
+ 						
+ 			var inserted = $dg.datagrid('getChanges', "inserted");
+ 			var deleted = $dg.datagrid('getChanges', "deleted");
+ 			var updated = $dg.datagrid('getChanges', "updated");			
+ 					
+ 			var effectRow = new Object();
+ 			if (inserted.length) {				
+ 				effectRow["inserted"] = JSON.stringify(inserted);
+ 			}
+ 			if (deleted.length) {				
+ 				effectRow["deleted"] = JSON.stringify(deleted);
+ 			}
+ 			if (updated.length) {				
+ 				effectRow["updated"] = JSON.stringify(updated);
+ 			}
+ 			
+ 			$.post("../kpiMonth/saveDeptMonthKpi.action", effectRow, function(rsp) {
+					if(rsp.code == "000"){
+						$.messager.alert("提示", "提交成功！");						
+						$('#dg_list').datagrid('reload'); // reload the user data
+					}
+				}, "JSON").error(function() {
+					$.messager.alert("提示", "提交错误了！");
+			});		
+ 		}
+ 		else{
+ 			$.messager.alert("提示", "无修改项！");
+ 		}
+ 	}
+	
+	/**
+	 * 部门月度评价提交审批
+	 */
+	function saveDeptApprove() {
+		var year = $("select[comboname=kpiYear]").combobox("getValue");
+		var month = $("select[comboname=kpiMonth]").combobox("getValue")
+		$.messager.confirm('确认','提交审批之后,部门月度评价将不可编辑!',
+			function(r) {
+			if (r) {
+				$.post('../kpiMonth/saveDeptApprove.action', {
+					year : year,
+					month : month
+				}, function(result) {
+					if (result.code == "000") {
+						$.messager.alert("提示", "操作成功！");
+						$('#dg_list').datagrid('reload');
+						//
+					} else {
+						$.messager.show({ // show error message
+							title : 'Error',
+							msg : result.errorMsg
+						});
+					}
+				}, 'json');
+			}
+		 });
 	}

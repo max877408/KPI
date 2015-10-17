@@ -1,14 +1,15 @@
 package com.fantasia.action;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fantasia.base.action.BaseAction;
+import com.fantasia.base.bean.ListData;
+import com.fantasia.base.bean.PageData;
 import com.fantasia.base.bean.ResultData;
+import com.fantasia.base.bean.ResultMsg;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptMonthService;
 import com.fantasia.service.KpiEmployeeMonthService;
@@ -16,8 +17,6 @@ import com.fantasia.service.KpiEmployeeMonthService;
 @Controller
 @RequestMapping(value = "/kpiMonth")
 public class KpiMonthAction extends BaseAction {
-
-	private static Logger _log = LoggerFactory.getLogger(KpiMonthAction.class);		
 	
 	@Autowired
 	private KpiDeptMonthService kpiDeptMonthService;
@@ -26,26 +25,62 @@ public class KpiMonthAction extends BaseAction {
 	private KpiEmployeeMonthService kpiEmployeeMonthService;
 	
 	/**
-	 * 查询部门月度绩效考核指标
+	 * 查询部门月度PBC
 	 * @param page
 	 * @return
 	 * @throws ServiceException
 	 */
 	@RequestMapping(value = "/getKpiDeptMonthtList")
 	@ResponseBody
-	public ResultData getKpiDeptMonthList(int page,int rows,int kpiYear,int kpiMonth) throws ServiceException {
-		return kpiDeptMonthService.getKpiDeptMonth(page,rows,kpiYear,kpiMonth);
+	public ResultData getKpiDeptMonthList(PageData page) throws ServiceException {
+		return kpiDeptMonthService.getKpiDeptMonth(page);
 	}
 	
 	/**
-	 * 查询员工月度绩效考核指标
+	 * 删除部门月度PBC
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/delMonthDeptKpi")
+	@ResponseBody
+	public ResultMsg delMonthDeptKpi(String id) throws ServiceException {
+		return kpiDeptMonthService.delMonthDeptKpi(id);
+	}
+	
+	/**
+	 * 保存部门月度PBC
+	 * @param listData
+	 * @return
+	 * @throws ServiceException
+	 */	
+	@RequestMapping(value = "/saveDeptMonthKpi")
+	@ResponseBody
+	public ResultMsg saveDeptMonthKpi(ListData listData) throws ServiceException {
+		return kpiDeptMonthService.saveDeptMonthKpi(listData);				
+	}
+	
+	/**
+	 * 部门月度评价提交审批
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/saveDeptApprove")
+	@ResponseBody
+	public ResultMsg saveDeptApprove(PageData page)  {
+		return kpiDeptMonthService.saveDeptApprove(page);
+	}
+	
+	/**
+	 * 查询员工月度PBC
 	 * @param page
 	 * @return
 	 * @throws ServiceException
 	 */
 	@RequestMapping(value = "/getKpiEmployeeMonthList")
 	@ResponseBody
-	public ResultData getKpiEmployeeMonthList(int page,int rows,int kpiYear,int kpiMonth) throws ServiceException {
-		return kpiEmployeeMonthService.getKpiEmployeeMonth(page,rows,kpiYear,kpiMonth);
+	public ResultData getKpiEmployeeMonthList(PageData page) throws ServiceException {
+		return kpiEmployeeMonthService.getKpiEmployeeMonthList(page);
 	}
 }

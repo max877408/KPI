@@ -284,7 +284,6 @@
   <delete id="delete" parameterType="java.lang.String">
     update kpi_employee_year
     set  status = '0' 
-    where id = #{id,jdbcType=VARCHAR}
-   
+    where id = #{id,jdbcType=VARCHAR}   
   </delete>
 </mapper>

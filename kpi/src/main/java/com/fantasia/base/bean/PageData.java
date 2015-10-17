@@ -108,6 +108,11 @@ public class PageData {
 	}
 
 	public int getMonth() {
+		if(month == 0 ){
+			Calendar startTime = Calendar.getInstance();
+			startTime.setTime(new Date());
+			return (startTime.get(Calendar.MONTH) + 1);
+		}
 		return month;
 	}
 

@@ -19,6 +19,7 @@ import com.fantasia.bean.kpiEmployeeMonth;
 import com.fantasia.core.DbcContext;
 import com.fantasia.core.Utils;
 import com.fantasia.dao.kpiEmployeeMonthMapper;
+import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiEmployeeMonthService;
 
 @Service("KpiEmployeeMonthService")
@@ -98,17 +99,32 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 			}
 		}
 	}
-
-	@Override
-	public ResultData getKpiEmployeeMonth(int page, int rows, int kpiYear,int kpiMonth) {
+	
+	
+	/**
+	 * 查询员工月度PBC
+	 * @param page
+	 * @return
+	 * @throws ServiceException
+	 */	
+	public ResultData getKpiEmployeeMonthList(PageData page){
+		
 		ResultData data = new ResultData();
-		int start = (page -1) * rows;
-		List<KpiDeptMonthBean> list = kpiEmployeeMonthMapper.getKpiEmpoyeeMonth(kpiYear,kpiMonth, start,rows);
+		page.setStart((page.getPage() -1) * page.getRows());	
+		if(!DbcContext.isAdmin()){
+			page.setUserId(DbcContext.getUser().getUserName());
+		}		
+		
+		List<KpiDeptMonthBean> list = kpiEmployeeMonthMapper.getKpiEmpoyeeMonth(page);
 		data.setRows(list);
 		
 		//TotalRows 
-		list = kpiEmployeeMonthMapper.getKpiEmpoyeeMonth(kpiYear,kpiMonth,0,PageData.MAX_ROWS);	
+		PageData totalPage = page;
+	
+		totalPage.setStart(0);
+		totalPage.setRows(PageData.MAX_ROWS);
+		list = kpiEmployeeMonthMapper.getKpiEmpoyeeMonth(totalPage);
 		data.setTotal(list.size());
-		return data;
-	}	
+		return data;	
+	}
 }

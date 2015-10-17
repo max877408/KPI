@@ -2,9 +2,11 @@ package com.fantasia.service;
 
 import java.util.List;
 
+import com.fantasia.base.bean.PageData;
 import com.fantasia.base.bean.ResultData;
 import com.fantasia.bean.KpiEmployeeYear;
 import com.fantasia.bean.kpiEmployeeMonth;
+import com.fantasia.exception.ServiceException;
 
 public interface KpiEmployeeMonthService {
 	
@@ -22,10 +24,11 @@ public interface KpiEmployeeMonthService {
 	public void InsertKpi(kpiEmployeeMonth kpiEmployeeMonth);
 	
 	/**
-	 * 查询员工月度绩效考核指标
+	 * 查询员工月度PBC
 	 * @param page
 	 * @return
-	 */
-	public ResultData getKpiEmployeeMonth(int page,int rows,int kpiYear,int kpiMonth);
+	 * @throws ServiceException
+	 */	
+	public ResultData getKpiEmployeeMonthList(PageData page);
 	
 }

@@ -5,6 +5,7 @@
 			 striped: true, //行背景交换
 			 nowrap: true, //单元格是否可以换行
 			 fit: false,
+			 checkOnSelect: false,
 			 pageSize: 15, //每页显示的记录条数，默认为10     
 		     pageList: [15, 20, 30, 40, 50, 100],
 			 width: 'auto',

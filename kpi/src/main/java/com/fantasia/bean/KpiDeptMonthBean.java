@@ -66,6 +66,9 @@ public class KpiDeptMonthBean {
 	private String isScore;
 
 	private String status;
+	
+	private String auditStatus;
+	
 
 	private String createBy;
 
@@ -273,6 +276,14 @@ public class KpiDeptMonthBean {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getAuditStatus() {
+		return auditStatus;
+	}
+
+	public void setAuditStatus(String auditStatus) {
+		this.auditStatus = auditStatus;
 	}
 
 	public String getCreateBy() {

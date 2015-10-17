@@ -42,7 +42,7 @@ public class DateTimeUtil {
 
 	public static String shortDateString() {
 		Date currentTime = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String dateString = sdf.format(currentTime);
 		return dateString;
 	}

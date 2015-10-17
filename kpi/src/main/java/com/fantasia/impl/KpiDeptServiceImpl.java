@@ -26,6 +26,7 @@ import com.fantasia.dao.KpiGroupYearMapper;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptDetailService;
 import com.fantasia.service.KpiDeptService;
+import com.fantasia.util.DateTimeUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -72,8 +73,22 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 				kpiGroupYear.setKeyItem(kpiBean.getKeyItem());
 				kpiGroupYear.setDetailItem(kpiBean.getDetailItem());				
 				kpiGroupYear.setDept(DbcContext.getUser().getDeptId());
-				kpiGroupYear.setStartTime(kpiBean.getStartTime());
-				kpiGroupYear.setEndTime(kpiBean.getEndTime());	
+				
+				//设置默认时间
+				if(!StringUtils.isEmpty(kpiBean.getStartTime())){
+					kpiGroupYear.setStartTime(kpiBean.getStartTime());
+				}
+				else{		
+					//添加部门月度绩效考核，默认审核通过
+					kpiBean.setAuditStatus("2");
+					kpiGroupYear.setStartTime(DateTimeUtil.shortDateString());
+				}				
+				if(!StringUtils.isEmpty(kpiBean.getEndTime())){
+					kpiGroupYear.setStartTime(kpiBean.getEndTime());
+				}
+				else{					
+					kpiGroupYear.setEndTime(DateTimeUtil.shortDateString());
+				}	
 				
 				//部门新增
 				kpiGroupYear.setStatus("2");
@@ -158,6 +173,9 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 			record.setStandard(kpiDeptYear.getStandard());
 			record.setProjectLevel(kpiDeptYear.getProjectLevel());
 			record.setDifficulty(kpiDeptYear.getDifficulty());
+			if(!StringUtils.isEmpty(kpiDeptYear.getAuditStatus())){
+				record.setAuditStatus(kpiDeptYear.getAuditStatus());
+			}
 			//record.setResponsiblePerson(kpiDeptYear.getResponsiblePerson());
 			
 			if(!StringUtils.isEmpty(kpiDeptYear.getId())){	

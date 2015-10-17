@@ -6,6 +6,7 @@
 			 striped: true, //行背景交换
 			 nowrap: false, //单元格是否可以换行
 			 fit: false,
+			 checkOnSelect: false,
 			 pageSize: 15, //每页显示的记录条数，默认为10     
 		     pageList: [15, 20, 30, 40, 50, 100],
 			 width: 'auto',
@@ -170,7 +171,7 @@
     * 菜单工具栏
     */    
 	function newDeptKpi() {
-		$('#dlg').dialog('open').dialog('center').dialog('setTitle','新增部门年度绩效考核指标');
+		$('#dlg').dialog('open').dialog('center').dialog('setTitle','新增部门年度计划');
 		$('#fm').form('clear');
 		
 		//新增默认行	

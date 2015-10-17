@@ -13,7 +13,7 @@
 		     pageList: [15, 20, 30, 40, 50, 100],
 			 width: 'auto',
 		     height: 'auto',
-		     url:'../kpiMonth/getKpiEmployeeMonthList.action?kpiYear='+kpiYear+'&kpiMonth='+kpiMonth+'',
+		     url:'../kpiMonth/getKpiEmployeeMonthList.action',
 			 onLoadSuccess : function(data) {
 				onLoadSuccess(data);
 				
