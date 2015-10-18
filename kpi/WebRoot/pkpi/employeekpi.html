@@ -12,9 +12,9 @@
 <script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../scripts/pkpi/employeekpi.js?time=New Date()"></script>
-<script type="text/javascript" src="../scripts/common/search-tool.js?time="></script>
-<script type="text/javascript" src="../scripts/common/toolbar.js?time=New Date()"></script>
+<script type="text/javascript" src="../scripts/pkpi/employeekpi.js"></script>
+<script type="text/javascript" src="../scripts/common/search-tool.js"></script>
+<script type="text/javascript" src="../scripts/common/toolbar.js"></script>
 </head>
 <body>
 	<div id="tb"
@@ -44,53 +44,63 @@
          </table>		
 	</div>
 	
-	<table id="dg_list" title="员工月度绩效考核方案" class="easyui-datagrid" 
+	<table id="dg_list" title="员工月度PBC" class="easyui-datagrid" 
+		 data-options="
+                iconCls: 'icon-edit',              
+                singleSelect: true,               
+                onClickCell: onListClickCell" 
 		 toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="false" singleSelect="true">
 		<thead data-options="frozen:true">
             <tr>
-                <th field="id"hidden="true">id</th>		
-                <th field="keyTask" width="150px">关键任务</th>
-				<th field="keyItem" width="150px">主要事项</th>
-				<th field="detailItem" width="150px">具体事项</th>	
-				<th field="keyPoint" width="150px" >关键节点(部门)</th>	
+                <th field="id"hidden="true">id</th>	
+                <th field="kpiId"hidden="true">kpiId</th>	
+                	
+                <th field="keyTask" width="120px" data-options="formatter:cellFormat">关键任务</th>
+				<th field="keyItem" width="120px" data-options="formatter:cellFormat">主要事项</th>
+				<th field="detailItem" width="120px" data-options="formatter:cellFormat">具体事项</th>	
+				<th field="keyPoint" width="130px" data-options="formatter:cellFormat">关键节点(部门)</th>	
             </tr>
         </thead>
 		<thead>
 			<tr>
-				<th field="workStage" width="250px" data-options="styler:cellStyler">考核指标名称</th>	
-				<th field="weight" width="80px" >权重</th>
-				<th field="content" width="250px">目标值</th>				
-				<th field="standard" width="250px">衡量标准</th>				
+				<th field="workStage" width="150px" >考核指标名称</th>	
+				<th  data-options="field:'weight',editor:'text',styler:cellStyler" width="80px" >权重</th>
+				<th  data-options="field:'yearTarget',editor:'text',styler:cellStyler" width="120px">目标值</th>				
+				<th  data-options="field:'standard',editor:'text',styler:cellStyler" width="180px">衡量标准</th>					
 				<th field="responsiblePerson" width="100px">责任人</th>
 				<th field="kpiMonth" width="80px">月份</th>												
 			</tr>
 		</thead>
-	</table>
-
-	<div id="toolbar">		
+	</table>	
+	
+	<div id="toolbar">
 		<a href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-edit" plain="true" onclick="editEmployeeKpi()">新增</a>
-	    <a href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-remove" plain="true" onclick="">删除</a>
+			iconCls="icon-add" plain="true" onclick="editEmployeeKpi()">新增</a>		
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-remove" plain="true" onclick="destroyDeptKpi()">删除</a> 
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-save" plain="true" onclick="saveEmployeeMonthKpi()">提交</a>
 	</div> 
 
 	<div id="dlg" class="easyui-dialog"
-		style="width:900px;height:550px;padding:1px 2px" closed="true"
+		style="width:900px;height:550px;padding:10px 10px" closed="true"
 		buttons="#dlg-buttons">
 
 		<form id="fm" method="post" novalidate>			
 			
-		   <table cellpadding="5">
+	 	  <table cellpadding="5">
 	            	<tr>
 	                    <td>具体事项:</td>
 	                    <td colspan="3">	                   	
-	                   	 <input type="text" name="detailItem" class="easyui-textbox" readonly="readonly">
+	                   	 <input type="text" name="detailItem" class="easyui-textbox" data-options="multiline:true" readonly="readonly"
+								style="height:35px;width:400px">
 	                    </td>
 	                </tr>
 	                <tr>
 	                    <td>关键节点:</td>
 	                    <td colspan="3"> 
-	                      <input type="text" name="keyPoint" class="easyui-textbox" readonly="readonly">	                      
+	                      <input type="text" name="keyPoint" class="easyui-textbox" data-options="multiline:true" readonly="readonly"
+								style="height:35px;width:400px">	                      
 	                   	</td>
 	                </tr>
 	                
@@ -104,17 +114,19 @@
 	                      <input type="text" name="endTime" class="easyui-textbox" readonly="readonly">
 	                   	</td>
 	                </tr>	                
-	         </table>
+	       </table> 	     
+	         
 	         <br/>
 
 			<table id="dg_add" title="请在下面列表中填写工作阶段" rownumbers="true" data-options="
                 iconCls: 'icon-edit',
                 singleSelect: true,               
                 onClickCell: onClickCell"
-				style="width:800px;height:350px;">
+				style="width:850px;height:350px;">
 				<thead>
 					<tr>
-						<th data-options="field:'workStage',width:180,editor:'text'">工作阶段</th>
+					    <th field="id"hidden="true">id</th>
+						<th data-options="field:'workStage',width:130,editor:'text'">工作阶段</th>
 						<th data-options="field:'taskDivision',width:120,
 		                        formatter:function(value,row){
 		                            return row.taskDivision;
@@ -148,6 +160,5 @@
 			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')"
 			style="width:90px">取消</a>
 	</div>
-
 </body>
 </html>

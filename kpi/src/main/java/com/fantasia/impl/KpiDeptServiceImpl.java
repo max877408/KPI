@@ -48,6 +48,12 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	
 	/**
 	 * 保存部门绩效考核
+	 * getGroupId 存在 则年度计划存在
+	 * 需要 保存年度计划
+	 * 部门年度计划
+	 * 部门年度计划明细
+	 * kpiBean.getStartTime() 为空 默认 
+	 * 默认为部门月度PBC新增，默认时间为当前时间
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -180,7 +186,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 			
 			if(!StringUtils.isEmpty(kpiDeptYear.getId())){	
 				record.setId(kpiDeptYear.getId());
-				record.setModifyBy(DbcContext.getAdminId());
+				record.setModifyBy(DbcContext.getUserId());
 				record.setModifyTime(new Date());
 				
 				kpiDeptYearMapper.update(record);
@@ -188,7 +194,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 			else{
 				record.setId(Utils.getGUID());
 				record.setStatus("1");
-				record.setCreateBy(DbcContext.getAdminId());
+				record.setCreateBy(DbcContext.getUserId());
 				record.setCreateTime(new Date());
 				
 				kpiDeptYearMapper.insert(record);

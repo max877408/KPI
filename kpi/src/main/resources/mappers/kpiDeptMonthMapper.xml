@@ -97,7 +97,7 @@
 	        </if>
 	        
 	</where>	
-	ORDER BY G.KEY_TASK,G.KEY_ITEM,D.KEY_POINT,M.CREATE_TIME DESC		
+	ORDER BY G.KEY_TASK,G.KEY_ITEM,D.KEY_POINT,M.CREATE_TIME DESC
 	LIMIT #{start} ,#{rows}
   </select>
 
@@ -294,7 +294,29 @@
   </delete>  
   
   <update id="saveDeptApprove" parameterType="com.fantasia.base.bean.PageData" >
-    update kpi_dept_month 
+	<!--     update kpi_dept_month 
+	    <set >
+	        audit_status = '2',
+		    <if test="modifyBy != null" >
+		      modify_by = #{modifyBy,jdbcType=VARCHAR},
+		    </if>
+		    <if test="modifyTime != null" >
+		      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		    </if>
+	    </set>     
+	    where kpi_id in(
+	    	select id from KPI_DEPT_YEAR_DETAIL
+	    	 <where>	
+				<if test="startTime != null" >
+		        	 start_time &gt;= #{startTime}
+		        </if>
+		        <if test="endTime != null" >
+		        	and end_time &lt;= #{endTime}
+		        </if> 
+			</where>     	
+	    )  -->  
+	    
+	update kpi_dept_month 
     <set >
         audit_status = '2',
 	    <if test="modifyBy != null" >
@@ -304,17 +326,12 @@
 	      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
 	    </if>
     </set>     
-    where kpi_id in(
-    	select id from KPI_DEPT_YEAR_DETAIL
-    	 <where>	
-			<if test="startTime != null" >
-	        	 start_time &gt;= #{startTime}
-	        </if>
-	        <if test="endTime != null" >
-	        	and end_time &lt;= #{endTime}
-	        </if> 
-		</where>     	
-    )   
+    <where>	
+    	 kpi_month = #{month}	
+        <if test="userId != null" >
+        	and responsible_person = #{userId}
+        </if> 
+	</where> 
   </update>
  
 </mapper>

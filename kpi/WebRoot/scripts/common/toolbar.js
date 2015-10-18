@@ -33,21 +33,32 @@
 		 }
  }
  
- /**
-  * 单元格格式
-  * @param val
-  * @param row
-  * @returns
-  */
- function cellFormat(val,row){
-		if (val != null && val.length > 18){
-			//var str = val.substring(0,17) + "...";
-			//return '<span title='+val+' style="color:red;">'+str+'</span>';
-			return '<span title='+val+' style="color:red;">'+val+'</span>';
-		} else {
-			return val;
-		}
-}
+	 /**
+	  * 单元格格式
+	  * @param val
+	  * @param row
+	  * @returns
+	  */
+	 function cellFormat(val,row){
+			if (val != null && val.length > 18){
+				//var str = val.substring(0,17) + "...";
+				//return '<span title='+val+' style="color:red;">'+str+'</span>';
+				return '<span title='+val+' style="color:red;">'+val+'</span>';
+			} else {
+				return val;
+			}
+	}
+ 
+	/**
+	 * 单元格样式
+	 * @param value
+	 * @param row
+	 * @param index
+	 * @returns {String}
+	 */
+	function cellStyler(value,row,index){
+		return 'background-color:#e6f0ff;';
+	}
  
  $(function(){
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import com.fantasia.base.bean.PageData;
 import com.fantasia.bean.KpiDeptMonthBean;
 import com.fantasia.bean.kpiEmployeeMonth;
+import com.fantasia.exception.ServiceException;
 
 public interface kpiEmployeeMonthMapper { 
 
@@ -13,4 +14,20 @@ public interface kpiEmployeeMonthMapper {
     int insert(kpiEmployeeMonth record);  
 
     int update(kpiEmployeeMonth record);
+    
+    /**
+	 * 删除员工月度PBC
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
+	public void delMonthEmployeeKpi(String id);
+	
+	/**
+	 * 员工 月度评价提交审批
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */	
+	public void saveEmployeeApprove(PageData page);
 }

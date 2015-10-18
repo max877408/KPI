@@ -88,6 +88,7 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 							record.setKpiId(kpiDeptYearDetail.getId());
 							record.setKpiMonth(month);
 							record.setKpiYear(endTime.get(Calendar.YEAR));
+							record.setResponsiblePerson(kpiDeptYearDetail.getLeadPerson());
 							record.setCreateBy(DbcContext.getAdminId());
 							record.setCreateTime(new Date());
 							record.setStatus("1");
@@ -101,7 +102,7 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 				}
 			}
 		}
-	}
+	}	
 
 	/**
 	 * 查询部门月度绩效考核指标
@@ -236,6 +237,9 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 	 */	
 	public ResultMsg saveDeptApprove(PageData page){
 		ResultMsg msg = new ResultMsg();
+		if(!DbcContext.isAdmin()){
+			page.setUserId(DbcContext.getUserId());
+		}
 		page.setModifyBy(DbcContext.getUserId());
 		page.setModifyTime(new Date());
 		kpiDeptMonthMapper.saveDeptApprove(page);		

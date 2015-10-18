@@ -53,6 +53,7 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_score" property="isScore" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
@@ -60,9 +61,11 @@
   </resultMap>
 
 
+  <!-- id 存放为 KPI_DEPT_YEAR_DETAIL id ,kpi_id 存放为 KPI_EMPLOYEE_MONTH id -->
   <select id="getKpiEmpoyeeMonth"  resultMap="EmployeeMonthMap">
 	SELECT
-		M.ID,
+		D.ID,
+		m.id as kpi_id,
 		G.KEY_TASK,
 		G.KEY_ITEM,
 		G.DETAIL_ITEM,
@@ -73,7 +76,11 @@
 		M.STANDARD,
 		M.KPI_MONTH,
 		M.KPI_YEAR,
-		E.TASK_DIVISION AS RESPONSIBLE_PERSON
+		E.TASK_DIVISION AS RESPONSIBLE_PERSON,
+		m.finish_value,
+		m.finish_desc,
+		m.seft_score,
+		m.audit_status
 	FROM
 		KPI_EMPLOYEE_MONTH M
        LEFT JOIN KPI_EMPLOYEE_YEAR E ON M.KPI_ID = E.ID
@@ -96,7 +103,7 @@
 	        </if>
 	</where>
 	
-	ORDER BY M.CREATE_TIME DESC
+	ORDER BY G.KEY_TASK,G.KEY_ITEM,	G.DETAIL_ITEM,M.CREATE_TIME DESC			
 	LIMIT #{start} ,#{rows}
   </select>
 
@@ -285,5 +292,33 @@
     </set>
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+  
+   
+  <delete id="delMonthEmployeeKpi" parameterType="java.lang.String">
+    update kpi_employee_month
+    set  status = '0' 
+    where id =  #{id,jdbcType=VARCHAR} 
+  </delete>
+  
+    
+  <update id="saveEmployeeApprove" parameterType="com.fantasia.base.bean.PageData" >
+    update kpi_employee_month 
+    <set >
+        audit_status = '2',
+	    <if test="modifyBy != null" >
+	      modify_by = #{modifyBy,jdbcType=VARCHAR},
+	    </if>
+	    <if test="modifyTime != null" >
+	      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+	    </if>
+    </set>     
+    <where>	
+    	 kpi_month = #{month}	
+        <if test="userId != null" >
+        	and responsible_person = #{userId}
+        </if> 
+	</where>     
+  </update>
+  
  
 </mapper>

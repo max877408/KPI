@@ -3,7 +3,7 @@
 
 		var dg_list = $('#dg_list').datagrid({
 			 striped: true, //行背景交换
-			 nowrap: true, //单元格是否可以换行
+			 nowrap: false, //单元格是否可以换行
 			 fit: false,
 			 checkOnSelect: false,
 			 pageSize: 15, //每页显示的记录条数，默认为10     
@@ -15,7 +15,7 @@
 				onLoadSuccess(data);	
 				
 				//内容换行
-				var div = $(".datagrid-td-merged div");
+				/*var div = $(".datagrid-td-merged div");
 				div.css({
 					"width":div.width(),
 					"white-space":"nowrap",
@@ -26,7 +26,7 @@
 				
 				$(div).each(function(){
 					$(this).parent().attr("title",$(this).text());
-				})
+				})*/
 				
 			 }
 		});	
@@ -246,6 +246,7 @@
 			
 			$('#dg_add').datagrid({
 				 striped: true, //行背景交换
+				 checkOnSelect: false,
 				 url:"../kpiYear/getKpiDeptDetail.action?id=" + row.id,
 				 onLoadSuccess : function(data) {
 					 if(data.rows.length == 0 && dg_index == 1){

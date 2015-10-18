@@ -1,5 +1,4 @@
   
-	
 	$(function() {	 
 
 		var kpiYear = $("input[name=kpiYear]").val();
@@ -7,8 +6,9 @@
 		
 		var dg_list = $('#dg_list').datagrid({
 			 striped: true, //行背景交换
-			 nowrap: true, //单元格是否可以换行
+			 nowrap: false, //单元格是否可以换行
 			 fit: false,
+			 checkOnSelect: false,
 			 pageSize: 15, //每页显示的记录条数，默认为10     
 		     pageList: [15, 20, 30, 40, 50, 100],
 			 width: 'auto',
@@ -255,11 +255,11 @@
 				 }
 			});	
 				
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle','制定员工年度绩效考核指标');
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','制定员工月度pbc');
 	        $('#fm').form('clear');			
 		}
 		else{
-			$.messager.alert("提示", "请选择一个具体事项,进行制定员工绩效考核指标！");
+			$.messager.alert("提示", "请选择一条记录！");
 		}	
 	}
 	
@@ -316,6 +316,37 @@
 	function cellStyler(value,row,index){
 		return 'background-color:#e6f0ff;';
 	}
+	
+	/**
+	 * 删除部门绩效
+	 */
+	function destroyDeptKpi() {
+		var row = $('#dg_list').datagrid('getSelected');
+		if (row) {
+			$.messager.confirm('Confirm',
+					'您确定要删除当前员工月度PBC吗?',
+					function(r) {
+						if (r) {
+							$.post('../kpiMonth/delMonthEmployeeKpi.action', {
+								id : row.kpiId
+							}, function(result) {
+								if (result.code == "000") {
+									$.messager.alert("提示", "删除成功！");
+									$('#dg_list').datagrid('reload'); // reload the user data
+								} else {
+									$.messager.show({ // show error message
+										title : 'Error',
+										msg : result.errorMsg
+									});
+								}
+							}, 'json');
+						}
+					});
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
+		}
+	}
 
 
 	/**
@@ -327,3 +358,85 @@
 					}
 	              
 	}
+	
+	/**
+	 * 部门月度pbc 单元格编辑
+	 * @param index
+	 * @param field
+	 */	
+	function onListClickCell(index, field){
+	   	 if (listIndex != index) {
+				if (endListEditing()) {
+					$('#dg_list').datagrid('selectRow', index).datagrid('beginEdit',index);
+					 var ed = $('#dg_list').datagrid('getEditor', {index:index,field:field});
+					 if (ed){
+	                     ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+	                 }
+					 listIndex = index;
+				} else {
+					$('#dg_list').datagrid('selectRow', listIndex);
+				}
+		}
+	 }
+	
+	/**
+	 * 行编辑
+	 */
+	 var listIndex = undefined;
+     function endListEditing(){
+    	 if (listIndex == undefined) {
+ 			return true
+ 		}
+ 	
+ 		if ($('#dg_list').datagrid('validateRow', listIndex)) { 			
+             // $('#dg_list').datagrid('endEdit', listIndex);
+              listIndex = undefined;
+              return true;
+ 		} else {
+ 			return false;
+ 		}      
+     }
+     
+     function finishEdit(){
+    	 rows = $('#dg_list').datagrid('getRows');    	 
+         for ( var i = 0; i < rows.length; i++) { 
+        	 $('#dg_list').datagrid('endEdit', i); 
+         }
+     }
+     
+ 	/**
+ 	 * 保存员工月度PBC
+ 	 */
+ 	function saveEmployeeMonthKpi() { 		
+ 		finishEdit();
+ 		var $dg = $("#dg_list");
+ 		if ($dg.datagrid('getChanges').length) {		
+ 						
+ 			var inserted = $dg.datagrid('getChanges', "inserted");
+ 			var deleted = $dg.datagrid('getChanges', "deleted");
+ 			var updated = $dg.datagrid('getChanges', "updated");			
+ 					
+ 			var effectRow = new Object();
+ 			if (inserted.length) {				
+ 				effectRow["inserted"] = JSON.stringify(inserted);
+ 			}
+ 			if (deleted.length) {				
+ 				effectRow["deleted"] = JSON.stringify(deleted);
+ 			}
+ 			if (updated.length) {				
+ 				effectRow["updated"] = JSON.stringify(updated);
+ 			}
+ 			
+ 			$.post("../kpiMonth/saveEmployeeMonthKpi.action", effectRow, function(rsp) {
+					if(rsp.code == "000"){
+						$.messager.alert("提示", "提交成功！");						
+						$('#dg_list').datagrid('reload'); // reload the user data
+					}
+				}, "JSON").error(function() {
+					$.messager.alert("提示", "提交错误了！");
+			});		
+ 		}
+ 		else{
+ 			$.messager.alert("提示", "无修改项！");
+ 		}
+ 	}

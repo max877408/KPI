@@ -83,4 +83,40 @@ public class KpiMonthAction extends BaseAction {
 	public ResultData getKpiEmployeeMonthList(PageData page) throws ServiceException {
 		return kpiEmployeeMonthService.getKpiEmployeeMonthList(page);
 	}
+	
+	/**
+	 * 删除员工月度PBC
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/delMonthEmployeeKpi")
+	@ResponseBody
+	public ResultMsg delMonthEmployeeKpi(String id) throws ServiceException {
+		return kpiEmployeeMonthService.delMonthEmployeeKpi(id);
+	}
+	
+	/**
+	 * 保存员工月度PBC
+	 * @param listData
+	 * @return
+	 * @throws ServiceException
+	 */	
+	@RequestMapping(value = "/saveEmployeeMonthKpi")
+	@ResponseBody
+	public ResultMsg saveEmployeeMonthKpi(ListData listData) throws ServiceException {
+		return kpiEmployeeMonthService.saveEmployeeMonthKpi(listData);				
+	}
+	
+	/**
+	 * 员工 月度评价提交审批
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/saveEmployeeApprove")
+	@ResponseBody
+	public ResultMsg saveEmployeeApprove(PageData page)  {
+		return kpiEmployeeMonthService.saveEmployeeApprove(page);
+	}
 }
