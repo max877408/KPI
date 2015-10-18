@@ -173,6 +173,7 @@
 	function newDeptKpi() {
 		$('#dlg').dialog('open').dialog('center').dialog('setTitle','新增部门年度计划');
 		$('#fm').form('clear');
+		$('#dg_list').datagrid('unselectAll');
 		
 		//新增默认行	
 		$('#dg_add').datagrid('loadData', { total: 0, rows: [] }); 
@@ -198,6 +199,7 @@
 			
 			$('#dg_add').datagrid({
 				 striped: true, //行背景交换
+				 checkOnSelect: false,				
 				 url:"../kpiYear/getKpiDeptDetail.action?id=" + row.id,
 				 onLoadSuccess : function(data) {
 					 if(data.rows.length == 0 && dg_index == 1){

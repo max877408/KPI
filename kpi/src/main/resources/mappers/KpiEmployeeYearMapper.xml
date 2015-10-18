@@ -76,16 +76,17 @@
 				and P.detail_item like '%${keyTask}%'
 			</if>			
 			<if test="startTime != null" >
-	        	and P.start_time &gt;= #{startTime}
+	        	and d.start_time &gt;= #{startTime}
 	        </if>
 	        <if test="endTime != null" >
-	        	and P.end_time &lt;= #{endTime}
+	        	and d.end_time &lt;= #{endTime}
 	        </if>
 	        <if test="userId != null" >
 	        	and d.lead_person = #{userId}
 	        </if>	        
 		</where>
-		ORDER BY d.create_time DESC
+		ORDER BY p.key_task, p.key_item, p.detail_item,d.create_time DESC		   
+		   
 		LIMIT #{start} ,#{rows}		
   </select>
   
@@ -254,7 +255,29 @@
   </update>
   
   <update id="updateTask" parameterType="com.fantasia.base.bean.PageData" >
-    update kpi_employee_year 
+  	update kpi_dept_year_detail d
+    <set >
+         audit_status = '2',
+	     <if test="modifyBy != null" >
+	       modify_by = #{modifyBy,jdbcType=VARCHAR},
+	     </if>
+	     <if test="modifyTime != null" >
+	       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+	     </if>
+    </set>    
+    <where>	
+			<if test="startTime != null" >
+	        	 d.start_time &gt;= #{startTime}
+	        </if>
+	        <if test="endTime != null" >
+	        	and d.end_time &lt;= #{endTime}
+	        </if>
+	        <if test="userId != null" >
+	        	and d.lead_person = #{userId}
+	        </if>		            
+	</where>   
+  
+    <!-- update kpi_employee_year 
     <set >
          audit_status = '2',
 	     <if test="modifyBy != null" >
@@ -277,7 +300,7 @@
 	        	and d.lead_person = #{userId}
 	        </if>		            
 		</where>    	
-    )   
+    )    -->
   </update>
  
   

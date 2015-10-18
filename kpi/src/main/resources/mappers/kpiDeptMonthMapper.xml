@@ -97,7 +97,7 @@
 	        </if>
 	        
 	</where>	
-	ORDER BY M.CREATE_TIME DESC,D.KEY_POINT
+	ORDER BY G.KEY_TASK,G.KEY_ITEM,D.KEY_POINT,M.CREATE_TIME DESC		
 	LIMIT #{start} ,#{rows}
   </select>
 

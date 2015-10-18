@@ -127,6 +127,9 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
       <if test="createBy != null" >
         create_by,
       </if>
@@ -168,6 +171,9 @@
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=CHAR},
+      </if>      
       <if test="createBy != null" >
         #{createBy,jdbcType=VARCHAR},
       </if>
