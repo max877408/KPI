@@ -2,7 +2,9 @@ package com.fantasia.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptDetailService;
 import com.fantasia.service.KpiDeptService;
 import com.fantasia.util.DateTimeUtil;
+import com.fantasia.workflow.KpiFlowService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,6 +44,9 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	
 	@Autowired
 	private KpiDeptDetailService  kpiDeptDetailService;
+	
+	@Autowired
+	private KpiFlowService kpiFlowService;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -251,11 +257,25 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	 * @return
 	 * @throws ServiceException
 	 */	
+	@Transactional
 	public ResultMsg saveDeptTask(PageData page){
 		ResultMsg msg = new ResultMsg();
 		page.setModifyBy(DbcContext.getUserId());
 		page.setModifyTime(new Date());
 		kpiDeptYearMapper.updateTask(page);		
+		
+		//启动工作流
+		 Map<String, Object> params = new HashMap<String, Object>();
+		 params.put("processId", "9b09d058e4a54af1bd7429396827f44c");
+		 params.put("orderId", "");
+		 params.put("taskId", "");
+		 
+		 //申请人
+		 params.put("apply.operator", "admin");
+		 //审批人
+		 params.put("approveDept.operator", "admin");
+		 kpiFlowService.process(params);
+		
 		return msg;
 	}
 }

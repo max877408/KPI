@@ -341,7 +341,9 @@
 				$.post('../kpiYear/saveDeptTask.action', {
 					year : year
 				}, function(result) {
-					if (result.code == "000") {
+					if (result.code == "000") {						
+						//启动工作流
+						//wf.startWorkFlow('9b09d058e4a54af1bd7429396827f44c','admin');
 						$.messager.alert("提示", "操作成功！");
 						$('#dg_list').datagrid('reload');
 						//

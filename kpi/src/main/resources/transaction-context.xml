@@ -15,7 +15,9 @@
     
     <aop:config>
         <aop:advisor id="managerTx" advice-ref="txAdvice" pointcut="execution(* *..service..*.*(..))" order="1"/>
+        <aop:advisor advice-ref="snaketxAdvice" pointcut="execution(* org.snaker.engine.core..*.*(..))"/>
     </aop:config>
+    <aop:aspectj-autoproxy proxy-target-class="true" />
     
     <tx:advice id="txAdvice" transaction-manager="transactionManager">   	
         <tx:attributes>
@@ -31,5 +33,32 @@
             <tx:method name="*" />
         </tx:attributes>
     </tx:advice>
+    
+    <tx:advice id="snaketxAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="start*" propagation="REQUIRED"/>
+			<tx:method name="execute*" propagation="REQUIRED"/>
+			<tx:method name="save*" propagation="REQUIRED"/>
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="assign*" propagation="REQUIRED" /> 
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="complete*" propagation="REQUIRED" />
+			<tx:method name="finish*" propagation="REQUIRED" />
+			<tx:method name="terminate*" propagation="REQUIRED" /> 
+			<tx:method name="take*" propagation="REQUIRED" />
+			<tx:method name="deploy*" propagation="REQUIRED" />
+			<tx:method name="undeploy*" propagation="REQUIRED" />
+			<tx:method name="redeploy*" propagation="REQUIRED" />
+			
+ 			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="search*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="is*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
     
 </beans>

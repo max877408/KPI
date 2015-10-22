@@ -18,9 +18,9 @@
 		<property name="maxWait" value="1000" />
 		<property name="defaultAutoCommit" value="true" />
 		<property name="removeAbandoned" value="true" />
-		<property name="removeAbandonedTimeout" value="60" />		
+		<property name="removeAbandonedTimeout" value="60" />	
+			
 	</bean>
-
 
 	<!-- 创建SqlSessionFactory，同时指定数据源 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
