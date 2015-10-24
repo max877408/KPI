@@ -2,6 +2,7 @@ package com.fantasia.dao;
 
 import java.util.List;
 
+import com.fantasia.base.bean.PageData;
 import com.fantasia.bean.PubUser;
 
 public interface PubUserMapper {
@@ -11,7 +12,7 @@ public interface PubUserMapper {
 	 * 
 	 * @return 用户列表
 	 */
-	public List<PubUser> getUsers(int start,int rows);
+	public List<PubUser> getUsers(PageData page);
 	
 	/**
 	 * 根据用户id获取用户
@@ -43,5 +44,11 @@ public interface PubUserMapper {
 	 * @param user
 	 */
 	public void updateUser(PubUser user);
+	
+	/**
+	 * 更新用户部门负责人
+	 * @param user
+	 */
+	public void updateDeptCharge(PubUser user);
  
 }

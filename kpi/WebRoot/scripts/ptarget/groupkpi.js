@@ -15,11 +15,12 @@
 				
 				 var row = $('#dg_list').datagrid('getData').rows[0];
 				 if(row){
-					 tooBar.menuStatus(row.auditStatus); 
-				 }
+					console.log(row.auditStatus)
+					tooBar.menuStatus(row.auditStatus);
+				  }
 				 else{
-					 tooBar.menuStatus(''); 
-				 }
+					 tooBar.menuStatus('1');
+				 }	
 			 }
 		});
 		
@@ -387,10 +388,11 @@
 						$('#dg_list').datagrid('reload');
 						//
 					} else {
-						$.messager.show({ // show error message
+						/*$.messager.show({ // show error message
 							title : 'Error',
 							msg : result.errorMsg
-						});
+						});*/
+						$.messager.alert("提示", result.errorMsg);
 					}
 				}, 'json');
 			}

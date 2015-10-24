@@ -68,6 +68,12 @@ public class PageData {
 	public Date modifyTime;
 	
 	/**
+	 * 状态
+	 * 任务提交状态 (1 未 提交 2已提交)
+	 */
+	public String status;
+	
+	/**
 	 * 查询最大记录数
 	 */
 	public static Integer MAX_ROWS = Integer.MAX_VALUE;
@@ -200,6 +206,13 @@ public class PageData {
 
 	public void setId(String id) {
 		this.id = id;
-	}	
-	
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}		
 }

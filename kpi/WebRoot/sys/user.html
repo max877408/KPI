@@ -13,24 +13,60 @@
 <script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../scripts/sys/user.js?time=New Date()"></script>
+<script type="text/javascript" src="../scripts/sys/user.js"></script>
 </head>
 <body>
+
+	<div id="tb" style="padding:2px 5px; padding-top:12px !important; height:40px">
+		
+		 <table cellpadding="5">
+           	<tr>               
+                <td>部门：</td>
+                <td>
+                	<select class="easyui-combobox" panelHeight="auto" data-options="
+ 										valueField:'deptName',
+		                                textField:'deptName',
+		                                multiple:false,
+		                                method:'get',
+		                                url:'../user/dept',	
+		                                required:false" 
+						style="width:150px" name="dept">						
+					</select>
+                </td>
+                <td>姓名:</td>
+                <td>	                   	
+               	   <input class="easyui-textbox"    style="width:120px" id="userName">
+                </td>               
+                <td><a href="#" class="easyui-linkbutton" iconCls="icon-search" style="width:80px" id="btSearch">查找</a></td>
+            </tr>
+         </table>	
+		
+	</div>
 	<table id="tt" class="easyui-datagrid" toolbar="#toolbar"
 		url="../user/getUser" title="用户列表" singleSelect="true"
-		rownumbers="true" pagination="true" striped="true">
-		<thead>
-			<tr>
-			    <th field="id" hidden="true">id</th>
+		rownumbers="true" pagination="true" striped="true">		
+	   <thead data-options="frozen:true">
+            <tr>
+                <th field="id" hidden="true">id</th>               
 			    <th field="roleId" hidden="true">roleId</th>
 				<th field="deptName" width="150">部门</th>
-				<th field="position" width="180">岗位</th>
-				<th field="jobLevel" width="180">职级</th>
+				<th field="position" width="150">岗位</th>
+				<th field="jobLevel" width="150">职级</th>
 				<th field="userName" width="160" align="center">姓名</th>
+            </tr>
+        </thead>
+        
+		<thead>
+			<tr>			   
+				<th field="isCharge" width="120" align="center">部门负责人</th>
+				<th field="superLeader" hidden="true" width="120" align="center">上级领导</th>
+				<th field="chargeLeader" width="120" align="center">分管领导</th>
+				
+				
 				<th field="phone" width="150">手机</th>
 				<th field="email" width="150">邮箱</th>
 				<th field="status" width="80">状态</th>
-				<th field="isCharge" width="120" align="center">是否部门负责人</th>
+				
 			</tr>
 		</thead>
 	</table>
@@ -38,6 +74,9 @@
 	<div id="toolbar">
 		<a href="javascript:void(0)" class="easyui-linkbutton"
 			iconCls="icon-save" plain="true" onclick="userRole()">用户角色</a>
+			
+	    <a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-edit" plain="true" onclick="updateDeptCharge()">设置部门负责人</a>
 	</div>
 	
 	<div id="dlg" class="easyui-dialog"

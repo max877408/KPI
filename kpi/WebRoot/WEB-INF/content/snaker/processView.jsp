@@ -49,25 +49,31 @@
 		<table class="table_all" align="center" border="0" cellpadding="0"
 			cellspacing="0" style="margin-top: 0px" width="98%">
 			<tr>
-				<td align="left" class="td_list_2" colspan="4" style="font-weight: bold">
+				<td align="left" class="td_list_2" colspan="6" style="font-weight: bold">
 					流程名称：<font color="red">${order.processName }</font>&nbsp;&nbsp;
 					流程编号：<font color="red">${order.orderNo }</font>&nbsp;&nbsp;
 					流程创建时间：<font color="red">${order.createTime }</font>
 				</td>
 			</tr>
 			<tr>
-				<td align=center width=30% class="td_list_1" nowrap>
+				<td align=center width=20% class="td_list_1" nowrap>
 					任务名称
 				</td>
-				<td align=center width=30% class="td_list_1" nowrap>
+				<td align=center width=15% class="td_list_1" nowrap>
 					任务创建时间
 				</td>
-				<td align=center width=20% class="td_list_1" nowrap>
+				<td align=center width=15% class="td_list_1" nowrap>
 					任务完成时间
 				</td>
-				<td align=center width=20% class="td_list_1" nowrap>
+				<td align=center width=10% class="td_list_1" nowrap>
 					任务处理人
 				</td>
+				<td align=center width=10% class="td_list_1" nowrap>
+					审批结果
+				</td>
+				<td align=center width=30% class="td_list_1" nowrap>
+					审批意见
+				</td> 
 			</tr>
 			<c:forEach items="${tasks}" var="item">
 				<tr>
@@ -83,6 +89,12 @@
 					<td class="td_list_2" align=left nowrap>
 						${item.operator }&nbsp;
 					</td>
+					<td class="td_list_2" align=left nowrap>
+						${item.parentTaskId }&nbsp;
+					</td>
+					<td class="td_list_2" align=left nowrap>
+						${item.variable }&nbsp;
+					</td> 
 				</tr>
 			</c:forEach>
 		</table>

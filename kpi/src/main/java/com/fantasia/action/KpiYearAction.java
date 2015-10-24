@@ -3,6 +3,8 @@ package com.fantasia.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import com.fantasia.bean.KpiDeptYearDetail;
 import com.fantasia.bean.KpiEmployeeYear;
 import com.fantasia.bean.KpiEmployeeYearBean;
 import com.fantasia.bean.KpiGroupYear;
+import com.fantasia.core.KpiWorkFlow;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptDetailService;
 import com.fantasia.service.KpiDeptService;
@@ -46,6 +49,9 @@ public class KpiYearAction extends BaseAction {
 	
 	@Autowired
 	private KpiEmployeeService kpiEmployeeService;
+	
+	@Autowired
+	private KpiWorkFlow kpiWorkFlow;
 
 	/***************************** 年度关键任务部分 *********************************/
 	
@@ -188,8 +194,17 @@ public class KpiYearAction extends BaseAction {
 	 * @throws ServiceException
 	 */
 	@RequestMapping(value = "/getKpiDeptList")
-	@ResponseBody
-	public ResultData getKpiDeptList(PageData page) throws ServiceException {
+	@ResponseBody	
+	public ResultData getKpiDeptList(PageData page,HttpServletRequest request) throws ServiceException {
+		
+		//获取工作流保存参数数据
+		String orderId = request.getParameter("orderId");
+		String taskName = request.getParameter("taskName");	
+		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
+			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName)) ;
+			page.setDeptId(kpiWorkFlow.getDept(orderId, taskName)) ;	
+		}				
+		
 		return kpiDeptService.getKpiDept(page);
 	}
 	

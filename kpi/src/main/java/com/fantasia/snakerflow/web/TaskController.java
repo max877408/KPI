@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fantasia.core.DbcContext;
 import com.fantasia.snakerflow.engine.SnakerEngineFacets;
 
 /**
@@ -47,7 +48,7 @@ public class TaskController {
 	
 	@RequestMapping(value = "active", method=RequestMethod.GET)
 	public String homeTaskList(Model model) {
-		String[] assignees = new String[]{"admin"};
+		String[] assignees = new String[]{DbcContext.getUser().getUserName()};
 		
 		Page<WorkItem> majorPage = new Page<WorkItem>(5);
 		Page<WorkItem> aidantPage = new Page<WorkItem>(3);
@@ -85,7 +86,7 @@ public class TaskController {
 	@RequestMapping(value = "user", method=RequestMethod.GET)
 	public String userTaskList(Model model, Page<WorkItem> page) {
 		facets.getEngine().query().getWorkItems(page, 
-				new QueryFilter().setOperator("admin"));
+				new QueryFilter().setOperator(DbcContext.getUser().getUserName()));
 		model.addAttribute("page", page);
 		return "snaker/userTask";
 	}
@@ -140,7 +141,7 @@ public class TaskController {
 	 */
 	@RequestMapping(value = "active/more", method=RequestMethod.GET)
 	public String activeTaskList(Model model, Page<WorkItem> page, Integer taskType) {
-		String[] assignees = new String[]{"admin"};
+		String[] assignees = new String[]{DbcContext.getUser().getUserName()};
 		facets.getEngine().query().getWorkItems(page, 
 				new QueryFilter().setOperators(assignees).setTaskType(taskType));
 		model.addAttribute("page", page);
@@ -155,7 +156,7 @@ public class TaskController {
 	 */
 	@RequestMapping(value = "active/ccmore", method=RequestMethod.GET)
 	public String activeCCList(Model model, Page<HistoryOrder> page) {
-		String[] assignees = new String[]{"admin"};
+		String[] assignees = new String[]{DbcContext.getUser().getUserName()};
 		facets.getEngine()
 				.query()
 				.getCCWorks(page, new QueryFilter()
@@ -172,7 +173,7 @@ public class TaskController {
 	 */
 	@RequestMapping(value = "exec", method=RequestMethod.GET)
 	public String activeTaskExec(Model model, String taskId) {
-		facets.execute(taskId, "admin", null);
+		facets.execute(taskId, DbcContext.getUser().getUserName(), null);
 		return "redirect:/snaker/task/active";
 	}
 	
@@ -186,7 +187,7 @@ public class TaskController {
 	public String activeTaskReject(Model model, String taskId) {
 		String error = "";
 		try {
-			facets.executeAndJump(taskId, "admin", null, null);
+			facets.executeAndJump(taskId, DbcContext.getUser().getUserName(), null, null);
 		} catch(Exception e) {
 			error = "?error=1";
 		}
@@ -201,7 +202,7 @@ public class TaskController {
 	@RequestMapping(value = "history", method=RequestMethod.GET)
 	public String historyTaskList(Model model, Page<WorkItem> page) {
 		facets.getEngine().query().getHistoryWorkItems(page, 
-				new QueryFilter().setOperator("admin"));
+				new QueryFilter().setOperator(DbcContext.getUser().getUserName()));
 		model.addAttribute("page", page);
 		return "snaker/historyTask";
 	}
@@ -215,7 +216,7 @@ public class TaskController {
 	public String historyTaskUndo(Model model, String taskId) {
 		String returnMessage = "";
 		try {
-			facets.getEngine().task().withdrawTask(taskId, "admin");
+			facets.getEngine().task().withdrawTask(taskId, DbcContext.getUser().getUserName());
 			returnMessage = "任务撤回成功.";
 		} catch(Exception e) {
 			returnMessage = e.getMessage();

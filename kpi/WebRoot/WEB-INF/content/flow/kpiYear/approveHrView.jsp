@@ -19,22 +19,22 @@
 			<c:forEach items="${vars}" var="item">
 			<table class="table_all" align="center" border="0" cellpadding="0"
 				cellspacing="0" style="margin-top: 10px">
-				<tr>
-					<td class="td_table_1">
-						<span>分管领导审批结果：</span>
-					</td>
-					<td class="td_table_2" colspan="3">
-						&nbsp;${item['method'] == '0' ? '同意' : '' }${item['method'] == '-1' ? '不同意' : '' }
-					</td>
-				</tr>
-				<tr>
-					<td class="td_table_1">
-						<span>分管领导审批意见：</span>
-					</td>
-					<td class="td_table_2" colspan="3">
-						&nbsp;${item['approveDept.suggest'] }
-					</td>
-				</tr>
+			<tr>
+				<td class="td_table_1"  style="width:150px">
+					<span>人力资源专员审批结果：</span>
+				</td>
+				<td class="td_table_2" colspan="3">
+					&nbsp;${item['method'] == '0' ? '同意' : '' }${item['method'] == '-1' ? '不同意' : '' }
+				</td>
+			</tr>
+			<tr>
+				<td class="td_table_1" style="width:150px">
+					<span>人力资源专员审批意见：</span>
+				</td>
+				<td class="td_table_2" colspan="3">
+					&nbsp;${item['approveBoss.suggest'] }
+				</td>
+			</tr>
 			</table>
 			</c:forEach>
 		</form>

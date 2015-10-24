@@ -254,7 +254,7 @@
   <update id="updateTask" parameterType="com.fantasia.base.bean.PageData" >
     update kpi_dept_year 
     <set >
-        audit_status = '2',
+        audit_status = #{status},
 	    <if test="modifyBy != null" >
 	      modify_by = #{modifyBy,jdbcType=VARCHAR},
 	    </if>

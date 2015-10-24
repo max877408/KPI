@@ -4,6 +4,7 @@
 			 striped: true, //行背景交换
 			 nowrap: true, //单元格是否可以换行
 			 fit: false,
+			 url:'../kpiYear/getKpiDeptList.action',
 			 checkOnSelect: false,
 			 pageSize: 15, //每页显示的记录条数，默认为10     
 		     pageList: [15, 20, 30, 40, 50, 100],
@@ -14,8 +15,14 @@
 				
 				debugger;
 				var row = $('#dg_list').datagrid('getData').rows[0];
-				console.log(row.auditStatus)
-				tooBar.menuStatus(row.auditStatus);
+				
+				if(row){
+					console.log(row.auditStatus)
+					tooBar.menuStatus(row.auditStatus);
+				}
+				else{
+					tooBar.menuStatus('1');
+				}			
 			 }
 		});	
 		
@@ -335,23 +342,39 @@
 	 */
 	function saveDeptTask() {
 		var year = $("select[comboname=kpiYear]").combobox("getValue")
+		var orderId = wf.GetQueryString("orderId");
+		var taskName = wf.GetQueryString("taskName");
+		var taskId = wf.GetQueryString("taskId");	 
 		$.messager.confirm('确认','任务下发之后,部门年度计划将不可编辑!',
 			function(r) {
 			if (r) {
-				$.post('../kpiYear/saveDeptTask.action', {
-					year : year
+				$.post('../kpiYear/saveDeptTask.action?status=2', {
+					year : year,
+					orderId:orderId,
+					taskId:taskId,
+					taskName:taskName
 				}, function(result) {
 					if (result.code == "000") {						
 						//启动工作流
 						//wf.startWorkFlow('9b09d058e4a54af1bd7429396827f44c','admin');
-						$.messager.alert("提示", "操作成功！");
-						$('#dg_list').datagrid('reload');
+						
+						if(orderId != '' && taskId != ''){
+							$.messager.alert("提示", "操作成功！");
+							parent.refresh();
+						}
+						else{
+							$.messager.alert("提示", "操作成功！");
+							$('#dg_list').datagrid('reload');
+						}
+						
 						//
 					} else {
-						$.messager.show({ // show error message
+						/*$.messager.show({ // show error message
 							title : 'Error',
 							msg : result.errorMsg
-						});
+						});*/
+						
+						$.messager.alert("提示", result.errorMsg);
 					}
 				}, 'json');
 			}

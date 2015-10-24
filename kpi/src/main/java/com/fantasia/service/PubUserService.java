@@ -46,4 +46,10 @@ public interface PubUserService {
 	 * @return
 	 */
 	public ResultMsg saveUserRole(String id, String roleId);
+	
+	/**
+	 * 更新用户部门负责人
+	 * @param user
+	 */	
+	public ResultMsg updateDeptCharge(PubUser user);
 }

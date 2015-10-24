@@ -24,6 +24,10 @@ public class PubUser {
     private String phone;
 
     private String isCharge;
+    
+    private String superLeader;
+    
+    private String chargeLeader;
 
     private String status;
     
@@ -171,5 +175,21 @@ public class PubUser {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getSuperLeader() {
+		return superLeader;
+	}
+
+	public void setSuperLeader(String superLeader) {
+		this.superLeader = superLeader;
+	}
+
+	public String getChargeLeader() {
+		return chargeLeader;
+	}
+
+	public void setChargeLeader(String chargeLeader) {
+		this.chargeLeader = chargeLeader;
 	}
 }

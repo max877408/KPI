@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.fantasia.core.DbcContext;
 import com.fantasia.snakerflow.engine.SnakerEngineFacets;
 
 @Controller
@@ -26,7 +27,7 @@ public class KpiYearController {
 		model.addAttribute("taskId", taskId);
 		//设置操作人为当前登录用户，请假流程演示时，将申请人、部门经理审批人、总经理审批人都设置为当前用户
 		//可通过修改申请页面的部门经理、总经理输入框来改变下一步的处理人
-		model.addAttribute("operator", "admin");
+		model.addAttribute("operator", DbcContext.getUser().getUserName());
 		//根据taskId是否为空来标识当前请求的页面是否为活动任务的节点页面
 		if(StringUtils.isEmpty(orderId) || StringUtils.isNotEmpty(taskId)) {
 			//如果实例id为空或者驳回情况下，返回apply.jsp
@@ -42,7 +43,7 @@ public class KpiYearController {
 	}
 	
 	/**
-	 * 部门经理审批路由方法
+	 * 分管领导审批路由方法
 	 */
 	@RequestMapping(value = "approveDept", method= RequestMethod.GET)
 	public String approveDept(Model model, String processId, String orderId, String taskId, String taskName) {
@@ -58,18 +59,18 @@ public class KpiYearController {
 	}
 	
 	/**
-	 * 总经理审批路由方法
+	 * 人力资源专员审批路由方法
 	 */
-	@RequestMapping(value = "approveBoss", method= RequestMethod.GET)
+	@RequestMapping(value = "approveHr", method= RequestMethod.GET)
 	public String approveBoss(Model model, String processId, String orderId, String taskId, String taskName) {
 		model.addAttribute("processId", processId);
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("taskId", taskId);
 		if(StringUtils.isNotEmpty(taskId)) {
-			return "flow/kpiYear/approveBoss";
+			return "flow/kpiYear/approveHr";
 		} else {
 			model.addAllAttributes(facets.flowData(orderId, taskName));
-			return "flow/kpiYear/approveBossView";
+			return "flow/kpiYear/approveHrView";
 		}
 	}
 }

@@ -233,7 +233,27 @@ public class ProcessController {
 		model.addAttribute("processId", processId);
 		model.addAttribute("order", order);
 		List<HistoryTask> tasks = facets.getEngine().query().getHistoryTasks(new QueryFilter().setOrderId(orderId));
+		if(tasks != null && tasks.size() > 0){
+			for (HistoryTask historyTask : tasks) {
+				String result = "";
+				if(historyTask.getVariableMap().get("method") == null){
+					result = "工作流提交";
+				}
+				else{
+					if(historyTask.getVariableMap().get("method").toString().equals("-1")){
+						result = "不同意";
+					}
+					if(historyTask.getVariableMap().get("method").toString().equals("0")){
+						result = "同意";
+					}
+				}
+
+				historyTask.setParentTaskId(result);
+				historyTask.setVariable((String)historyTask.getVariableMap().get("approveDept.suggest"));
+			}
+		}
 		model.addAttribute("tasks", tasks);
+		
 		return "snaker/processView";
 	}
 

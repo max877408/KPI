@@ -14,12 +14,21 @@
  */
 package com.fantasia.snakerflow.web;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.access.QueryFilter;
-import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.HistoryOrder;
+import org.snaker.engine.entity.Process;
 import org.snaker.engine.model.TaskModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,11 +37,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fantasia.core.DbcContext;
+import com.fantasia.core.KpiWorkFlow;
 import com.fantasia.snakerflow.engine.SnakerEngineFacets;
-
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author yuqs
@@ -44,7 +51,9 @@ public class FlowController {
     @Autowired
     private SnakerEngineFacets facets;
     
-    @SuppressWarnings("unchecked")
+    @Autowired
+    private KpiWorkFlow kpiWorkFlow;
+ 
 	@RequestMapping(value = "process")
     public String process(HttpServletRequest request) {
         Map<String, Object> params = new HashMap<String, Object>();
@@ -89,8 +98,11 @@ public class FlowController {
         String orderId = request.getParameter("orderId");
         String taskId = request.getParameter("taskId");
         String nextOperator = request.getParameter("");
+        
+        kpiWorkFlow.process(request);
+        
         if (StringUtils.isEmpty(orderId) && StringUtils.isEmpty(taskId)) {
-            facets.startAndExecute(processId, "admin", params);
+            facets.startAndExecute(processId, DbcContext.getUser().getUserName(), params);
         } else {
             String methodStr = request.getParameter("method");
             int method;
@@ -101,23 +113,23 @@ public class FlowController {
             }
             switch(method) {
                 case 0://任务执行
-                    facets.execute(taskId, "admin", params);
+                    facets.execute(taskId, DbcContext.getUser().getUserName(), params);
                     break;
                 case -1://驳回、任意跳转
-                    facets.executeAndJump(taskId, "admin", params, request.getParameter("nodeName"));
+                    facets.executeAndJump(taskId, DbcContext.getUser().getUserName(), params, request.getParameter("nodeName"));
                     break;
                 case 1://转办
                     if(StringUtils.isNotEmpty(nextOperator)) {
-                        facets.transferMajor(taskId, "admin", nextOperator.split(","));
+                        facets.transferMajor(taskId,DbcContext.getUser().getUserName(), nextOperator.split(","));
                     }
                     break;
                 case 2://协办
                     if(StringUtils.isNotEmpty(nextOperator)) {
-                        facets.transferAidant(taskId, "admin", nextOperator.split(","));
+                        facets.transferAidant(taskId, DbcContext.getUser().getUserName(), nextOperator.split(","));
                     }
                     break;
                 default:
-                    facets.execute(taskId, "admin", params);
+                    facets.execute(taskId, DbcContext.getUser().getUserName(), params);
                     break;
             }
         }
@@ -135,7 +147,12 @@ public class FlowController {
      */
     @RequestMapping(value = "order", method= RequestMethod.GET)
     public String order(Model model, Page<HistoryOrder> page) {
-        facets.getEngine().query().getHistoryOrders(page, new QueryFilter());
+    	if(DbcContext.isAdmin()){
+    		 facets.getEngine().query().getHistoryOrders(page, new QueryFilter());
+    	}
+    	else{
+    		 facets.getEngine().query().getHistoryOrders(page, new QueryFilter().setOperator(DbcContext.getUser().getUserName()));
+    	}       
         model.addAttribute("page", page);
         return "snaker/order";
     }
@@ -148,7 +165,7 @@ public class FlowController {
      */
     @RequestMapping(value = "ccread")
     public String ccread(String id, String url) {
-    	String[] assignees = new String[]{"admin"};
+    	String[] assignees = new String[]{DbcContext.getUser().getUserName()};
         facets.getEngine().order().updateCCStatus(id, assignees);
         return "redirect:" + url;
     }

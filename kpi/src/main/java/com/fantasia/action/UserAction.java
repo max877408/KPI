@@ -104,4 +104,14 @@ public class UserAction extends BaseAction {
 		return userService.saveUserRole(id, roleId);
 	}
 	
+	/**
+	 * 更新用户部门负责人
+	 * @param user
+	 */
+	@RequestMapping(value = "/updateDeptCharge")
+	@ResponseBody
+	public ResultMsg updateDeptCharge(PubUser user){
+		return userService.updateDeptCharge(user);
+	}
+	
 }

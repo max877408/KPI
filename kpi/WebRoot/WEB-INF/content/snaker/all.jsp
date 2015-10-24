@@ -104,65 +104,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						content : content
 					}
 				});				
-			}			
+			}	
+			
+			function refresh(){
+				window.location.href = '../snaker/task/active';
+			}		
 			 
 		</script>
-
-	   
-	 <!--   <script type="text/javascript">
-        var tabs;
-        var taskName = "${task.taskName}";
-        $(function () {
-            tabs = $('#tabs').cleverTabs();
-            $(window).bind('resize', function () {
-                tabs.resizePanelContainer();
-            });
-            var diagramTab = tabs.add({
-            	url: '${ctx}/snaker/process/diagram?processId=${processId}&orderId=${orderId}',
-            	label: '流程图',
-            	locked: true
-            });
-            diagramTab.activate();
-            $.ajax({
-				type:'GET',
-				url:"${ctx}/snaker/flow/node",
-				data:"processId=${processId}",
-				async: false,
-				globle:false,
-				error: function(){
-					alert('数据处理错误！');
-					return false;
-				},
-				success: function(data) {
-					data = eval("("+data+")");
-					var curTab;
-					var iscurrent = false;
-					for(var i = 0; i < data.length; i++) {
-						var node = data[i];
-						var iframeUrl = '${ctx }' + node.form + '?processId=${processId}&orderId=${orderId}&taskName=' + node.name;
-						if(taskName == node.name || (taskName == '' && i == 0)) {
-							iscurrent = true;
-							iframeUrl += '&taskId=${taskId}&readonly=1';
-						} else {
-							iscurrent = false;
-							iframeUrl += '&readonly=0';
-						}
-			            var tab = tabs.add({
-			                url: iframeUrl,
-			                label: node.displayName,
-			                locked: true
-			            });
-			            tab.activate();
-			            if(iscurrent) {
-			            	curTab = tab;
-			            	tab.mark();
-			            }
-					}
-					if(curTab) curTab.activate();
-				}
-			});
-        });
-    	</script> -->
+	
 	</head>
 	<body>
 		<table border="0" width=100% align="center">
@@ -182,7 +131,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			</tr>
 		</table>
 		</c:if>	    
-	    <div id="tt" class="easyui-tabs" style="padding: 10px;height: 450px">
+	    <div id="tt" class="easyui-tabs" style="padding: 10px;">
 		
 		</div>
 		

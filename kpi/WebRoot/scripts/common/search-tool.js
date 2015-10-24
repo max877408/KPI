@@ -51,6 +51,7 @@ $(function(){
 		        queryParams.month = month;
 		        
 		        //重新加载datagrid的数据  
+		        $('#dg_list').datagrid('loadData', { total: 0, rows: [] }); 
 		        $('#dg_list').datagrid('reload');				
 			},
 			regEvent : function(){

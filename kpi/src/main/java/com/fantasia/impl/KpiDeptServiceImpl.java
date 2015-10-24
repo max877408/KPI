@@ -22,6 +22,7 @@ import com.fantasia.bean.KpiDeptYearBean;
 import com.fantasia.bean.KpiDeptYearDetail;
 import com.fantasia.bean.KpiGroupYear;
 import com.fantasia.core.DbcContext;
+import com.fantasia.core.KpiWorkFlow;
 import com.fantasia.core.Utils;
 import com.fantasia.dao.KpiDeptYearMapper;
 import com.fantasia.dao.KpiGroupYearMapper;
@@ -47,6 +48,9 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	
 	@Autowired
 	private KpiFlowService kpiFlowService;
+	
+	@Autowired
+	private KpiWorkFlow kpiWorkFlow;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -84,7 +88,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 				kpiGroupYear.setKeyTask(kpiBean.getKeyTask());
 				kpiGroupYear.setKeyItem(kpiBean.getKeyItem());
 				kpiGroupYear.setDetailItem(kpiBean.getDetailItem());				
-				kpiGroupYear.setDept(DbcContext.getUser().getDeptId());
+				kpiGroupYear.setDept(DbcContext.getUser().getDeptName());
 				
 				//设置默认时间
 				if(!StringUtils.isEmpty(kpiBean.getStartTime())){
@@ -216,8 +220,10 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	public ResultData getKpiDept(PageData page) {		
 		
 		ResultData data = new ResultData();
-		page.setStart((page.getPage() -1) * page.getRows());	
-		page.setDeptId(DbcContext.getUser().getDeptName());
+		page.setStart((page.getPage() -1) * page.getRows());
+		if(StringUtils.isEmpty(page.getDeptId())){
+			page.setDeptId(DbcContext.getUser().getDeptName());
+		}		
 		
 		List<KpiDeptYearBean> list = kpiDeptYearMapper.getKpiDept(page);
 		data.setRows(list);
@@ -227,6 +233,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 		totalPage.setKeyTask(page.getKeyTask());
 		totalPage.setStartTime(page.getStartTime());
 		totalPage.setEndTime(page.getEndTime());
+		totalPage.setYear(page.getYear());
 		totalPage.setStart(0);
 		totalPage.setRows(PageData.MAX_ROWS);
 		list = kpiDeptYearMapper.getKpiDept(totalPage);
@@ -257,23 +264,52 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	 * @return
 	 * @throws ServiceException
 	 */	
-	@Transactional
+	@Transactional	
 	public ResultMsg saveDeptTask(PageData page){
 		ResultMsg msg = new ResultMsg();
+		
+		//查看当前年度是否有年度计划
+		page.setPage(1);
+		ResultData data = getKpiDept(page);
+		if(data != null && data.getTotal() == 0){			
+			msg.setCode("100");
+			msg.setErrorMsg("当前无年度计划任务!");
+			return msg;
+		}
+		
+		//检测是否配置分管领导
+		if(StringUtils.isEmpty(DbcContext.getUser().getChargeLeader())){
+			msg.setCode("101");
+			msg.setErrorMsg("当前部门("+DbcContext.getUser().getDeptName()+")分管领导为空,请先配置分管领导!");
+			return msg;
+		}
+		
 		page.setModifyBy(DbcContext.getUserId());
 		page.setModifyTime(new Date());
 		kpiDeptYearMapper.updateTask(page);		
 		
-		//启动工作流
-		 Map<String, Object> params = new HashMap<String, Object>();
-		 params.put("processId", "9b09d058e4a54af1bd7429396827f44c");
-		 params.put("orderId", "");
-		 params.put("taskId", "");
+		//启动工作流		
+		 Map<String, Object> params = new HashMap<String, Object>();		
+		 params.put("processId", "86129c15f5a3475ab84da1eebb2fc844");
+		 params.put("orderId", DbcContext.getRequest().getParameter("orderId"));
+		 params.put("taskId", DbcContext.getRequest().getParameter("taskId"));
+		 if(!StringUtils.isEmpty(params.get("orderId")) && !StringUtils.isEmpty(params.get("taskId"))){
+			 params.put("year",kpiWorkFlow.getKpiYear(DbcContext.getRequest().getParameter("orderId"), DbcContext.getRequest().getParameter("taskName")));
+		 }
+		 else{
+			 params.put("year", page.getYear());
+		 }		 
+		 params.put("dept", DbcContext.getUser().getDeptName());
+		/* params.put("orderId", "");
+		 params.put("taskId", "");*/
 		 
 		 //申请人
-		 params.put("apply.operator", "admin");
-		 //审批人
-		 params.put("approveDept.operator", "admin");
+		 params.put("apply.operator", DbcContext.getUser().getUserName());
+		 //分管领导审批人
+		 params.put("approveDept.operator", DbcContext.getUser().getChargeLeader());
+		 //人力资源专员审批人
+		 params.put("approveHr.operator", "张玉真");		 
+		 
 		 kpiFlowService.process(params);
 		
 		return msg;

@@ -1,6 +1,7 @@
 	$(function(){
 	   $('#tt').datagrid({
-	   		pageSize:20,
+	   		pageSize:15,
+	   	    pageList: [15, 20, 30, 40, 50, 100],
 	   		loadmsg:'正在加载,请稍后....',
 			onLoadSuccess : function(data) {
 				onLoadSuccess(data);					
@@ -45,6 +46,21 @@
 				});
 			}
 		}
+		
+		//用户查找 
+		$("#btSearch").click(function(){
+			var dept =$("select[comboname=dept]").combobox("getValue");						
+			var userName = $("#userName").val();
+			
+			
+			var queryParams = $('#tt').datagrid('options').queryParams;  
+	        queryParams.dept = dept;  
+	        queryParams.userName = userName;  
+	        
+	        //重新加载Datagrid的数据  
+	        $('#tt').datagrid('loadData', { total: 0, rows: [] }); 
+	        $('#tt').datagrid('reload');
+		})
 	});
 	
     function changeP(){
@@ -92,4 +108,27 @@
  				}
  			}
  		});
+    }
+    
+    /**
+     * 设置部门负责人
+     */
+    function updateDeptCharge(){
+    	var row = $('#tt').datagrid('getSelected');
+		if (row) {			
+			var id = row.id;
+			var deptId = row.deptId;
+			
+			$.post("../user/updateDeptCharge.action?id="+id+"&deptId="+deptId+"", function(rsp) {
+				if(rsp.code == "000"){
+					$.messager.alert("提示", "提交成功！");				
+					$('#tt').datagrid('reload'); // reload the user data
+				}
+			}, "JSON").error(function() {
+				$.messager.alert("提示", "提交错误了！");
+			});
+		}
+		else{
+			$.messager.alert("提示", "请选择一条记录！");
+		}
     }

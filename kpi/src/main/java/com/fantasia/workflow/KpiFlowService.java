@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fantasia.core.DbcContext;
 import com.fantasia.snakerflow.engine.SnakerEngineFacets;
 
 /**
@@ -38,30 +39,30 @@ public class KpiFlowService {
         String nextOperator = "";
         
         if (StringUtils.isEmpty(orderId) && StringUtils.isEmpty(taskId)) {
-            facets.startAndExecute(processId, "admin", params);
+            facets.startAndExecute(processId, DbcContext.getUser().getUserName(), params);
         } else {
            
             int method = 0;
            
             switch(method) {
                 case 0://任务执行
-                    facets.execute(taskId, "admin", params);
+                    facets.execute(taskId, DbcContext.getUser().getUserName(), params);
                     break;
                 case -1://驳回、任意跳转
-                    facets.executeAndJump(taskId, "admin", params, "");
+                    facets.executeAndJump(taskId, DbcContext.getUser().getUserName(), params, "");
                     break;
                 case 1://转办
                     if(StringUtils.isNotEmpty(nextOperator)) {
-                        facets.transferMajor(taskId, "admin", nextOperator.split(","));
+                        facets.transferMajor(taskId,DbcContext.getUser().getUserName(), nextOperator.split(","));
                     }
                     break;
                 case 2://协办
                     if(StringUtils.isNotEmpty(nextOperator)) {
-                        facets.transferAidant(taskId, "admin", nextOperator.split(","));
+                        facets.transferAidant(taskId, DbcContext.getUser().getUserName(), nextOperator.split(","));
                     }
                     break;
                 default:
-                    facets.execute(taskId, "admin", params);
+                    facets.execute(taskId, DbcContext.getUser().getUserName(), params);
                     break;
             }
         }

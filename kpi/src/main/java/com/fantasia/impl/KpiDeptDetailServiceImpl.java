@@ -11,7 +11,6 @@ import com.fantasia.core.DbcContext;
 import com.fantasia.core.Utils;
 import com.fantasia.dao.KpiDeptYearDetailMapper;
 import com.fantasia.service.KpiDeptDetailService;
-import com.fantasia.service.KpiDeptMonthService;
 import com.fantasia.util.StringUtils;
 
 @Service("KpiDeptDetailService")
@@ -19,9 +18,6 @@ public class KpiDeptDetailServiceImpl implements KpiDeptDetailService {
 
 	@Autowired
 	private KpiDeptYearDetailMapper kpiDeptYearDetailMapper;
-	
-	@Autowired
-	private KpiDeptMonthService kpiDeptMonthService;
 
 	/**
 	 * 保存部门年度绩效考核
@@ -47,9 +43,6 @@ public class KpiDeptDetailServiceImpl implements KpiDeptDetailService {
 					kpiDeptYearDetailMapper.insert(kpiDeptYearDetail);
 				}				
 			}
-			
-			//根据部门时间段生成部门月度考核指标
-			kpiDeptMonthService.inertDeptMonthKpi(list);
 		}
 	}
 	

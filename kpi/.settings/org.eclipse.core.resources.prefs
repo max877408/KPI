@@ -1,8 +1,8 @@
-#Thu Oct 22 22:32:58 CST 2015
+#Sat Oct 24 12:48:49 CST 2015
 eclipse.preferences.version=1
-encoding//WebRoot/WEB-INF/content/flow/kpiYear/deptkpiView.jsp=UTF-8
 encoding//WebRoot/ptarget/deptkpi.html=UTF-8
 encoding//src/main/resources/config.properties=UTF-8
 encoding//src/main/resources/email.properties=UTF-8
+encoding//src/main/resources/flows/deptyear.snaker=UTF-8
 encoding//src/main/resources/log4j.properties=UTF-8
 encoding/<project>=UTF-8

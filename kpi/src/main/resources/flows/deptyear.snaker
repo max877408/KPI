@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<process displayName="éƒ¨é—¨å¹´åº¦è®¡åˆ’ç”³è¯·" instanceUrl="/snaker/flow/all" name="deptyear">
+<?xml version="1.0" encoding="GBK" standalone="no"?>
+<process displayName="²¿ÃÅÄê¶È¼Æ»®ÉêÇë" instanceUrl="/snaker/flow/all" name="deptyear">
 <start displayName="start1" layout="42,118,-1,-1" name="start1">
 <transition g="" name="transition1" offset="0,0" to="apply"/>
 </start>
-<end displayName="end1" layout="479,118,-1,-1" name="end1"/>
-<task assignee="apply.operator" autoExecute="Y" displayName="éƒ¨é—¨å¹´åº¦è®¡åˆ’ç”³è¯·" form="/ptarget/deptkpi.html" layout="126,116,-1,-1" name="apply" performType="ANY" taskType="Major">
-<transition g="" name="transition2" offset="0,0" to="approval"/>
+<end displayName="end1" layout="639,116,44,48" name="end1"/>
+<task assignee="apply.operator" displayName="²¿ÃÅÄê¶È¼Æ»®ÉêÇë" form="/ptarget/deptkpi.html" layout="126,116,142,52" name="apply" performType="ANY">
+<transition g="" name="transition2" offset="0,0" to="task1"/>
 </task>
-<task assignee="approval.operator" autoExecute="Y" displayName="å®¡æ‰¹" form="/snaker/flow/approval" layout="252,116,-1,-1" name="approval" performType="ANY" taskType="Major">
-<transition g="" name="transition3" offset="0,0" to="decision1"/>
+<task displayName="·Ö¹ÜÁìµ¼ÉóÅú" layout="319,113,108,53" name="task1" performType="ANY">
+<transition g="" name="transition3" offset="0,0" to="task2"/>
 </task>
-<decision displayName="decision1" expr="#result" layout="384,118,-1,-1" name="decision1">
-<transition displayName="åŒæ„" g="" name="agree" offset="0,0" to="end1"/>
-<transition displayName="ä¸åŒæ„" g="408,68;172,68" name="disagree" offset="0,0" to="apply"/>
-</decision>
+<task displayName="ÈËÁ¦×ÊÔ´×¨Ô±" layout="475,113,106,52" name="task2" performType="ANY">
+<transition g="" name="transition4" offset="0,0" to="end1"/>
+</task>
 </process>

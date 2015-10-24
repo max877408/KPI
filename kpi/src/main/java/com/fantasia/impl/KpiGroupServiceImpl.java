@@ -40,6 +40,7 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 		totalPage.setStartTime(page.getStartTime());
 		totalPage.setEndTime(page.getEndTime());
 		totalPage.setStart(0);
+		totalPage.setYear(page.getYear());
 		totalPage.setRows(PageData.MAX_ROWS);
 		list = kpiGroupYearMapper.getKpiGroup(totalPage);	
 		data.setTotal(list.size());
@@ -165,6 +166,16 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 	 */
 	public ResultMsg saveTask(PageData page){
 		ResultMsg msg = new ResultMsg();
+		
+		//查看当前年度是否有年度关键任务
+		page.setPage(1);
+		ResultData data = getKpiGroup(page);
+		if(data != null && data.getTotal() == 0){			
+			msg.setCode("100");
+			msg.setErrorMsg("当前无年度关键任务!");
+			return msg;
+		}
+		
 		page.setModifyBy(DbcContext.getUserId());
 		page.setModifyTime(new Date());
 		kpiGroupYearMapper.updateTask(page);		
