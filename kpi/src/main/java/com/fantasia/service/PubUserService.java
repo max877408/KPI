@@ -52,4 +52,11 @@ public interface PubUserService {
 	 * @param user
 	 */	
 	public ResultMsg updateDeptCharge(PubUser user);
+	
+	/**
+	 * 获取部门负责人
+	 * @param dept
+	 * @return
+	 */
+	public PubUser getDeptChare(String dept);
 }

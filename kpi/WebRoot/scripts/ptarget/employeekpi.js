@@ -14,7 +14,13 @@
 				onLoadSuccess(data);	
 				
 				var row = $('#dg_list').datagrid('getData').rows[0];
-				tooBar.menuStatus(row.auditStatus);
+				if(row){
+					console.log(row.auditStatus)
+					tooBar.menuStatus(row.auditStatus);
+				}
+				else{
+					tooBar.menuStatus('1');
+				}	
 			 }
 		});	
 		
@@ -255,23 +261,32 @@
 	/**
 	 * 员工年度计划任务下发
 	 */
-	function saveEmployTask() {
+	function saveEmployTask() {		
 		var year = $("select[comboname=kpiYear]").combobox("getValue")
+		var orderId = wf.GetQueryString("orderId");
+		var taskName = wf.GetQueryString("taskName");
+		var taskId = wf.GetQueryString("taskId");	
 		$.messager.confirm('确认','任务下发之后,员工年度计划将不可编辑!',
 			function(r) {
 			if (r) {
-				$.post('../kpiYear/saveEmployTask.action', {
-					year : year
+				$.post('../kpiYear/saveEmployTask.action?status=2', {
+					year : year,
+					orderId:orderId,
+					taskId:taskId,
+					taskName:taskName
 				}, function(result) {
 					if (result.code == "000") {
-						$.messager.alert("提示", "操作成功！");
-						$('#dg_list').datagrid('reload');
+						if(orderId != null && taskId != null){
+							$.messager.alert("提示", "操作成功！");
+							parent.refresh();
+						}
+						else{
+							$.messager.alert("提示", "操作成功！");
+							$('#dg_list').datagrid('reload');
+						}
 						//
 					} else {
-						$.messager.show({ // show error message
-							title : 'Error',
-							msg : result.errorMsg
-						});
+						$.messager.alert("提示", result.errorMsg);						
 					}
 				}, 'json');
 			}

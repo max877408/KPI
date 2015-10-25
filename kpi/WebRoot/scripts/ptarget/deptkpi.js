@@ -358,7 +358,7 @@
 						//启动工作流
 						//wf.startWorkFlow('9b09d058e4a54af1bd7429396827f44c','admin');
 						
-						if(orderId != '' && taskId != ''){
+						if(orderId != null && taskId != null){
 							$.messager.alert("提示", "操作成功！");
 							parent.refresh();
 						}
@@ -392,7 +392,7 @@
 				 striped: true, //行背景交换
 				 url:"../kpiYear/getKpiDeptDetail.action?id=" + row.id,
 				 onLoadSuccess : function(data) {
-					 tooBar.menuStatus(row.auditStatus);					
+					 //tooBar.menuStatus(row.auditStatus);					
 				 }
 			});
 			

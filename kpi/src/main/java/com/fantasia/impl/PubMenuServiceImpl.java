@@ -94,7 +94,13 @@ public class PubMenuServiceImpl implements PubMenuService {
 	public MenuRoot queryMenu(){ 
 		MenuRoot root = new MenuRoot();
 		List<MenuItem> basic = new ArrayList<MenuItem>();
-		List<PubMenu> list = pubMenuMapper.getMenuList(DbcContext.getUserId());
+		List<PubMenu> list ;
+		if(DbcContext.isAdmin()){
+			list = pubMenuMapper.queryMenuList();
+		}
+		else{
+			list = pubMenuMapper.getMenuList(DbcContext.getUserId());
+		}				
 		
 		//获取一级菜单节点
 		List<MenuItem> items = getChildNavigation("40715C35D8364F80AACF6A784895C6B0",list);
@@ -162,7 +168,14 @@ public class PubMenuServiceImpl implements PubMenuService {
 	 * @return
 	 */
 	public List<PubMenu> queryUserMenuList(){
-		List<PubMenu> list = pubMenuMapper.getMenuList(DbcContext.getUserId());
+		List<PubMenu> list ;
+		if(DbcContext.isAdmin()){
+			list = pubMenuMapper.queryMenuList();
+		}
+		else{
+			list = pubMenuMapper.getMenuList(DbcContext.getUserId());
+		}
+		
 		return list;
 	}
 }

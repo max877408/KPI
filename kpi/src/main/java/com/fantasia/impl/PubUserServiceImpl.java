@@ -126,4 +126,29 @@ public class PubUserServiceImpl implements PubUserService {
 		return rtnMsg;
 	}
 	
+	/**
+	 * 获取部门负责人
+	 * @param dept
+	 * @return
+	 */
+	@Override
+	public PubUser getDeptChare(String dept){
+		PubUser user = null;
+		PageData page = new PageData();
+		page.setStart(0);
+		page.setRows(PageData.MAX_ROWS);
+		List<PubUser> list = pubUserMapper.getUsers(page);
+		if(list != null && list.size() > 0){
+			for (PubUser pubUser : list) {
+				if(pubUser.getDeptName() != null && pubUser.getDeptName().equalsIgnoreCase(dept)){
+					if(pubUser.getIsCharge().equalsIgnoreCase("是")){
+						user = pubUser;
+					}
+				}
+				
+			}
+		}
+		return user;
+	}
+	
 }

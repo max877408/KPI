@@ -223,20 +223,23 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 		page.setStart((page.getPage() -1) * page.getRows());
 		if(StringUtils.isEmpty(page.getDeptId())){
 			page.setDeptId(DbcContext.getUser().getDeptName());
-		}		
+		}
 		
 		List<KpiDeptYearBean> list = kpiDeptYearMapper.getKpiDept(page);
 		data.setRows(list);
 		
 		//TotalRows 
-		PageData totalPage = new PageData();
+		/*PageData totalPage = new PageData();
 		totalPage.setKeyTask(page.getKeyTask());
 		totalPage.setStartTime(page.getStartTime());
 		totalPage.setEndTime(page.getEndTime());
 		totalPage.setYear(page.getYear());
 		totalPage.setStart(0);
-		totalPage.setRows(PageData.MAX_ROWS);
-		list = kpiDeptYearMapper.getKpiDept(totalPage);
+		totalPage.setDeptId(page.getDeptId());
+		totalPage.setRows(PageData.MAX_ROWS);*/
+		page.setStart(0);
+		page.setRows(PageData.MAX_ROWS);
+		list = kpiDeptYearMapper.getKpiDept(page);
 		data.setTotal(list.size());
 		return data;
 	}
@@ -291,17 +294,27 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 		//启动工作流		
 		 Map<String, Object> params = new HashMap<String, Object>();		
 		 params.put("processId", "86129c15f5a3475ab84da1eebb2fc844");
-		 params.put("orderId", DbcContext.getRequest().getParameter("orderId"));
-		 params.put("taskId", DbcContext.getRequest().getParameter("taskId"));
+		
+		 if(!DbcContext.getRequest().getParameter("orderId").equals("null")){
+			 params.put("orderId", DbcContext.getRequest().getParameter("orderId"));
+		 }
+		 else{
+			 params.put("orderId", "");
+		 }
+		 if(!DbcContext.getRequest().getParameter("taskId").equals("null")){
+			 params.put("taskId", DbcContext.getRequest().getParameter("taskId"));
+		 }
+		 else{
+			 params.put("taskId", "");
+		 }
+		
 		 if(!StringUtils.isEmpty(params.get("orderId")) && !StringUtils.isEmpty(params.get("taskId"))){
 			 params.put("year",kpiWorkFlow.getKpiYear(DbcContext.getRequest().getParameter("orderId"), DbcContext.getRequest().getParameter("taskName")));
 		 }
 		 else{
 			 params.put("year", page.getYear());
 		 }		 
-		 params.put("dept", DbcContext.getUser().getDeptName());
-		/* params.put("orderId", "");
-		 params.put("taskId", "");*/
+		 params.put("dept", DbcContext.getUser().getDeptName());		
 		 
 		 //申请人
 		 params.put("apply.operator", DbcContext.getUser().getUserName());

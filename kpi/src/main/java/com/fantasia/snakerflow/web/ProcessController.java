@@ -238,6 +238,7 @@ public class ProcessController {
 				String result = "";
 				if(historyTask.getVariableMap().get("method") == null){
 					result = "工作流提交";
+					historyTask.setVariable("");
 				}
 				else{
 					if(historyTask.getVariableMap().get("method").toString().equals("-1")){
@@ -246,10 +247,20 @@ public class ProcessController {
 					if(historyTask.getVariableMap().get("method").toString().equals("0")){
 						result = "同意";
 					}
+					
+					if(historyTask.getVariableMap().get("approveDept.suggest") == null){
+						historyTask.setVariable((String)historyTask.getVariableMap().get("approveBoss.suggest"));
+					}
+					else{					
+						historyTask.setVariable((String)historyTask.getVariableMap().get("approveDept.suggest"));
+					}
 				}
 
 				historyTask.setParentTaskId(result);
-				historyTask.setVariable((String)historyTask.getVariableMap().get("approveDept.suggest"));
+				
+				
+				
+				
 			}
 		}
 		model.addAttribute("tasks", tasks);

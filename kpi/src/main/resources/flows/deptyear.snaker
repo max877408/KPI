@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="GBK" standalone="no"?>
-<process displayName="部门年度计划申请" instanceUrl="/snaker/flow/all" name="deptyear">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<process displayName="閮ㄩ棬骞村害璁″垝娴佺▼" instanceUrl="/snaker/flow/all" name="deptyear">
 <start displayName="start1" layout="42,118,-1,-1" name="start1">
 <transition g="" name="transition1" offset="0,0" to="apply"/>
 </start>
 <end displayName="end1" layout="639,116,44,48" name="end1"/>
-<task assignee="apply.operator" displayName="部门年度计划申请" form="/ptarget/deptkpi.html" layout="126,116,142,52" name="apply" performType="ANY">
+<task assignee="apply.operator" displayName="閮ㄩ棬骞村害璁″垝鐢宠" form="/ptarget/deptkpi.html" layout="126,116,142,52" name="apply" performType="ANY">
 <transition g="" name="transition2" offset="0,0" to="task1"/>
 </task>
-<task displayName="分管领导审批" layout="319,113,108,53" name="task1" performType="ANY">
+<task displayName="鍒嗙棰嗗瀹℃壒" layout="319,113,108,53" name="task1" performType="ANY">
 <transition g="" name="transition3" offset="0,0" to="task2"/>
 </task>
-<task displayName="人力资源专员" layout="475,113,106,52" name="task2" performType="ANY">
+<task displayName="浜哄姏鑱屽憳涓撳憳" layout="475,113,106,52" name="task2" performType="ANY">
 <transition g="" name="transition4" offset="0,0" to="end1"/>
 </task>
 </process>

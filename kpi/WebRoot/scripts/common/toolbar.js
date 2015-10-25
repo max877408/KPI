@@ -18,7 +18,7 @@
 				 $("#dlg").find(".datagrid-toolbar").show();
 				 
 			 }
-			 else if(status == '2'){
+			 else if(status == '2' || status == '3'){
 				 $("#toolbar").find("a").hide();
 				 $("#toolbar").find("#view").show();
 				 $("#dlg-buttons").find("[iconcls=icon-ok]").hide();				

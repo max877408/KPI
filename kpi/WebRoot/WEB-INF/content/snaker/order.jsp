@@ -52,30 +52,30 @@
 			</tr>
 			<c:forEach items="${page.result}" var="item">
 				<tr>
-					<td class="td_list_2" align=left nowrap>
+					<td align=center class="td_list_2"  nowrap>
 						${item.processName}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
+					<td align=center class="td_list_2"  nowrap>
 						${item.orderNo}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
+					<td align=center class="td_list_2"  nowrap>
 						${item.createTime}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
+					<td align=center class="td_list_2"  nowrap>
 						${item.endTime}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
+					<td align=center class="td_list_2"  nowrap>
 						${item.expireTime}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
+					<td align=center class="td_list_2" nowrap>
 						${item.creator}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
+					<td align=center class="td_list_2"  nowrap>
 						${item.orderState == 0 ? '已结束' : '运行中'}&nbsp;
 					</td>
-					<td class="td_list_2" align=left nowrap>
+					<td  align=center class="td_list_2" style="padding-left:20px"  nowrap>
 						<a href="${ctx}/snaker/process/display?processId=${item.processId }&orderId=${item.id} " class="btnPict" title="查看流程图">查看流程图</a>
-						<a href="${ctx}/snaker/all?processId=${item.processId }&orderId=${item.id}&type=cc " class="btnView" title="查看">查看</a>
+						<%--<a href="${ctx}/snaker/all?processId=${item.processId }&orderId=${item.id}&type=cc " class="btnView" title="查看">查看</a> --%>
 					</td>
 				</tr>
 			</c:forEach>

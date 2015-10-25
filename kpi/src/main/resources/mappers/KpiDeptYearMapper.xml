@@ -271,6 +271,9 @@
 	        <if test="endTime != null" >
 	        	and end_time &lt;= #{endTime}
 	        </if> 
+	        <if test="deptId != null" >
+	        	and dept = #{deptId}
+	        </if> 
 		</where>     	
     )   
   </update>

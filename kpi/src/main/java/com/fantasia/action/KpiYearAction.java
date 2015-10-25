@@ -22,6 +22,7 @@ import com.fantasia.bean.KpiDeptYearDetail;
 import com.fantasia.bean.KpiEmployeeYear;
 import com.fantasia.bean.KpiEmployeeYearBean;
 import com.fantasia.bean.KpiGroupYear;
+import com.fantasia.core.DbcContext;
 import com.fantasia.core.KpiWorkFlow;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptDetailService;
@@ -280,7 +281,16 @@ public class KpiYearAction extends BaseAction {
 	 */
 	@RequestMapping(value = "/getKpiEmployeeList")
 	@ResponseBody
-	public ResultData getKpiEmployeeList(PageData page) throws ServiceException {		
+	public ResultData getKpiEmployeeList(PageData page,HttpServletRequest request) throws ServiceException {	
+		//获取工作流保存参数数据
+		String orderId = request.getParameter("orderId");
+		String taskName = request.getParameter("taskName");	
+		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
+			if(!DbcContext.isAdmin()){
+				page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName)) ;
+				page.setUserId(kpiWorkFlow.getUserId(orderId, taskName)) ;	
+			}			
+		}
 		return kpiEmployeeService.getKpiEmployee(page);
 	}
 	

@@ -71,7 +71,7 @@
 		LEFT JOIN kpi_dept_year y ON d.dept_kpi_id = y.id
 		LEFT JOIN kpi_group_year p ON p.ID = y.group_id
 		<where>	
-			y.audit_status = '2' AND d.STATUS = '1'	
+			y.audit_status = '3' AND d.STATUS = '1'	
 			<if test="keyTask != null">
 				and P.detail_item like '%${keyTask}%'
 			</if>			

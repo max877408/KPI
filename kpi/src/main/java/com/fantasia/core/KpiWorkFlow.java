@@ -1,5 +1,6 @@
 package com.fantasia.core;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fantasia.base.bean.PageData;
 import com.fantasia.dao.KpiDeptYearMapper;
 import com.fantasia.service.KpiDeptMonthService;
 import com.fantasia.snakerflow.engine.SnakerEngineFacets;
@@ -100,6 +102,29 @@ public class KpiWorkFlow {
 	}
 	
 	/**
+	 * 获取工作流用户
+	 * @param orderId
+	 * @param taskName
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public String getUserId(String orderId,String taskName){
+		String userId = "";
+		
+		//获取工作流保存参数数据	
+		Map<String, Object> tasks = facets.flowData(orderId, taskName);
+		if(tasks != null && tasks.size() > 0){
+			
+			List<Map<String, Object>> list = (List<Map<String, Object>>) tasks.get("vars");
+			if(list != null && list.size() > 0){
+				userId = (String) list.get(list.size() - 1).get("userId") ;
+			}			
+		}
+				
+		return userId;
+	}
+	
+	/**
 	 * 部门年度计划工作流提交
 	 * @param processId
 	 * @param orderId
@@ -132,6 +157,17 @@ public class KpiWorkFlow {
 			
 			//同意
 			if(methodStr.equalsIgnoreCase("0")){
+				
+				PageData page = new PageData();
+				page.setYear(getKpiYear(orderId, taskName));
+				page.setDeptId(getDept(orderId, taskName));
+				
+				//审批通过
+				page.setStatus("3");
+				
+				page.setModifyBy(DbcContext.getUserId());
+				page.setModifyTime(new Date());
+				kpiDeptYearMapper.updateTask(page);
 				
 				//根据部门时间段生成部门月度考核指标
 				kpiDeptMonthService.inertDeptMonthKpi(null);
