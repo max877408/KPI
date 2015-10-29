@@ -2,9 +2,17 @@ package com.fantasia.dao;
 
 import java.util.List;
 
+import com.fantasia.base.bean.PageData;
 import com.fantasia.bean.KpiDeptYearDetail;
 
 public interface KpiDeptYearDetailMapper {
+	
+	/**
+	 * 获取部门明细列表
+	 * @param page
+	 * @return
+	 */
+	public List<KpiDeptYearDetail> getKpiDept(PageData page);
 
 	public List<KpiDeptYearDetail> getKpiDeptDetailById(String id);
 	

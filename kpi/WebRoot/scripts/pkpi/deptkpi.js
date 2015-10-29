@@ -14,6 +14,15 @@
 			 onLoadSuccess : function(data) {
 				onLoadSuccess(data);	
 				
+				var row = $('#dg_list').datagrid('getData').rows[0];				
+				if(row){
+					console.log(row.auditStatus)
+					tooBar.menuStatus(row.auditStatus);
+				}
+				else{
+					tooBar.menuStatus('1');
+				}	
+				
 				//内容换行
 				/*var div = $(".datagrid-td-merged div");
 				div.css({
@@ -471,3 +480,48 @@
  			$.messager.alert("提示", "无修改项！");
  		}
  	}
+ 	
+ 	/**
+	 * 部门月度pbc提交申请
+	 */
+	function saveDeptPbcTask() {
+		var year = $("select[comboname=kpiYear]").combobox("getValue");
+		var orderId = "";
+		var taskName = "";
+		var taskId = "";
+		
+		if(wf.GetQueryString("orderId")){
+			orderId = wf.GetQueryString("orderId");
+		}
+		if(wf.GetQueryString("taskName")){
+			taskName = wf.GetQueryString("taskName");
+		}
+		if(wf.GetQueryString("taskId")){
+			taskId = wf.GetQueryString("taskId");
+		}		
+		 
+		$.messager.confirm('确认','提交申请之后,部门月度pbc将不可编辑!',
+			function(r) {
+			if (r) {
+				$.post('../kpiMonth/saveDeptPbcApprove.action?status=2', {
+					year : year,
+					orderId:orderId,
+					taskId:taskId,
+					taskName:taskName
+				}, function(result) {
+					if (result.code == "000") {	
+						if(orderId != "" && taskId != ""){
+							$.messager.alert("提示", "操作成功！");
+							parent.refresh();
+						}
+						else{
+							$.messager.alert("提示", "操作成功！");
+							$('#dg_list').datagrid('reload');
+						}						
+					} else {
+						$.messager.alert("提示", result.errorMsg);
+					}
+				}, 'json');
+			}
+		 });
+	}

@@ -18,11 +18,13 @@ import com.fantasia.base.bean.PageData;
 import com.fantasia.base.bean.ResultData;
 import com.fantasia.base.bean.ResultMsg;
 import com.fantasia.bean.KpiDeptMonthBean;
+import com.fantasia.bean.KpiDeptYearBean;
 import com.fantasia.bean.KpiEmployeeMonthBean;
 import com.fantasia.bean.KpiEmployeeYear;
 import com.fantasia.bean.kpiEmployeeMonth;
 import com.fantasia.core.DbcContext;
 import com.fantasia.core.Utils;
+import com.fantasia.dao.KpiDeptYearMapper;
 import com.fantasia.dao.kpiEmployeeMonthMapper;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiEmployeeMonthService;
@@ -38,6 +40,9 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 	
 	@Autowired
 	private kpiEmployeeMonthMapper kpiEmployeeMonthMapper;
+	
+	@Autowired
+	private KpiDeptYearMapper kpiDeptYearMapper;
 
 	@Override
 	public void InsertKpi(kpiEmployeeMonth kpiEmployeeMonth) {
@@ -110,6 +115,47 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 	}
 	
 	
+	/**
+	 * 新增员工月度考核指标
+	 * @param list
+	 */
+	public void inertEmployeeMonthKpi(PageData page){
+		page.setStart(0);
+		page.setRows(PageData.MAX_ROWS);
+		List<KpiDeptYearBean> list = kpiDeptYearMapper.getKpiDept(page);
+		
+		if(list != null && list.size() > 0){
+			SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+			for (KpiDeptYearBean kpiEmployeeYear : list) {
+				try {
+					Date startDate = sdf.parse(kpiEmployeeYear.getStartTime()) ;
+					Date endDate = sdf.parse(kpiEmployeeYear.getEndTime()) ;
+					Calendar startTime = Calendar.getInstance();
+					startTime.setTime(startDate);
+					Calendar endTime = Calendar.getInstance();
+					endTime.setTime(endDate);
+					
+					
+					if(startTime.get(Calendar.YEAR)== endTime.get(Calendar.YEAR)){
+						for(int month =startTime.get(Calendar.MONTH); month <= (endTime.get(Calendar.MONTH) + 1); month++){
+							kpiEmployeeMonth record = new kpiEmployeeMonth();
+							record.setId(Utils.getGUID());
+							record.setKpiId(kpiEmployeeYear.getId());
+							record.setKpiMonth(month);
+							record.setKpiYear(startTime.get(Calendar.YEAR));
+							record.setCreateBy(DbcContext.getAdminId());
+							record.setCreateTime(new Date());
+							record.setStatus("1");
+							kpiEmployeeMonthMapper.insert(record);
+						}
+					}
+				} catch (ParseException e) {
+					_log.error("date convert error",e);
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	/**
 	 * 查询员工月度PBC
 	 * @param page

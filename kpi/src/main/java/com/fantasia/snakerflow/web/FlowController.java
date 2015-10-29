@@ -38,8 +38,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fantasia.core.DbcContext;
-import com.fantasia.core.KpiWorkFlow;
 import com.fantasia.snakerflow.engine.SnakerEngineFacets;
+import com.fantasia.snakerflow.process.KpiWorkFlow;
 
 /**
  * @author yuqs

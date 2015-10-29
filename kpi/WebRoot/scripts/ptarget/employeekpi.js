@@ -263,9 +263,19 @@
 	 */
 	function saveEmployTask() {		
 		var year = $("select[comboname=kpiYear]").combobox("getValue")
-		var orderId = wf.GetQueryString("orderId");
-		var taskName = wf.GetQueryString("taskName");
-		var taskId = wf.GetQueryString("taskId");	
+		var orderId = "";
+		var taskName = "";
+		var taskId = "";
+		
+		if(wf.GetQueryString("orderId")){
+			orderId = wf.GetQueryString("orderId");
+		}
+		if(wf.GetQueryString("taskName")){
+			taskName = wf.GetQueryString("taskName");
+		}
+		if(wf.GetQueryString("taskId")){
+			taskId = wf.GetQueryString("taskId");
+		}		
 		$.messager.confirm('确认','任务下发之后,员工年度计划将不可编辑!',
 			function(r) {
 			if (r) {
@@ -276,7 +286,7 @@
 					taskName:taskName
 				}, function(result) {
 					if (result.code == "000") {
-						if(orderId != null && taskId != null){
+						if(orderId != "" && taskId != ""){
 							$.messager.alert("提示", "操作成功！");
 							parent.refresh();
 						}

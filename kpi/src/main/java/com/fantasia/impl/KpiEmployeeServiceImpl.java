@@ -15,17 +15,21 @@ import com.fantasia.base.bean.ListData;
 import com.fantasia.base.bean.PageData;
 import com.fantasia.base.bean.ResultData;
 import com.fantasia.base.bean.ResultMsg;
+import com.fantasia.bean.KpiDeptYear;
+import com.fantasia.bean.KpiDeptYearDetail;
 import com.fantasia.bean.KpiEmployeeYear;
 import com.fantasia.bean.KpiEmployeeYearBean;
 import com.fantasia.bean.PubUser;
 import com.fantasia.core.DbcContext;
-import com.fantasia.core.KpiWorkFlow;
 import com.fantasia.core.Utils;
+import com.fantasia.dao.KpiDeptYearDetailMapper;
+import com.fantasia.dao.KpiDeptYearMapper;
 import com.fantasia.dao.KpiEmployeeYearMapper;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiEmployeeMonthService;
 import com.fantasia.service.KpiEmployeeService;
 import com.fantasia.service.PubUserService;
+import com.fantasia.snakerflow.process.KpiWorkFlow;
 import com.fantasia.util.StringUtils;
 import com.fantasia.workflow.KpiFlowService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -50,6 +54,12 @@ public class KpiEmployeeServiceImpl implements KpiEmployeeService {
 	
 	@Autowired
 	private KpiWorkFlow kpiWorkFlow;
+	
+	@Autowired
+	private KpiDeptYearMapper kpiDeptYearMapper;
+	
+	@Autowired
+	private KpiDeptYearDetailMapper kpiDeptYearDetailMapper;
 	
 	@Override
 	public ResultData getKpiEmployee(PageData page) {
@@ -222,7 +232,7 @@ public class KpiEmployeeServiceImpl implements KpiEmployeeService {
 		
 		//启动工作流		
 		 Map<String, Object> params = new HashMap<String, Object>();		
-		 params.put("processId", "86a4c28073f045bf85404a7e012faf96");
+		 params.put("processId", "72f868734ac84742b6897f6b63bafff2");
 		
 		 if(!DbcContext.getRequest().getParameter("orderId").equals("null")){
 			 params.put("orderId", DbcContext.getRequest().getParameter("orderId"));
@@ -263,5 +273,42 @@ public class KpiEmployeeServiceImpl implements KpiEmployeeService {
 		 kpiFlowService.process(params);
 				 
 		return msg;
+	}
+	
+	/**
+	 * 更新年度计划责任人
+	 * @param page	
+	 */
+	@Override
+	public void updateResPerson(PageData page){
+		page.setStart(0);
+		page.setRows(PageData.MAX_ROWS); 
+		List<KpiDeptYearDetail> list = kpiDeptYearDetailMapper.getKpiDept(page);
+		if(list != null && list.size() > 0){
+			for (KpiDeptYearDetail kpiDeptYearDetail : list) {
+				
+				List<KpiEmployeeYear> empLst = kpiEmployeeYearMapper.getKpiEmployeeDetail(kpiDeptYearDetail.getId());
+				
+				//任务分工
+				String taskDivision = "";
+				if(empLst != null && empLst.size() > 0){
+					for (KpiEmployeeYear kpiEmployeeYear : empLst) {
+						taskDivision += kpiEmployeeYear.getTaskDivision() + ",";
+					}
+				}
+				
+				if(taskDivision.endsWith(",")){
+					taskDivision =taskDivision.substring(0,taskDivision.length() - 1);
+				}
+				
+				//更新年度计划责任人
+				KpiDeptYear record = new KpiDeptYear();
+				record.setId(kpiDeptYearDetail.getDeptKpiId());
+				record.setResponsiblePerson(taskDivision);
+				record.setModifyTime(new Date());
+				record.setModifyBy(DbcContext.getUserId());
+				kpiDeptYearMapper.updateById(record);				
+			}
+		}		
 	}
 }

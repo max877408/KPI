@@ -12,12 +12,18 @@
 		    	 return false;
 		    	// $('#dg_list').datagrid("unselectRow",rowIndex);
 		     },
-		     url:'../kpiMonth/getKpiDeptMonthtList.action',
-			 onLoadSuccess : function(data) {
-				var row = $('#dg_list').datagrid('getData').rows[0];
-				tooBar.menuStatus(row.auditStatus);
-				 
+		     url:'../kpiMonth/getKpiDeptMonthScore.action',
+			 onLoadSuccess : function(data) {				 
 				onLoadSuccess(data);	
+				
+				var row = $('#dg_list').datagrid('getData').rows[0];				
+				if(row){
+					console.log(row.auditStatus)
+					tooBar.menuStatus(row.auditStatus);
+				}
+				else{
+					tooBar.menuStatus('1');
+				}				
 				
 				//内容换行
 				var div = $(".datagrid-td-merged div");
@@ -260,23 +266,42 @@
 	 */
 	function saveDeptApprove() {
 		var year = $("select[comboname=kpiYear]").combobox("getValue");
-		var month = $("select[comboname=kpiMonth]").combobox("getValue")
+		var month = $("select[comboname=kpiMonth]").combobox("getValue");
+		var orderId = "";
+		var taskName = "";
+		var taskId = "";
+		
+		if(wf.GetQueryString("orderId")){
+			orderId = wf.GetQueryString("orderId");
+		}
+		if(wf.GetQueryString("taskName")){
+			taskName = wf.GetQueryString("taskName");
+		}
+		if(wf.GetQueryString("taskId")){
+			taskId = wf.GetQueryString("taskId");
+		}		
+		 
 		$.messager.confirm('确认','提交审批之后,部门月度评价将不可编辑!',
 			function(r) {
 			if (r) {
-				$.post('../kpiMonth/saveDeptApprove.action', {
+				$.post('../kpiMonth/saveDeptApprove.action?status=2', {
 					year : year,
-					month : month
+					month : month,
+					orderId:orderId,
+					taskId:taskId,
+					taskName:taskName
 				}, function(result) {
 					if (result.code == "000") {
-						$.messager.alert("提示", "操作成功！");
-						$('#dg_list').datagrid('reload');
-						//
-					} else {
-						$.messager.show({ // show error message
-							title : 'Error',
-							msg : result.errorMsg
-						});
+						if(orderId != "" && taskId != ""){
+							$.messager.alert("提示", "操作成功！");
+							parent.refresh();
+						}
+						else{
+							$.messager.alert("提示", "操作成功！");
+							$('#dg_list').datagrid('reload');
+						}	
+					} else {						
+						$.messager.alert("提示", result.errorMsg);
 					}
 				}, 'json');
 			}

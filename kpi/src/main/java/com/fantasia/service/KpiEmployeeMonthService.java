@@ -19,6 +19,12 @@ public interface KpiEmployeeMonthService {
 	public void inertEmployeeMonthKpi(List<KpiEmployeeYear> list);
 	
 	/**
+	 * 新增员工月度考核指标
+	 * @param list
+	 */
+	public void inertEmployeeMonthKpi(PageData page);
+	
+	/**
 	 * 保存员工月度绩效
 	 * @param list
 	 * @param deptKpi

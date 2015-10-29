@@ -22,13 +22,13 @@ import com.fantasia.bean.KpiDeptYearBean;
 import com.fantasia.bean.KpiDeptYearDetail;
 import com.fantasia.bean.KpiGroupYear;
 import com.fantasia.core.DbcContext;
-import com.fantasia.core.KpiWorkFlow;
 import com.fantasia.core.Utils;
 import com.fantasia.dao.KpiDeptYearMapper;
 import com.fantasia.dao.KpiGroupYearMapper;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptDetailService;
 import com.fantasia.service.KpiDeptService;
+import com.fantasia.snakerflow.process.KpiWorkFlow;
 import com.fantasia.util.DateTimeUtil;
 import com.fantasia.workflow.KpiFlowService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -215,11 +215,13 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 	
 	/**
 	 * 查询部门年度计划
+	 * 只有部门负责人，才可以看到部门年度计划
 	 */
 	@Override
 	public ResultData getKpiDept(PageData page) {		
 		
-		ResultData data = new ResultData();
+		ResultData data = new ResultData();	
+		
 		page.setStart((page.getPage() -1) * page.getRows());
 		if(StringUtils.isEmpty(page.getDeptId())){
 			page.setDeptId(DbcContext.getUser().getDeptName());
@@ -293,7 +295,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 		
 		//启动工作流		
 		 Map<String, Object> params = new HashMap<String, Object>();		
-		 params.put("processId", "86129c15f5a3475ab84da1eebb2fc844");
+		 params.put("processId", "34bd21ff94ea4e158ef8fc13ea49b2c4");
 		
 		 if(!DbcContext.getRequest().getParameter("orderId").equals("null")){
 			 params.put("orderId", DbcContext.getRequest().getParameter("orderId"));

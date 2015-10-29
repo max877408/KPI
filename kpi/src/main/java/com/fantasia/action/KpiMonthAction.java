@@ -10,13 +10,19 @@ import com.fantasia.base.bean.ListData;
 import com.fantasia.base.bean.PageData;
 import com.fantasia.base.bean.ResultData;
 import com.fantasia.base.bean.ResultMsg;
+import com.fantasia.core.DbcContext;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptMonthService;
 import com.fantasia.service.KpiEmployeeMonthService;
+import com.fantasia.snakerflow.process.KpiWorkFlow;
+import com.fantasia.util.StringUtils;
 
 @Controller
 @RequestMapping(value = "/kpiMonth")
 public class KpiMonthAction extends BaseAction {
+	
+	@Autowired
+	private KpiWorkFlow kpiWorkFlow;
 	
 	@Autowired
 	private KpiDeptMonthService kpiDeptMonthService;
@@ -33,6 +39,19 @@ public class KpiMonthAction extends BaseAction {
 	@RequestMapping(value = "/getKpiDeptMonthtList")
 	@ResponseBody
 	public ResultData getKpiDeptMonthList(PageData page) throws ServiceException {
+		//获取工作流保存参数数据
+		String orderId = request.getParameter("orderId");
+		String taskName = request.getParameter("taskName");	
+		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
+			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName));
+			page.setMonth(kpiWorkFlow.getKpiMonth(orderId, taskName)) ;
+			page.setDeptId(kpiWorkFlow.getDept(orderId, taskName)) ;	
+		}
+		else{
+			if(!DbcContext.isDeptChare()){
+				return null;
+			}
+		}
 		return kpiDeptMonthService.getKpiDeptMonth(page);
 	}
 	
@@ -61,6 +80,27 @@ public class KpiMonthAction extends BaseAction {
 	}
 	
 	/**
+	 * 部门月度PBC提交审批
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/saveDeptPbcApprove")
+	@ResponseBody
+	public ResultMsg saveDeptPbcApprove(PageData page)  {
+		//获取工作流保存参数数据
+		String orderId = request.getParameter("orderId");
+		String taskName = request.getParameter("taskName");	
+		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
+			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName));
+			page.setMonth(kpiWorkFlow.getKpiMonth(orderId, taskName)) ;
+			page.setDeptId(kpiWorkFlow.getDept(orderId, taskName)) ;	
+		}
+		
+		return kpiDeptMonthService.saveDeptPbcApprove(page);
+	}
+	
+	/**
 	 * 部门月度评价提交审批
 	 * @param year
 	 * @return
@@ -71,6 +111,35 @@ public class KpiMonthAction extends BaseAction {
 	public ResultMsg saveDeptApprove(PageData page)  {
 		return kpiDeptMonthService.saveDeptApprove(page);
 	}
+	
+	/**
+	 * 查询部门月度评价
+	 * @param page
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/getKpiDeptMonthScore")
+	@ResponseBody	
+	public ResultData getKpiDeptMonthScore(PageData page) throws ServiceException {
+		//获取工作流保存参数数据
+		String orderId = request.getParameter("orderId");
+		String taskName = request.getParameter("taskName");	
+		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
+			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName));
+			page.setMonth(kpiWorkFlow.getKpiMonth(orderId, taskName)) ;
+			page.setDeptId(kpiWorkFlow.getDept(orderId, taskName)) ;	
+		}
+		else{
+			if(!DbcContext.isDeptChare()){
+				return null;
+			}
+		}
+		return  kpiDeptMonthService.getKpiDeptMonthScore(page);		
+	}
+	
+	
+	
+	//-------------------员工部门----------------------------
 	
 	/**
 	 * 查询员工月度PBC

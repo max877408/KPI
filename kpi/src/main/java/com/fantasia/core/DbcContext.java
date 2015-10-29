@@ -75,7 +75,7 @@ public class DbcContext {
 		} else {
 			return String.valueOf(user.getId());
 		}
-	}
+	}	
 
 	/**
 	 * 管理员ID
@@ -108,4 +108,20 @@ public class DbcContext {
 			return false;
 		}
 	}
+	
+	/**
+	 * 当前用户是否部门负责人
+	 * @return
+	 */
+	public static boolean isDeptChare(){
+		if(DbcContext.getUser().getIsCharge().equals("是")){
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
 }

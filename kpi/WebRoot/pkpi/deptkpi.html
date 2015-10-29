@@ -12,10 +12,11 @@
 <script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../scripts/pkpi/deptkpi.js?time=New Date()"></script>
-<script type="text/javascript" src="../scripts/common/search-tool.js?time="></script>
-<script type="text/javascript" src="../scripts/common/toolbar.js?time=New Date()"></script>
-
+<script type="text/javascript" src="../scripts/common/wf-parame.js" ></script>
+<script type="text/javascript" src="../scripts/pkpi/deptkpi.js"></script>
+<script type="text/javascript" src="../scripts/common/search-tool.js"></script>
+<script type="text/javascript" src="../scripts/common/toolbar.js"></script>
+<script type="text/javascript" src="../scripts/common/workflow.js" defer="defer"></script>
 </head>
 <body>
 	<div id="tb"
@@ -80,7 +81,9 @@
 		<a href="javascript:void(0)" class="easyui-linkbutton"
 			iconCls="icon-remove" plain="true" onclick="destroyDeptKpi()">删除</a> 
 		<a href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-save" plain="true" onclick="saveDeptMonthKpi()">提交</a>
+			iconCls="icon-save" plain="true" onclick="saveDeptMonthKpi()">保存</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton"
+			iconCls="icon-save" plain="true" onclick="saveDeptPbcTask()">提交申请</a>
 	</div> 
 	</form>
 	

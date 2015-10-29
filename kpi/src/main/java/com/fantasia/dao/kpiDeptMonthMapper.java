@@ -25,10 +25,23 @@ public interface kpiDeptMonthMapper {
 	public void delMonthDeptKpi(String id);
 	
 	/**
+	 * 部门月度PBC工作流完成，更新状态
+	 * @param page
+	 */
+	public void updateTask(PageData page);
+	
+	/**
 	 * 部门月度评价提交审批
 	 * @param year
 	 * @return
 	 * @throws ServiceException
 	 */	
 	public void saveDeptApprove(PageData page);
+	
+	/**
+	 * 查询部门月度评价
+	 * @param page
+	 * @return
+	 */
+	public List<KpiDeptMonthBean> getKpiDeptMonthScore(PageData page);
 }

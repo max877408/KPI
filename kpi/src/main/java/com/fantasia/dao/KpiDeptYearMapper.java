@@ -16,6 +16,8 @@ public interface KpiDeptYearMapper {
 
 	public void update(KpiDeptYear record);
 	
+	public void updateById(KpiDeptYear record);
+	
 	/**
 	 * 删除部门年度计划
 	 * @param id

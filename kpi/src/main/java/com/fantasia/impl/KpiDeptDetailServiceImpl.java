@@ -26,22 +26,28 @@ public class KpiDeptDetailServiceImpl implements KpiDeptDetailService {
 	public void SaveKpiDetail(List<KpiDeptYearDetail> list,String deptKpi) {
 		if(list != null && list.size() > 0){
 			for (KpiDeptYearDetail kpiDeptYearDetail : list) {
-				
-				kpiDeptYearDetail.setDeptKpiId(deptKpi);			
-				
-				if(!StringUtils.isAnyoneEmpty(kpiDeptYearDetail.getId())){	
+				if(!StringUtils.isAnyoneEmpty(kpiDeptYearDetail.getKeyPoint(),
+											kpiDeptYearDetail.getLeadPerson(),
+											kpiDeptYearDetail.getStartTime(),
+											kpiDeptYearDetail.getEndTime())){
 					
-					kpiDeptYearDetail.setModifyBy(DbcContext.getAdminId());
-					kpiDeptYearDetail.setModifyTime(new Date());
-					kpiDeptYearDetailMapper.update(kpiDeptYearDetail);
+					kpiDeptYearDetail.setDeptKpiId(deptKpi);			
+					
+					if(!StringUtils.isAnyoneEmpty(kpiDeptYearDetail.getId())){	
+						
+						kpiDeptYearDetail.setModifyBy(DbcContext.getAdminId());
+						kpiDeptYearDetail.setModifyTime(new Date());
+						kpiDeptYearDetailMapper.update(kpiDeptYearDetail);
+					}
+					else{
+						kpiDeptYearDetail.setId(Utils.getGUID());	
+						kpiDeptYearDetail.setCreateBy(DbcContext.getAdminId());
+						kpiDeptYearDetail.setCreateTime(new Date());
+						kpiDeptYearDetail.setStatus("1");
+						kpiDeptYearDetailMapper.insert(kpiDeptYearDetail);
+					}
 				}
-				else{
-					kpiDeptYearDetail.setId(Utils.getGUID());	
-					kpiDeptYearDetail.setCreateBy(DbcContext.getAdminId());
-					kpiDeptYearDetail.setCreateTime(new Date());
-					kpiDeptYearDetail.setStatus("1");
-					kpiDeptYearDetailMapper.insert(kpiDeptYearDetail);
-				}				
+							
 			}
 		}
 	}

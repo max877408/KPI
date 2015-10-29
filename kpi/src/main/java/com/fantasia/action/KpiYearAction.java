@@ -23,12 +23,12 @@ import com.fantasia.bean.KpiEmployeeYear;
 import com.fantasia.bean.KpiEmployeeYearBean;
 import com.fantasia.bean.KpiGroupYear;
 import com.fantasia.core.DbcContext;
-import com.fantasia.core.KpiWorkFlow;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptDetailService;
 import com.fantasia.service.KpiDeptService;
 import com.fantasia.service.KpiEmployeeService;
 import com.fantasia.service.KpiGroupService;
+import com.fantasia.snakerflow.process.KpiWorkFlow;
 import com.fantasia.util.StringUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -204,7 +204,12 @@ public class KpiYearAction extends BaseAction {
 		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
 			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName)) ;
 			page.setDeptId(kpiWorkFlow.getDept(orderId, taskName)) ;	
-		}				
+		}
+		else{
+			if(!DbcContext.isDeptChare()){
+				return null;
+			}
+		}
 		
 		return kpiDeptService.getKpiDept(page);
 	}

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<process displayName="部门年度计划流程" instanceUrl="/snaker/flow/all" name="deptyear">
-<start displayName="start1" layout="42,118,-1,-1" name="start1">
-<transition g="" name="transition1" offset="0,0" to="apply"/>
+<process name="deptyear" displayName="部门年度计划流程" instanceUrl="/snaker/flow/all" >
+<start layout="42,118,50,50" name="start1" displayName="start1" >
+<transition offset="0,0" to="apply" name="transition1" />
 </start>
-<end displayName="end1" layout="639,116,44,48" name="end1"/>
-<task assignee="apply.operator" displayName="部门年度计划申请" form="/ptarget/deptkpi.html" layout="126,116,142,52" name="apply" performType="ANY">
-<transition g="" name="transition2" offset="0,0" to="task1"/>
+<end layout="639,116,44,48" name="end1" displayName="end1" >
+</end>
+<task layout="126,116,142,52" name="apply" displayName="部门年度计划申请" form="/ptarget/deptkpi.html" assignee="apply.operator" taskType="Major" performType="ANY" >
+<transition offset="0,0" to="approveDept" name="transition2" />
 </task>
-<task displayName="分管领导审批" layout="319,113,108,53" name="task1" performType="ANY">
-<transition g="" name="transition3" offset="0,0" to="task2"/>
+<task layout="319,113,108,53" name="approveDept" displayName="分管领导审批" form="/flow/KpiYear/approveDept" assignee="approveDept.operator" taskType="Major" performType="ANY" >
+<transition offset="0,0" to="approveHr" name="transition3" />
 </task>
-<task displayName="人力职员专员" layout="475,113,106,52" name="task2" performType="ANY">
-<transition g="" name="transition4" offset="0,0" to="end1"/>
+<task layout="475,113,106,52" name="approveHr" displayName="人力职员专员" form="/flow/KpiYear/approveHr" assignee="approveHr.operator" taskType="Major" performType="ANY" >
+<transition offset="0,0" to="end1" name="transition4" />
 </task>
 </process>

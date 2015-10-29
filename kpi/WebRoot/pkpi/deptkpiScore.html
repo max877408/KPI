@@ -12,9 +12,11 @@
 <script type="text/javascript" src="../scripts/jquery-1.6.min.js"></script>
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../scripts/pkpi/deptkpi_score.js?time=New Date()"></script>
-<script type="text/javascript" src="../scripts/common/search-tool.js?time="></script>
-<script type="text/javascript" src="../scripts/common/toolbar.js?time=New Date()"></script>
+<script type="text/javascript" src="../scripts/common/wf-parame.js" ></script>
+<script type="text/javascript" src="../scripts/pkpi/deptkpi_score.js"></script>
+<script type="text/javascript" src="../scripts/common/search-tool.js"></script>
+<script type="text/javascript" src="../scripts/common/toolbar.js"></script>
+<script type="text/javascript" src="../scripts/common/workflow.js" defer="defer"></script>
 
 </head>
 <body>
@@ -67,9 +69,9 @@
 				<th field="standard" width="100px">衡量标准</th>				
 				<th field="responsiblePerson" width="100px">责任人</th>
 				
-				<th field="finishValue" width="60px" data-options="styler:cellStyler,editor:'numberbox'">完成值</th>
+				<th field="finishValue" width="60px" editor="{type:'numberbox',options:{precision:2}}" data-options="styler:cellStyler">完成值</th>
 				<th field="finishDesc" width="120px" data-options="styler:cellStyler,editor:'text'">完成情况说明</th>
-				<th field="seftScore" width="60px" data-options="styler:cellStyler,editor:'numberbox'">自评分</th>
+				<th field="seftScore" width="60px"  editor="{type:'numberbox',options:{precision:2}}" data-options="styler:cellStyler">自评分</th>
 				<th field="examScore" width="100px" >考核得分</th>
 				<th field="remark" width="200px" >备注</th>
 					

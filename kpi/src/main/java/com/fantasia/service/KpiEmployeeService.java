@@ -47,4 +47,10 @@ public interface KpiEmployeeService {
 	 * @throws ServiceException
 	 */	
 	public ResultMsg saveEmployTask(PageData page);
+	
+	/**
+	 * 更新年度计划责任人
+	 * @param PageData	
+	 */
+	public void updateResPerson(PageData page);
 }

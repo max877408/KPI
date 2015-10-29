@@ -51,7 +51,7 @@ public class UserAction extends BaseAction {
 		UserPermission.loginUsers.put(user.getToken(), pubUser);
 		
 		ResultMsg  resultMsg = new ResultMsg();		
-		CookieTool.addCookie(response, "token", user.getToken(), 3600);
+		CookieTool.addCookie(response, "token", user.getToken(), Integer.MAX_VALUE);
 		
 		return resultMsg;
 	}
