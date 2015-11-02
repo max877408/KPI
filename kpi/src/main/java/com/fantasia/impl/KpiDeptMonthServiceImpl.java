@@ -156,6 +156,7 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 							kpiDeptMonth record = new kpiDeptMonth();
 							record.setId(Utils.getGUID());
 							record.setKpiId(kpiDeptYearDetail.getId());
+							record.setDeptId(page.getDeptId());
 							record.setKpiMonth(month);
 							record.setKpiYear(startTime.get(Calendar.YEAR));
 							record.setCreateBy(DbcContext.getAdminId());
@@ -310,17 +311,9 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 	 * @return
 	 * @throws ServiceException
 	 */
+	@SuppressWarnings("unchecked")
 	public ResultMsg saveDeptPbcApprove(PageData page){
 		ResultMsg msg = new ResultMsg();	
-
-		// 查看当前部门月度PBC
-		page.setPage(1);
-		ResultData data = getKpiDeptMonth(page);
-		if (data != null && data.getTotal() == 0) {
-			msg.setCode("100");
-			msg.setErrorMsg("当前无部门月度PBC!");
-			return msg;
-		}
 
 		// 检测是否配置分管领导
 		if (StringUtils.isEmpty(DbcContext.getUser().getChargeLeader())) {
@@ -329,10 +322,30 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 					+ ")分管领导为空,请先配置分管领导!");
 			return msg;
 		}
-
-		page.setModifyBy(DbcContext.getUserId());
-		page.setModifyTime(new Date());
-		kpiDeptMonthMapper.saveDeptApprove(page);
+		
+		// 查看当前部门月度PBC
+		page.setPage(1);
+		ResultData data = getKpiDeptMonth(page);
+		if (data != null && data.getTotal() == 0) {
+			msg.setCode("100");
+			msg.setErrorMsg("当前无部门月度PBC!");
+			return msg;
+		}
+		else{			
+			//kpiDeptMonthMapper.saveDeptApprove(page);
+			//更新状态为提交申请
+			List<KpiDeptMonthBean> list = (List<KpiDeptMonthBean>) data.getRows();
+			if(list != null && list.size() > 0){
+				for (KpiDeptMonthBean kpiDeptMonth : list) {
+					kpiDeptMonth record = new kpiDeptMonth();
+					record.setId(kpiDeptMonth.getId());
+					record.setAuditStatus("2");
+					record.setModifyBy(DbcContext.getUserId());
+					record.setModifyTime(new Date());  
+					kpiDeptMonthMapper.update(record);
+				}
+			}
+		}	
 
 		// 启动工作流
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -406,6 +419,7 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 	 * @return
 	 * @throws ServiceException
 	 */
+	@SuppressWarnings("unchecked")
 	public ResultMsg saveDeptApprove(PageData page) {
 		ResultMsg msg = new ResultMsg();	
 
@@ -426,9 +440,18 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 			return msg;
 		}
 
-		page.setModifyBy(DbcContext.getUserId());
-		page.setModifyTime(new Date());
-		kpiDeptMonthMapper.saveDeptApprove(page);
+		//修改部门月度评价已提交审批
+		List<KpiDeptMonthBean> list = (List<KpiDeptMonthBean>) data.getRows();
+		if(list != null && list.size() > 0){
+			for (KpiDeptMonthBean kpiDeptMonthBean : list) {
+				kpiDeptMonth record = new kpiDeptMonth();
+				record.setId(kpiDeptMonthBean.getId());
+				record.setAuditStatus("5");
+				record.setModifyBy(DbcContext.getUserId());
+				record.setModifyTime(new Date());
+				kpiDeptMonthMapper.update(record);
+			}			
+		}		
 
 		// 启动工作流
 		Map<String, Object> params = new HashMap<String, Object>();

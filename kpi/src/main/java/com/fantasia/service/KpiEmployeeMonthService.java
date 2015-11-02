@@ -56,6 +56,14 @@ public interface KpiEmployeeMonthService {
 	public ResultMsg saveEmployeeMonthKpi(ListData listData);
 	
 	/**
+	 * 员工月度PBC提交审批
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */
+	public ResultMsg saveEmployeePbcApprove(PageData page);
+	
+	/**
 	 * 员工 月度评价提交审批
 	 * @param year
 	 * @return

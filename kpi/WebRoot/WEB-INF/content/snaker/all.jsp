@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="scripts/jquery.easyui.min.js"></script>
 		<script type="text/javascript" src="scripts/easyui-lang-zh_CN.js"></script>
 		
-		<script type="text/javascript">
+		<script type="text/javascript">		 
 			$(function(){
 				var taskName = "${task.taskName}";
 				var url =  '${ctx}/snaker/process/diagram?processId=${processId}&orderId=${orderId}';
@@ -108,8 +108,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 			function refresh(){
 				window.location.href = '../snaker/task/active';
-			}		
-			 
+			}			 
 		</script>
 	
 	</head>

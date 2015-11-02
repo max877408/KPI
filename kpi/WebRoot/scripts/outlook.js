@@ -1,4 +1,4 @@
-﻿_menus = [];
+_menus = [];
 $(function() {
 	tabClose();
 	tabCloseEven();
@@ -33,7 +33,7 @@ $(function() {
 			window.location.href = "login.html?time=New Date()";
 		}
 		else{
-			$("#userName").text("欢迎您" + userContext.user.userName);
+			$("#userName").text("欢迎您,中国集团 " + userContext.user.userName);
 		}
 	});
 

@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.fantasia.bean.kpiEmployeeMonth" >
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="kpi_id" property="kpiId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="weight" property="weight" jdbcType="VARCHAR" />
     <result column="year_target" property="yearTarget" jdbcType="VARCHAR" />
     <result column="standard" property="standard" jdbcType="VARCHAR" />
@@ -88,7 +89,7 @@
 	LEFT JOIN KPI_DEPT_YEAR Y ON D.DEPT_KPI_ID = Y.ID
 	LEFT JOIN KPI_GROUP_YEAR G ON Y.GROUP_ID = G.ID
 	<where>	
-			Y.audit_status = '2' AND M.STATUS = '1'	
+			Y.audit_status = '3' and d.audit_status = '3' AND M.STATUS = '1'	
 			<if test="keyTask != null">
 				and G.key_task like '%${keyTask}%'
 			</if>			
@@ -99,7 +100,7 @@
 	        	and  M.KPI_MONTH = #{month}
 	        </if>
 	        <if test="userId != null" >
-	        	and d.lead_person = #{userId}
+	        	and m.user_id = #{userId}
 	        </if>
 	</where>
 	
@@ -115,6 +116,9 @@
       </if>
       <if test="kpiId != null" >
         kpi_id,
+      </if>
+       <if test="userId != null" >
+        user_id,
       </if>
       <if test="weight != null" >
         weight,
@@ -174,6 +178,9 @@
       </if>
       <if test="kpiId != null" >
         #{kpiId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="weight != null" >
         #{weight,jdbcType=VARCHAR},

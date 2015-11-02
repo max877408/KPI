@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<process displayName="员工月度评价流程" instanceUrl="/snaker/flow/all" name="employeemonth">
+<start displayName="start1" layout="24,118,-1,-1" name="start1">
+<transition g="" name="transition1" offset="0,0" to="apply"/>
+</start>
+<end displayName="end1" layout="722,116,-1,-1" name="end1"/>
+<task assignee="apply.operator" displayName="员工月度评价申请" form="/pkpi/employeekpiScore.html" layout="112,116,127,52" name="apply" performType="ANY">
+<transition g="" name="transition2" offset="0,0" to="decision1"/>
+</task>
+<decision displayName="decision1" expr="#charge &gt; 0 ? 'transition5' : 'transition4'" layout="327,118,-1,-1" name="decision1">
+<transition displayName="是部门负责人" g="" name="transition5" offset="8,-1" to="approveBoss"/>
+<transition displayName="不是部门负责人" g="" name="transition4" offset="10,0" to="approveDept"/>
+</decision>
+<task assignee="approveDept.operator" displayName="部门负责人审批" form="/flow/EmployeeMonth/approveDept" layout="292,277,115,52" name="approveDept" performType="ANY">
+<transition g="597,302" name="transition6" offset="0,0" to="approveBoss"/>
+</task>
+<task assignee="approveBoss.operator" displayName="分管领导审批" form="/flow/EmployeeMonth/approveBoss" layout="534,115,127,52" name="approveBoss" performType="ANY">
+<transition g="" name="transition3" offset="0,0" to="end1"/>
+</task>
+</process>

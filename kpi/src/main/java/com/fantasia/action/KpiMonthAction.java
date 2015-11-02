@@ -139,7 +139,7 @@ public class KpiMonthAction extends BaseAction {
 	
 	
 	
-	//-------------------员工部门----------------------------
+	//-------------------员工月度----------------------------
 	
 	/**
 	 * 查询员工月度PBC
@@ -150,6 +150,14 @@ public class KpiMonthAction extends BaseAction {
 	@RequestMapping(value = "/getKpiEmployeeMonthList")
 	@ResponseBody
 	public ResultData getKpiEmployeeMonthList(PageData page) throws ServiceException {
+		//获取工作流保存参数数据
+		String orderId = request.getParameter("orderId");
+		String taskName = request.getParameter("taskName");	
+		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
+			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName));
+			page.setMonth(kpiWorkFlow.getKpiMonth(orderId, taskName)) ;
+			page.setUserId(kpiWorkFlow.getUserId(orderId, taskName));	
+		}
 		return kpiEmployeeMonthService.getKpiEmployeeMonthList(page);
 	}
 	
@@ -175,6 +183,27 @@ public class KpiMonthAction extends BaseAction {
 	@ResponseBody
 	public ResultMsg saveEmployeeMonthKpi(ListData listData) throws ServiceException {
 		return kpiEmployeeMonthService.saveEmployeeMonthKpi(listData);				
+	}
+	
+	/**
+	 * 员工月度PBC提交审批
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "/saveEmployeePbcApprove")
+	@ResponseBody
+	public ResultMsg saveEmployeePbcApprove(PageData page)  {
+		//获取工作流保存参数数据
+		String orderId = request.getParameter("orderId");
+		String taskName = request.getParameter("taskName");	
+		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
+			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName));
+			page.setMonth(kpiWorkFlow.getKpiMonth(orderId, taskName)) ;
+			page.setDeptId(kpiWorkFlow.getDept(orderId, taskName)) ;	
+		}
+		
+		return kpiEmployeeMonthService.saveEmployeePbcApprove(page);
 	}
 	
 	/**

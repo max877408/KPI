@@ -18,7 +18,7 @@
 				
 				var row = $('#dg_list').datagrid('getData').rows[0];				
 				if(row){
-					console.log(row.auditStatus)
+					console.log(row.auditStatus);
 					tooBar.menuStatus(row.auditStatus);
 				}
 				else{
@@ -173,7 +173,7 @@
  		} 	
     	 
  		if ($('#dg_list').datagrid('validateRow', editIndex)) { 			
-             // $('#dg_list').datagrid('endEdit', editIndex);
+              $('#dg_list').datagrid('endEdit', editIndex);
               editIndex = undefined;
               return true;
  		} else {
@@ -182,6 +182,7 @@
       
      }
      function onClickCell(index, field){
+    	 //alert('1111111')
     	 if (editIndex != index) {
  			if (endEditing()) {
  				$('#dg_list').datagrid('beginEdit',	index);
@@ -284,7 +285,7 @@
 		$.messager.confirm('确认','提交审批之后,部门月度评价将不可编辑!',
 			function(r) {
 			if (r) {
-				$.post('../kpiMonth/saveDeptApprove.action?status=2', {
+				$.post('../kpiMonth/saveDeptApprove.action?status=5', {
 					year : year,
 					month : month,
 					orderId:orderId,

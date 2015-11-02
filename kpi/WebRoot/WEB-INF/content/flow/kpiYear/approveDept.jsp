@@ -59,26 +59,7 @@
 					<td class="td_table_2" colspan="3">
 						<textarea class="input_textarea_320" id="departmentDesc" name="approveDept.suggest"></textarea>
 					</td>
-				</tr>
-				<%-- <tr id="transferDIV" style="display: none">
-					<td class="td_table_1">
-						<span>转派给：</span>
-					</td>
-					<td class="td_table_2" colspan="3">
-						<input type="hidden" id="nextOperator" name="nextOperator" value="">
-						<input type="text" id="nextOperatorName" readonly="readonly" name="nextOperatorName" class="input_520" value="">
-						<input type='button' class='button_70px' value='选择部门' id="selectOrgBtn" onclick="selectOrg('${ctx}', 'nextOperator', 'nextOperatorName')"/>
-						<!-- <input type="text" class="input_240" id="nextOperator" name="nextOperator" value="${variable_approveDept['nextOperator'] }"/> -->
-					</td>
-				</tr>
-				<tr>
-					<td class="td_table_1"><span>抄送给：</span></td>
-					<td class="td_table_2" colspan="3">
-						<input type="hidden" id="ccOperator" name="ccOperator" value="">
-						<input type="text" id="ccOperatorName" readonly="readonly" name="ccOperatorName" class="input_520" value="">
-						<input type='button' class='button_70px' value='选择部门' onclick="selectOrg('${ctx}', 'ccOperator', 'ccOperatorName')"/>
-					</td>
-				</tr> --%>
+				</tr>				
 			</table>
 			<table align="center" border="0" cellpadding="0"
 				cellspacing="0">
@@ -92,14 +73,14 @@
 				</tr>
 			</table>
 		</form>
-<script type="text/javascript">
-	function transfer(flag) {
-		if(flag == '2') {
-			document.all['transferDIV'].style.display = "block";
-		} else {
-			document.all['transferDIV'].style.display = "none";
-		}
-	}
-</script>
+		<script type="text/javascript">
+			function transfer(flag) {
+				if(flag == '2') {
+					document.all['transferDIV'].style.display = "block";
+				} else {
+					document.all['transferDIV'].style.display = "none";
+				}
+			}
+		</script>
 	</body>
 </html>

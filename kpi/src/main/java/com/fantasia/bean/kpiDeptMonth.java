@@ -6,6 +6,8 @@ public class kpiDeptMonth {
     private String id;
 
     private String kpiId;
+    
+    private String deptId;
 
     private String weight;
 
@@ -66,8 +68,16 @@ public class kpiDeptMonth {
     public void setKpiId(String kpiId) {
         this.kpiId = kpiId == null ? null : kpiId.trim();
     }
+    
+    public String getDeptId() {
+		return deptId;
+	}
 
-    public String getWeight() {
+	public void setDeptId(String deptId) {
+		this.deptId = deptId;
+	}
+
+	public String getWeight() {
         return weight;
     }
 

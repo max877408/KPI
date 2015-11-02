@@ -30,4 +30,10 @@ public interface kpiEmployeeMonthMapper {
 	 * @throws ServiceException
 	 */	
 	public void saveEmployeeApprove(PageData page);
+	
+	/**
+	 * 工作流提交申请，更新状态
+	 * @param page
+	 */
+	public void updateTask(PageData page);
 }

@@ -292,8 +292,8 @@ public class KpiYearAction extends BaseAction {
 		String taskName = request.getParameter("taskName");	
 		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
 			if(!DbcContext.isAdmin()){
-				page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName)) ;
-				page.setUserId(kpiWorkFlow.getUserId(orderId, taskName)) ;	
+				page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName));				
+				page.setUserId(kpiWorkFlow.getUserId(orderId, taskName));	
 			}			
 		}
 		return kpiEmployeeService.getKpiEmployee(page);

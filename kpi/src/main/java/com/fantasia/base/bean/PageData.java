@@ -14,7 +14,7 @@ public class PageData {
 	/**
 	 * 当前页
 	 */
-	public int page;
+	public int page = 1;
 	
 	/**
 	 * 记录条数

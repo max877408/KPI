@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import com.fantasia.bean.KpiDeptMonthBean;
 import com.fantasia.bean.KpiDeptYearBean;
 import com.fantasia.bean.KpiEmployeeMonthBean;
 import com.fantasia.bean.KpiEmployeeYear;
+import com.fantasia.bean.PubUser;
 import com.fantasia.bean.kpiEmployeeMonth;
 import com.fantasia.core.DbcContext;
 import com.fantasia.core.Utils;
@@ -28,6 +31,9 @@ import com.fantasia.dao.KpiDeptYearMapper;
 import com.fantasia.dao.kpiEmployeeMonthMapper;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiEmployeeMonthService;
+import com.fantasia.service.PubUserService;
+import com.fantasia.snakerflow.process.KpiWorkFlow;
+import com.fantasia.workflow.KpiFlowService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -43,6 +49,15 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 	
 	@Autowired
 	private KpiDeptYearMapper kpiDeptYearMapper;
+	
+	@Autowired
+	private PubUserService pubUserService;
+	
+	@Autowired
+	private KpiFlowService kpiFlowService;
+	
+	@Autowired
+	private KpiWorkFlow kpiWorkFlow;
 
 	@Override
 	public void InsertKpi(kpiEmployeeMonth kpiEmployeeMonth) {
@@ -139,14 +154,22 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 					if(startTime.get(Calendar.YEAR)== endTime.get(Calendar.YEAR)){
 						for(int month =startTime.get(Calendar.MONTH); month <= (endTime.get(Calendar.MONTH) + 1); month++){
 							kpiEmployeeMonth record = new kpiEmployeeMonth();
-							record.setId(Utils.getGUID());
-							record.setKpiId(kpiEmployeeYear.getId());
-							record.setKpiMonth(month);
-							record.setKpiYear(startTime.get(Calendar.YEAR));
-							record.setCreateBy(DbcContext.getAdminId());
-							record.setCreateTime(new Date());
-							record.setStatus("1");
-							kpiEmployeeMonthMapper.insert(record);
+							
+							String resPerson = kpiEmployeeYear.getResponsiblePerson();
+							if(!StringUtils.isEmpty(resPerson)){
+								String[] pers = resPerson.split(",");
+								for(int i=0 ; i< pers.length ; i++){
+									record.setId(Utils.getGUID());
+									record.setKpiId(kpiEmployeeYear.getId());
+									record.setUserId(pers[i]);
+									record.setKpiMonth(month);
+									record.setKpiYear(startTime.get(Calendar.YEAR));
+									record.setCreateBy(DbcContext.getUserId());
+									record.setCreateTime(new Date());
+									record.setStatus("1");
+									kpiEmployeeMonthMapper.insert(record);
+								}
+							}						
 						}
 					}
 				} catch (ParseException e) {
@@ -167,7 +190,9 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 		ResultData data = new ResultData();
 		page.setStart((page.getPage() -1) * page.getRows());	
 		if(!DbcContext.isAdmin()){
-			page.setUserId(DbcContext.getUser().getUserName());
+			if(StringUtils.isEmpty(page.getUserId())){
+				page.setUserId(DbcContext.getUser().getUserName());
+			}
 		}		
 		
 		List<KpiDeptMonthBean> list = kpiEmployeeMonthMapper.getKpiEmpoyeeMonth(page);
@@ -281,6 +306,103 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * 员工月度PBC提交审批
+	 * @param year
+	 * @return
+	 * @throws ServiceException
+	 */	
+	@SuppressWarnings({"unchecked" })
+	public ResultMsg saveEmployeePbcApprove(PageData page){
+		ResultMsg msg = new ResultMsg();	
+
+		//检测是否配置部门负责人
+		PubUser pubuser = pubUserService.getDeptChare(DbcContext.getUser().getDeptName());
+		if(pubuser == null){
+			msg.setCode("101");
+			msg.setErrorMsg("当前部门("+DbcContext.getUser().getDeptName()+")部门负责人为空,请先配置部门负责人!");
+			return msg;
+		}
+		
+		//检测是否配置分管领导
+		if(StringUtils.isEmpty(DbcContext.getUser().getChargeLeader())){
+			msg.setCode("101");
+			msg.setErrorMsg("当前部门("+DbcContext.getUser().getDeptName()+")分管领导为空,请先配置分管领导!");
+			return msg;
+		}
+		
+		// 查看当前员工月度PBC
+		page.setPage(1);
+		ResultData data = getKpiEmployeeMonthList(page);
+		if (data != null && data.getTotal() == 0) {
+			msg.setCode("100");
+			msg.setErrorMsg("当前无员工月度PBC!");
+			return msg;
+		}
+		else{			
+			//更新状态为提交申请
+			List<KpiDeptMonthBean> list = (List<KpiDeptMonthBean>) data.getRows();
+			if(list != null && list.size() > 0){
+				for (KpiDeptMonthBean kpiDeptMonthBean : list) {
+					kpiEmployeeMonth record = new kpiEmployeeMonth();
+					record.setId(kpiDeptMonthBean.getKpiId());
+					record.setAuditStatus("2");
+					record.setModifyBy(DbcContext.getUserId());
+					record.setModifyTime(new Date());  
+					kpiEmployeeMonthMapper.update(record);
+				}
+			}
+			//kpiEmployeeMonthMapper.saveEmployeeApprove(page);
+			
+		}
+			
+		
+		//启动工作流		
+		 Map<String, Object> params = new HashMap<String, Object>();		
+		 params.put("processId", "39a799627c834ea582ccaaac9980d727");
+		
+		 if(!DbcContext.getRequest().getParameter("orderId").equals("null")){
+			 params.put("orderId", DbcContext.getRequest().getParameter("orderId"));
+		 }
+		 else{
+			 params.put("orderId", "");
+		 }
+		 if(!DbcContext.getRequest().getParameter("taskId").equals("null")){
+			 params.put("taskId", DbcContext.getRequest().getParameter("taskId"));
+		 }
+		 else{
+			 params.put("taskId", "");
+		 }
+		
+		 if(!params.get("orderId").equals("") && ! params.get("taskId").equals("")){
+			 params.put("year",kpiWorkFlow.getKpiYear(DbcContext.getRequest().getParameter("orderId"), DbcContext.getRequest().getParameter("taskName")));
+		 }
+		 else{
+			 params.put("year", page.getYear());
+			 params.put("month", page.getMonth());
+		 }		 
+		 params.put("userId", DbcContext.getUser().getUserName());	
+		 
+		 //判断是否部门负责人
+		 if(pubuser.getId().equalsIgnoreCase(DbcContext.getUserId())){
+			 params.put("charge", 1);	
+		 }
+		 else{
+			 params.put("charge", 0);	
+		 }
+		 
+		 //申请人
+		 params.put("apply.operator", DbcContext.getUser().getUserName());
+		 //部门负责人审批
+		 params.put("approveDept.operator", pubuser.getUserName());
+		 //分管领导审批
+		 params.put("approveBoss.operator", DbcContext.getUser().getChargeLeader());		 
+		 
+		 kpiFlowService.process(params);
+				 
+		return msg;
 	}
 	
 	/**

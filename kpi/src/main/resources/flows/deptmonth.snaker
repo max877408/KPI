@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<process displayName="部门月度评价流程" instanceUrl="/snaker/flow/all" name="deptmonth">
+<start displayName="start1" layout="42,118,-1,-1" name="start1">
+<transition g="" name="transition1" offset="0,0" to="apply"/>
+</start>
+<end displayName="end1" layout="639,116,44,48" name="end1"/>
+<task assignee="apply.operator" displayName="部门月度评价申请" form="/pkpi/deptkpiScore.html" layout="126,116,142,52" name="apply" performType="ANY">
+<transition g="" name="transition2" offset="0,0" to="approveDept"/>
+</task>
+<task assignee="approveDept.operator"  form="/flow/KpiMonth/approveDept"  name="approveDept"  displayName="分管领导审批" layout="319,113,108,53"  performType="ANY">
+<transition g="" name="transition3" offset="0,0" to="approveHr"/>
+</task>
+<task assignee="approveHr.operator"  form="/flow/KpiMonth/approveHr"  name="approveHr"  displayName="人力职员专员" layout="475,113,106,52"  performType="ANY">
+<transition g="" name="transition4" offset="0,0" to="end1"/>
+</task>
+</process>
