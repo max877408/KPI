@@ -120,6 +120,9 @@
 		m.finish_value,
 		m.finish_desc,
 		m.seft_score,
+		m.exam_score,
+		m.remark,
+		g.dept,
 		CASE
 		WHEN m.audit_status = '3' THEN
 			'1'
@@ -319,7 +322,7 @@
         exam_score = #{examScore,jdbcType=DOUBLE},
       </if>
       <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
+        remark = CONCAT(remark ,#{remark,jdbcType=VARCHAR}),
       </if>
       <if test="isScore != null" >
         is_score = #{isScore,jdbcType=VARCHAR},

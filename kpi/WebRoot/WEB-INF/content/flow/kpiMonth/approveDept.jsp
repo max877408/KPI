@@ -30,6 +30,26 @@
 					
 				})
 			})
+			
+			/**
+			* 工作流提交
+			*/
+			function submitWF(){
+				//获取Form 表单内容
+				var formData = $('#inputForm').serializeArray();
+				var parame = {};
+				$.each(formData,function(){
+					parame[this.name] = this.value;
+				})
+									
+				//提交工作流
+				$.post("${ctx }/snaker/flow/process", parame, function(rsp) {
+					alert("提交成功！");
+					history.back()
+				}).error(function() {
+					alert("提交错误了！");
+				});
+			}
 		</script>
 	</head>
 

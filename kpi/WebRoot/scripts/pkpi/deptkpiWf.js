@@ -2,9 +2,9 @@
 	$(function() {			
 		var dg_list = $('#dg_list').datagrid({
 			 striped: true, //行背景交换
-			 nowrap: true, //单元格是否可以换行
+			 nowrap: false, //单元格是否可以换行
 			 fit: false,			
-			 pageSize: 15, //每页显示的记录条数，默认为10     
+			 pageSize: 100, //每页显示的记录条数，默认为10     
 		     pageList: [15, 20, 30, 40, 50, 100],
 			 width: 'auto',
 		     height: 'auto',
@@ -21,22 +21,7 @@
 		     },
 		     url:'../kpiMonth/getKpiDeptMonthScore.action',
 			 onLoadSuccess : function(data) {				 
-				onLoadSuccess(data);								
-				
-				//内容换行
-				var div = $(".datagrid-td-merged div");
-				div.css({
-					"width":div.width(),
-					"white-space":"nowrap",
-					"text-overflow":"ellipsis",
-					"-o-text-overflow":"ellipsis",
-					"overflow":"hidden"
-				});
-				
-				$(div).each(function(){
-					$(this).parent().attr("title",$(this).text());
-				})
-				
+				onLoadSuccess(data);			
 			 }
 		});	
 		
@@ -238,9 +223,12 @@
  			}
  			
  			$.post("../kpiMonth/saveDeptMonthKpi.action", effectRow, function(rsp) {
-					if(rsp.code == "000"){
-						$.messager.alert("提示", "提交成功！");						
-						$('#dg_list').datagrid('reload'); // reload the user data
+					if(rsp.code == "000"){						
+						/*alert("提交成功！");
+						window.location.reload();*/
+						
+						//提交工作流
+						parent.submitWF();
 					}
 				}, "JSON").error(function() {
 					$.messager.alert("提示", "提交错误了！");

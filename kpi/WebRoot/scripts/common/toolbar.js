@@ -59,6 +59,15 @@
 	function cellStyler(value,row,index){
 		return 'background-color:#e6f0ff;';
 	}
+	
+	/**
+	 * 单元格行高
+	 */
+	function cellHeigh(){
+		$(".datagrid-editable input").height($(".datagrid-editable").parent().height()-9);
+		$(".datagrid-editable span").height($(".datagrid-editable").parent().height()-5);
+		debugger;
+	}
  
  $(function(){
 	

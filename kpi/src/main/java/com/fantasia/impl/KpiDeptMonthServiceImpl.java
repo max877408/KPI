@@ -281,6 +281,16 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 					record.setFinishValue(kpiDeptMonth.getFinishValue());
 					record.setFinishDesc(kpiDeptMonth.getFinishDesc());
 					record.setSeftScore(kpiDeptMonth.getSeftScore());
+					
+					//工作流审批，提交考核得分
+					if(!StringUtils.isEmpty(kpiDeptMonth.getExamScore())){
+						record.setExamScore(kpiDeptMonth.getExamScore());
+						
+						if(!kpiDeptMonth.getExamScore().equals(kpiDeptMonth.getSeftScore())){
+							String remark = DbcContext.getUser().getUserName() + "修改考核得分为：" + kpiDeptMonth.getExamScore() + ";";
+							record.setRemark(remark);
+						}
+					}
 
 					record.setModifyBy(DbcContext.getUserId());
 					record.setModifyTime(new Date());
