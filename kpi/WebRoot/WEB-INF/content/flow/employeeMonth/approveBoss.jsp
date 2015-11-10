@@ -30,6 +30,26 @@
 					
 				})
 			})
+			
+			/**
+			* 工作流提交
+			*/
+			function submitWF(){
+				//获取Form 表单内容
+				var formData = $('#inputForm').serializeArray();
+				var parame = {};
+				$.each(formData,function(){
+					parame[this.name] = this.value;
+				})
+									
+				//提交工作流
+				$.post("${ctx }/snaker/flow/process", parame, function(rsp) {
+					alert("提交成功！");
+					history.back()
+				}).error(function() {
+					alert("提交错误了！");
+				});
+			}
 		</script>
 	</head>
 
@@ -37,39 +57,11 @@
 		<form id="inputForm" action="${ctx }/snaker/flow/process" method="post" target="mainFrame">
 			<input type="hidden" name="processId" value="${processId }" />
 			<input type="hidden" name="orderId" value="${orderId }" />
-			<input type="hidden" name="taskId" value="${taskId }" />
-			<input type="hidden" name="curNode" value="2" />
-			<table class="table_all" align="center" border="0" cellpadding="0"
-				cellspacing="0" style="margin-top: 0px">
-			<tr>
-				<td class="td_table_1">
-					<span>分管领导审批结果：</span>
-				</td>
-				<td class="td_table_2" colspan="3">
-					<input type="radio" name="method" value="0" checked="checked"/>同意
-					<input type="radio" name="method" value="-1" />不同意
-				</td>
-			</tr>
-			<tr>
-				<td class="td_table_1">
-					<span>分管领导审批意见：</span>
-				</td>
-				<td class="td_table_2" colspan="3">
-					<textarea class="input_textarea_320" id="approveBoss_suggest" name="approveBoss.suggest"></textarea>
-				</td>
-			</tr>
-			</table>
-			<table align="center" border="0" cellpadding="0"
-				cellspacing="0">
-				<tr align="left">
-					<td colspan="1">
-						<input type="button" class="button_70px" name="submit" value="提交">
-						&nbsp;&nbsp;
-						<input type="button" class="button_70px" name="reback" value="返回"
-							onclick="history.back()">
-					</td>
-				</tr>
-			</table>
+			<input type="hidden" name="taskId" value="${taskId }" />		
+			<input type="hidden" name="curNode" value="1" />
+	
+			<iframe src="../../pkpi/employeekpiWF.html?processId=${processId }&orderId=${orderId }&taskId=${taskId }&taskName=apply" frameborder="0" style="width:100%;height:100%"></iframe>
+			
 		</form>
 	</body>
 </html>

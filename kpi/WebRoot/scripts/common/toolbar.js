@@ -4,31 +4,58 @@
 */
 
  var tooBar = {
+		 show:function(){
+			 $("#toolbar").find("a").show();
+			 $("#toolbar").find("[iconcls=icon-ok]").hide();
+			 $("#dlg-buttons").find("[iconcls=icon-ok]").show();				
+			 $("#dlg").find(".datagrid-toolbar").show();
+		 },
+		 hide:function(){
+			 $("#toolbar").find("a").hide();
+			 $("#toolbar").find("#view").show();
+			 $("#dlg-buttons").find("[iconcls=icon-ok]").hide();				
+			 $("#dlg").find(".datagrid-toolbar").hide();
+		 },
+		 appraise:function(){
+			 //判断当前页面是否评价页面
+			 var result = false;
+			 var url = window.location.href;
+			 if(url.indexOf("Score") > 0 ){
+				 result = true;
+			 }
+			 return result;
+		 },
 		 menuStatus : function(status){
 			 /*
 			  * 工具栏菜单状态
 			  * 1 任务未下发，可以编辑
 			  * 2 任务已下发，只能查看
+			  * 3 工作流审批通过
+			  * 5 评价工作流提交
+			  * 6评价工作流审批通过
 			  */
 			 
 			 if(status == '1'){
-				 $("#toolbar").find("a").show();
-				 $("#toolbar").find("[iconcls=icon-ok]").hide();
-				 $("#dlg-buttons").find("[iconcls=icon-ok]").show();				
-				 $("#dlg").find(".datagrid-toolbar").show();
-				 
+				this.show();		 
 			 }
-			 else if(status == '2' || status == '3'){
-				 $("#toolbar").find("a").hide();
-				 $("#toolbar").find("#view").show();
-				 $("#dlg-buttons").find("[iconcls=icon-ok]").hide();				
-				 $("#dlg").find(".datagrid-toolbar").hide();
+			 else if(status == '2'){
+				this.hide();	
+			 } 
+			 else if(status == '3'){				 
+				 //是否评价页面
+				var result = this.appraise();
+				if(result){
+					this.show();
+				}
+				else{
+					this.hide();
+				}
 			 }
+			 else if(status == '5' || status == '6'){
+					this.hide();	
+			 } 
 			 else{
-				 $("#toolbar").find("a").show();
-				 $("#toolbar").find("[iconcls=icon-ok]").hide(); 
-				 $("#dlg-buttons").find("[iconcls=icon-ok]").show();				
-				 $("#dlg").find(".datagrid-toolbar").show();
+				this.show();
 			 }			
 		 }
  }
@@ -63,10 +90,17 @@
 	/**
 	 * 单元格行高
 	 */
-	function cellHeigh(){
-		$(".datagrid-editable input").height($(".datagrid-editable").parent().height()-9);
-		$(".datagrid-editable span").height($(".datagrid-editable").parent().height()-5);
-		debugger;
+	function cellHeigh(index){		
+		setHeight();
+		$(".datagrid-btable").eq(1).find("input[type=text]").click(function(){
+			setHeight(index);
+		})
+	}
+	
+	function setHeight(index){
+		//获取当前选择的行
+		var tr = $(".datagrid-btable").eq(1).find("tr").siblings().eq(index); 		
+		tr.find("input[type=text]").height(tr.height()-9);
 	}
  
  $(function(){

@@ -1,6 +1,7 @@
 package com.fantasia.snakerflow.process;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fantasia.base.bean.PageData;
+import com.fantasia.bean.KpiDeptMonthBean;
+import com.fantasia.bean.kpiDeptMonth;
 import com.fantasia.core.DbcContext;
-import com.fantasia.dao.KpiDeptYearMapper;
+import com.fantasia.dao.kpiDeptMonthMapper;
 import com.fantasia.service.KpiDeptMonthService;
 
 /**
@@ -21,7 +24,7 @@ import com.fantasia.service.KpiDeptMonthService;
 public class DeptMonthProcess  extends WorkFlowBase implements SflowProcess  {
 
 	@Autowired
-	private KpiDeptYearMapper kpiDeptYearMapper;
+	private kpiDeptMonthMapper kpiDeptMonthMapper;
 	
 	@Autowired
 	private KpiDeptMonthService kpiDeptMonthService;
@@ -30,14 +33,14 @@ public class DeptMonthProcess  extends WorkFlowBase implements SflowProcess  {
 	public void process(HttpServletRequest request) {
 		String processId = request.getParameter("processId");
 		
-		//部门年度计划
-		if(processId.equalsIgnoreCase("34bd21ff94ea4e158ef8fc13ea49b2c4")){	
+		//部门月度评价
+		if(processId.equalsIgnoreCase("4f0a1cfec6954908b6d2271d0a870e35")){	
 			deptYearProcess(request);
 		}				
 	}
 	
 	/**
-	 * 部门年度计划工作流提交
+	 * 部门月度评价工作流提交
 	 * @param processId
 	 * @param orderId
 	 * @param taskId
@@ -71,15 +74,24 @@ public class DeptMonthProcess  extends WorkFlowBase implements SflowProcess  {
 			if(methodStr.equalsIgnoreCase("0")){
 				
 				PageData page = new PageData();
+				page.setStart(0);
+				page.setRows(PageData.MAX_ROWS);
 				page.setYear(getKpiYear(orderId, taskName));
 				page.setDeptId(getDept(orderId, taskName));
+				page.setMonth(getKpiMonth(orderId, taskName));			
 				
-				//审批通过
-				page.setStatus("3");
-				
-				page.setModifyBy(DbcContext.getUserId());
-				page.setModifyTime(new Date());
-				kpiDeptYearMapper.updateTask(page);
+				List<KpiDeptMonthBean> list = kpiDeptMonthMapper.getKpiDeptMonth(page);		
+				if(list != null && list.size() > 0){
+					for (KpiDeptMonthBean kpiDeptMonthBean : list) {
+						kpiDeptMonth record = new kpiDeptMonth();
+						record.setId(kpiDeptMonthBean.getId());
+						//审批通过
+						record.setAuditStatus("6");				
+						record.setModifyBy(DbcContext.getUserId());
+						record.setModifyTime(new Date());
+						kpiDeptMonthMapper.update(record);
+					}
+				}
 				
 				//根据部门年度计划生成部门月度考核指标
 				kpiDeptMonthService.inertDeptMonthKpi(page);

@@ -1,2 +1,10 @@
 
  外网访问 http://202.170.138.30:8181/kpi/login.html
+ 
+ vpn:
+ https://vpn.cnfantasia.com/por/service.csp
+ easadmin / easadmin123
+ 
+ mstsc:192.168.0.27
+ 
+ 

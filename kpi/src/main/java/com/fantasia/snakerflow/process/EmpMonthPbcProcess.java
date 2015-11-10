@@ -1,6 +1,7 @@
 package com.fantasia.snakerflow.process;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -8,9 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fantasia.base.bean.PageData;
+import com.fantasia.bean.KpiDeptMonthBean;
+import com.fantasia.bean.kpiEmployeeMonth;
 import com.fantasia.core.DbcContext;
-import com.fantasia.dao.KpiEmployeeYearMapper;
-import com.fantasia.service.KpiEmployeeMonthService;
+import com.fantasia.dao.kpiEmployeeMonthMapper;
 import com.fantasia.service.KpiEmployeeService;
 
 /**
@@ -20,35 +22,28 @@ import com.fantasia.service.KpiEmployeeService;
  */
 @Service("EmpMonthPbcProcess")
 public class EmpMonthPbcProcess extends WorkFlowBase implements SflowProcess {
-
-	
-	@Autowired
-	private KpiEmployeeMonthService kpiEmployeeMonthService;
-	
-	@Autowired
-	private KpiEmployeeYearMapper kpiEmployeeYearMapper;
 	
 	@Autowired
 	private KpiEmployeeService kpiEmployeeService;
+	
+	@Autowired
+	private kpiEmployeeMonthMapper kpiEmployeeMonthMapper;
 	
 	@Override
 	public void process(HttpServletRequest request) {	
 		String processId = request.getParameter("processId");
 		
-		//员工年度计划
-		if(processId.equalsIgnoreCase("72f868734ac84742b6897f6b63bafff2")){
-			employeeYearProcess(request);
+		//员工月度pbc
+		if(processId.equalsIgnoreCase("39a799627c834ea582ccaaac9980d727")){
+			employeeMonthProcess(request);
 		}
 	}
-	
+
 	/**
-	 * 员工年度计划工作流提交
-	 * @param processId
-	 * @param orderId
-	 * @param taskId
-	 * @param methodStr
+	 * 员工月度pbc审批
+	 * @param request
 	 */
-	private void employeeYearProcess(HttpServletRequest request){
+	private void employeeMonthProcess(HttpServletRequest request){
 		String orderId = request.getParameter("orderId");		
 		String methodStr = request.getParameter("method");
 		String taskName ="apply";	
@@ -70,19 +65,30 @@ public class EmpMonthPbcProcess extends WorkFlowBase implements SflowProcess {
 				
 				//修改状态
 				PageData page = new PageData();
-				page.setYear(getKpiYear(orderId, taskName));
-				page.setUserId(getUserId(orderId, taskName));				
-				//审批通过
-				page.setStatus("3");				
-				page.setModifyBy(DbcContext.getUserId());
-				page.setModifyTime(new Date());
-				kpiEmployeeYearMapper.updateTask(page);
+				page.setStart(0);
+				page.setRows(PageData.MAX_ROWS);
+				page.setYear(getKpiYear(orderId, taskName));				
+				if(getKpiMonth(orderId, taskName) != null){
+					page.setMonth(getKpiMonth(orderId, taskName));
+				}				
+				page.setUserId(getUserId(orderId, taskName));
+			
+				
+				List<KpiDeptMonthBean> list = kpiEmployeeMonthMapper.getKpiEmpoyeeMonth(page);
+				if(list != null && list.size() > 0){
+					for (KpiDeptMonthBean kpiDeptMonthBean : list) {
+						kpiEmployeeMonth record = new kpiEmployeeMonth();
+						record.setId(kpiDeptMonthBean.getKpiId());
+						record.setAuditStatus("3");
+						record.setModifyBy(DbcContext.getUserId());
+						record.setModifyTime(new Date());  
+						kpiEmployeeMonthMapper.update(record);
+					}
+				}
+				//kpiEmployeeYearMapper.updateTask(page);
 				
 				//修改部门年度计划责任人
 				kpiEmployeeService.updateResPerson(page);				
-				
-				//根据员工年度计划生成员工月度考核指标
-				kpiEmployeeMonthService.inertEmployeeMonthKpi(page);
 			}
 		}		
 	}

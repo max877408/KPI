@@ -130,6 +130,7 @@
 			'2'
 		WHEN m.audit_status = '6' THEN
 			'3'
+		else m.audit_status
 		END AS audit_status		
 	FROM
 		KPI_DEPT_MONTH M
@@ -137,7 +138,11 @@
 	LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON D.DEPT_KPI_ID = Y.ID
 	LEFT JOIN KPI_GROUP_YEAR G ON Y.GROUP_ID = G.ID
 	<where>	
-			Y.audit_status = '3' AND (M.audit_status = '3' or M.audit_status = '5' or M.audit_status = '6')
+			Y.audit_status = '3' 
+			<!-- status 不为空，则表示员工月度评价提交 -->
+			<if test="status != null">
+				AND (M.audit_status = '3' or M.audit_status = '5' or M.audit_status = '6')
+			</if>			
 			<if test="keyTask != null">
 				and G.key_task like '%${keyTask}%'
 			</if>			

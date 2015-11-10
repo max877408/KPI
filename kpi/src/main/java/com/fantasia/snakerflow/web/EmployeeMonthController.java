@@ -25,10 +25,10 @@ public class EmployeeMonthController {
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("taskId", taskId);
 		if(StringUtils.isNotEmpty(taskId)) {
-			return "flow/EmployeeMonth/approveBoss";
+			return "flow/employeeMonth/approveBoss";
 		} else {
 			model.addAllAttributes(facets.flowData(orderId, taskName));
-			return "flow/EmployeeMonth/approveBossView";
+			return "flow/employeeMonth/approveBossView";
 		}
 	}
 	
@@ -41,10 +41,10 @@ public class EmployeeMonthController {
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("taskId", taskId);
 		if(StringUtils.isNotEmpty(taskId)) {
-			return "flow/EmployeeMonth/approveDept";
+			return "flow/employeeMonth/approveDept";
 		} else {
 			model.addAllAttributes(facets.flowData(orderId, taskName));
-			return "flow/EmployeeMonth/approveDeptView";
+			return "flow/employeeMonth/approveDeptView";
 		}
 	}	
 }

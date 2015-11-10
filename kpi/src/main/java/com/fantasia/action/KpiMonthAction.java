@@ -200,7 +200,7 @@ public class KpiMonthAction extends BaseAction {
 		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
 			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName));
 			page.setMonth(kpiWorkFlow.getKpiMonth(orderId, taskName)) ;
-			page.setDeptId(kpiWorkFlow.getDept(orderId, taskName)) ;	
+			page.setUserId(kpiWorkFlow.getUserId(orderId, taskName)) ;	
 		}
 		
 		return kpiEmployeeMonthService.saveEmployeePbcApprove(page);
@@ -215,6 +215,14 @@ public class KpiMonthAction extends BaseAction {
 	@RequestMapping(value = "/saveEmployeeApprove")
 	@ResponseBody
 	public ResultMsg saveEmployeeApprove(PageData page)  {
+		//获取工作流保存参数数据
+		String orderId = request.getParameter("orderId");
+		String taskName = request.getParameter("taskName");	
+		if(!StringUtils.isAnyoneEmpty(orderId,taskName)){
+			page.setYear(kpiWorkFlow.getKpiYear(orderId, taskName));
+			page.setMonth(kpiWorkFlow.getKpiMonth(orderId, taskName)) ;
+			page.setUserId(kpiWorkFlow.getUserId(orderId, taskName)) ;		
+		}
 		return kpiEmployeeMonthService.saveEmployeeApprove(page);
 	}
 }

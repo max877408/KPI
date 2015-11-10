@@ -12,31 +12,14 @@
 	</head>
 
 	<body>
-		<form id="inputForm" action="" method="post" target="mainFrame">
+		<form id="inputForm" action="" method="post" target="mainFrame">			
 			<input type="hidden" name="processId" value="${processId }" />
 			<input type="hidden" name="orderId" value="${orderId }" />
-			<input type="hidden" name="taskId" value="${taskId }" />
-			<c:forEach items="${vars}" var="item">
-			<table class="table_all" align="center" border="0" cellpadding="0"
-				cellspacing="0" style="margin-top: 0px">
-			<tr>
-				<td class="td_table_1">
-					<span>分管领导审批结果：</span>
-				</td>
-				<td class="td_table_2" colspan="3">
-					&nbsp;${item['method'] == '0' ? '同意' : '' }${item['method'] == '-1' ? '不同意' : '' }
-				</td>
-			</tr>
-			<tr>
-				<td class="td_table_1">
-					<span>分管领导审审批意见：</span>
-				</td>
-				<td class="td_table_2" colspan="3">
-					&nbsp;${item['approveBoss.suggest'] }
-				</td>
-			</tr>
-			</table>
-			</c:forEach>
+			<input type="hidden" name="taskId" value="${taskId }" />		
+			<input type="hidden" name="curNode" value="1" />
+	
+			<iframe src="../../pkpi/employeekpiWF.html?processId=${processId }&orderId=${orderId }&taskId=${taskId }&taskName=apply" frameborder="0" style="width:100%;height:100%"></iframe>
+			
 		</form>
 	</body>
 </html>

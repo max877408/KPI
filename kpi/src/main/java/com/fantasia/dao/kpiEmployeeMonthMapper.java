@@ -13,7 +13,8 @@ public interface kpiEmployeeMonthMapper {
 	
     int insert(kpiEmployeeMonth record);  
 
-    int update(kpiEmployeeMonth record);
+    int update(kpiEmployeeMonth record);    
+  
     
     /**
 	 * 删除员工月度PBC

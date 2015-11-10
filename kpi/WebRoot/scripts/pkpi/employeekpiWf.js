@@ -1,44 +1,27 @@
   
-	$(function() {	
+	$(function() {			
 		var dg_list = $('#dg_list').datagrid({
 			 striped: true, //行背景交换
 			 nowrap: false, //单元格是否可以换行
 			 fit: false,			
-			 pageSize: 15, //每页显示的记录条数，默认为10     
+			 pageSize: 100, //每页显示的记录条数，默认为10     
 		     pageList: [15, 20, 30, 40, 50, 100],
 			 width: 'auto',
 		     height: 'auto',
+		     toolbar : [ {
+					text : "提交",
+					iconCls : "icon-save",
+					handler : function() {
+						saveEmployeeMonthKpi();
+					}
+			}],
 		     onSelect:function(rowIndex,rowData){
 		    	 return false;
 		    	// $('#dg_list').datagrid("unselectRow",rowIndex);
 		     },
-		     url:'../kpiMonth/getKpiDeptMonthScore.action',
+		     url:'../kpiMonth/getKpiEmployeeMonthList.action',
 			 onLoadSuccess : function(data) {				 
-				onLoadSuccess(data);	
-				
-				var row = $('#dg_list').datagrid('getData').rows[0];				
-				if(row){
-					console.log(row.auditStatus);
-					tooBar.menuStatus(row.auditStatus);
-				}
-				else{
-					tooBar.menuStatus('1');
-				}				
-				
-				//内容换行
-				var div = $(".datagrid-td-merged div");
-				div.css({
-					"width":div.width(),
-					"white-space":"nowrap",
-					"text-overflow":"ellipsis",
-					"-o-text-overflow":"ellipsis",
-					"overflow":"hidden"
-				});
-				
-				$(div).each(function(){
-					$(this).parent().attr("title",$(this).text());
-				})
-				
+				onLoadSuccess(data);			
 			 }
 		});	
 		
@@ -194,8 +177,6 @@
  			} else {
  				$('#dg_list').datagrid('selectRow', editIndex);
  			}
- 			
- 			cellHeigh(index);
  		}
      }	
 	
@@ -217,21 +198,23 @@
 		return 'background-color:#e6f0ff;';
 	}
 	
-	/**
-	 * 工具栏菜单操作
-	 */
-	var toolOp = {
-					loadData : function(id){						
-						$('#fm').form('load', '../kpiYear/getKpiDept.action?id='+ id);
-					}
-	              
-	}
 	
 	/**
- 	 * 保存部门月度评价
+ 	 * 保存员工月度评价,修改考核得分
  	 */
- 	function saveDeptMonthKpi() { 		
-		endEdit();
+ 	function saveEmployeeMonthKpi() { 	
+ 		
+ 		$.messager.confirm('确认','请确认是否已填写所有,考核得分!',
+ 				function(r) {
+ 				if (r) {
+ 					submitData();
+ 				}
+ 			 });
+ 	}
+ 	
+ 	//提交数据
+ 	function submitData(){
+ 		endEdit();
  		var $dg = $("#dg_list");
  		if ($dg.datagrid('getChanges').length) {		
  						
@@ -250,10 +233,10 @@
  				effectRow["updated"] = JSON.stringify(updated);
  			}
  			
- 			$.post("../kpiMonth/saveDeptMonthKpi.action", effectRow, function(rsp) {
-					if(rsp.code == "000"){
-						$.messager.alert("提示", "提交成功！");						
-						$('#dg_list').datagrid('reload'); // reload the user data
+ 			$.post("../kpiMonth/saveEmployeeMonthKpi.action", effectRow, function(rsp) {
+					if(rsp.code == "000"){	
+						//提交工作流
+						parent.submitWF();
 					}
 				}, "JSON").error(function() {
 					$.messager.alert("提示", "提交错误了！");
@@ -263,50 +246,3 @@
  			$.messager.alert("提示", "无修改项！");
  		}
  	}
-	
-	/**
-	 * 部门月度评价提交审批
-	 */
-	function saveDeptApprove() {
-		var year = $("select[comboname=kpiYear]").combobox("getValue");
-		var month = $("select[comboname=kpiMonth]").combobox("getValue");
-		var orderId = "";
-		var taskName = "";
-		var taskId = "";
-		
-		if(wf.GetQueryString("orderId")){
-			orderId = wf.GetQueryString("orderId");
-		}
-		if(wf.GetQueryString("taskName")){
-			taskName = wf.GetQueryString("taskName");
-		}
-		if(wf.GetQueryString("taskId")){
-			taskId = wf.GetQueryString("taskId");
-		}		
-		 
-		$.messager.confirm('确认','提交审批之后,部门月度评价将不可编辑!',
-			function(r) {
-			if (r) {
-				$.post('../kpiMonth/saveDeptApprove.action?status=5', {
-					year : year,
-					month : month,
-					orderId:orderId,
-					taskId:taskId,
-					taskName:taskName
-				}, function(result) {
-					if (result.code == "000") {
-						if(orderId != "" && taskId != ""){
-							$.messager.alert("提示", "操作成功！");
-							parent.refresh();
-						}
-						else{
-							$.messager.alert("提示", "操作成功！");
-							$('#dg_list').datagrid('reload');
-						}	
-					} else {						
-						$.messager.alert("提示", result.errorMsg);
-					}
-				}, 'json');
-			}
-		 });
-	}

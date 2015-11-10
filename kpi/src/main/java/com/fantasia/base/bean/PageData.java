@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class PageData {
+public class PageData extends WorkFlowData {
 	private static Logger _log = LoggerFactory.getLogger(PageData.class);
 	/**
 	 * 当前页

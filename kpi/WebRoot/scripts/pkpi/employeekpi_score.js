@@ -13,12 +13,18 @@
 		     pageList: [15, 20, 30, 40, 50, 100],
 			 width: 'auto',
 		     height: 'auto',
-		     url:'../kpiMonth/getKpiEmployeeMonthList.action',
+		     url:'../kpiMonth/getKpiEmployeeMonthList.action?status=0',
 			 onLoadSuccess : function(data) {
 				onLoadSuccess(data);
 				
-				var row = $('#dg_list').datagrid('getData').rows[0];
-				tooBar.menuStatus(row.auditStatus);
+				var row = $('#dg_list').datagrid('getData').rows[0];				
+				if(row){
+					console.log(row.auditStatus);
+					tooBar.menuStatus(row.auditStatus);
+				}
+				else{
+					tooBar.menuStatus('1');
+				}
 				
 				//内容换行
 				var div = $(".datagrid-td-merged div");
@@ -302,10 +308,7 @@
 						$('#dg_list').datagrid('reload');
 						//
 					} else {
-						$.messager.show({ // show error message
-							title : 'Error',
-							msg : result.errorMsg
-						});
+						$.messager.alert("提示", result.errorMsg);						
 					}
 				}, 'json');
 			}

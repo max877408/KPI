@@ -63,6 +63,7 @@
 
 
   <!-- id 存放为 KPI_DEPT_YEAR_DETAIL id ,kpi_id 存放为 KPI_EMPLOYEE_MONTH id -->
+  <!--   查询用户月度评价 -->
   <select id="getKpiEmpoyeeMonth"  resultMap="EmployeeMonthMap">
 	SELECT
 		D.ID,
@@ -81,15 +82,22 @@
 		m.finish_value,
 		m.finish_desc,
 		m.seft_score,
-		m.audit_status
+		m.audit_status,
+		m.exam_score,
+		m.remark	
 	FROM
 		KPI_EMPLOYEE_MONTH M
-       LEFT JOIN KPI_EMPLOYEE_YEAR E ON M.KPI_ID = E.ID
-	LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON E.KPI_ID = D.ID
-	LEFT JOIN KPI_DEPT_YEAR Y ON D.DEPT_KPI_ID = Y.ID
-	LEFT JOIN KPI_GROUP_YEAR G ON Y.GROUP_ID = G.ID
+        LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON M.KPI_ID = D.ID
+		LEFT JOIN KPI_EMPLOYEE_YEAR E ON E.KPI_ID = D.ID
+		AND E.TASK_DIVISION  LIKE '%${userId}%'
+		LEFT JOIN KPI_DEPT_YEAR Y ON Y.ID = D.dept_kpi_id
+		LEFT JOIN KPI_GROUP_YEAR G ON Y.GROUP_ID = G.ID
 	<where>	
-			Y.audit_status = '3' and d.audit_status = '3' AND M.STATUS = '1'	
+			Y.audit_status = '3' and d.audit_status = '3'  
+			<!-- status 不为空，则表示员工月度评价提交 -->
+			<if test="status = 0">
+				AND (M.audit_status = '3' or M.audit_status = '5' or M.audit_status = '6')
+			</if>
 			<if test="keyTask != null">
 				and G.key_task like '%${keyTask}%'
 			</if>			
@@ -273,7 +281,7 @@
         exam_score = #{examScore,jdbcType=DOUBLE},
       </if>
       <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
+         remark = CONCAT(remark ,#{remark,jdbcType=VARCHAR}),
       </if>
       <if test="isScore != null" >
         is_score = #{isScore,jdbcType=VARCHAR},

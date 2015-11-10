@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.fantasia.base.bean.PageData;
 import com.fantasia.core.DbcContext;
 import com.fantasia.dao.KpiEmployeeYearMapper;
-import com.fantasia.service.KpiEmployeeMonthService;
 import com.fantasia.service.KpiEmployeeService;
 
 /**
@@ -23,9 +22,6 @@ public class EmpMonthProcess extends WorkFlowBase implements SflowProcess {
 
 	
 	@Autowired
-	private KpiEmployeeMonthService kpiEmployeeMonthService;
-	
-	@Autowired
 	private KpiEmployeeYearMapper kpiEmployeeYearMapper;
 	
 	@Autowired
@@ -35,20 +31,20 @@ public class EmpMonthProcess extends WorkFlowBase implements SflowProcess {
 	public void process(HttpServletRequest request) {	
 		String processId = request.getParameter("processId");
 		
-		//员工年度计划
-		if(processId.equalsIgnoreCase("72f868734ac84742b6897f6b63bafff2")){
-			employeeYearProcess(request);
+		//员工月度评价
+		if(processId.equalsIgnoreCase("92f7776b077243f6bc7c64e16525eb2d")){
+			employeeMonthProcess(request);
 		}
 	}
 	
 	/**
-	 * 员工年度计划工作流提交
+	 * 员工月度评价工作流提交
 	 * @param processId
 	 * @param orderId
 	 * @param taskId
 	 * @param methodStr
 	 */
-	private void employeeYearProcess(HttpServletRequest request){
+	private void employeeMonthProcess(HttpServletRequest request){
 		String orderId = request.getParameter("orderId");		
 		String methodStr = request.getParameter("method");
 		String taskName ="apply";	
@@ -57,10 +53,6 @@ public class EmpMonthProcess extends WorkFlowBase implements SflowProcess {
 		//获取工作流节点,部门负责人提交审批		
 		if(curNode.equals("1")){
 			
-			//不同意
-			if(methodStr.equalsIgnoreCase("-1")){
-				
-			}
 		}
 		//分管领导提交审批
 		if(curNode.equals("2")){
@@ -71,18 +63,16 @@ public class EmpMonthProcess extends WorkFlowBase implements SflowProcess {
 				//修改状态
 				PageData page = new PageData();
 				page.setYear(getKpiYear(orderId, taskName));
-				page.setUserId(getUserId(orderId, taskName));				
+				page.setUserId(getUserId(orderId, taskName));	
+				page.setMonth(getKpiMonth(orderId, taskName));
 				//审批通过
-				page.setStatus("3");				
+				page.setStatus("6");				
 				page.setModifyBy(DbcContext.getUserId());
 				page.setModifyTime(new Date());
 				kpiEmployeeYearMapper.updateTask(page);
 				
 				//修改部门年度计划责任人
-				kpiEmployeeService.updateResPerson(page);				
-				
-				//根据员工年度计划生成员工月度考核指标
-				kpiEmployeeMonthService.inertEmployeeMonthKpi(page);
+				kpiEmployeeService.updateResPerson(page);			
 			}
 		}		
 	}

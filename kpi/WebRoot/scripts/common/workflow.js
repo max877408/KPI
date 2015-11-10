@@ -24,7 +24,7 @@
 							$('#dg_list').datagrid({
 								 onLoadSuccess : function(data) {
 									
-									$("table").find("td[field=dept]").show();									
+									//$("table").find("td[field=dept]").show();									
 									
 									//页面可以编辑
 									if(readonly == '1'){

@@ -159,7 +159,7 @@
 				text : "添加",
 				iconCls : "icon-add",
 				handler : function() {
-					 $('#dg_add').datagrid('appendRow',{status:'P'});
+					 $('#dg_add').datagrid('appendRow',{status:'1'});
 			            editIndex = $('#dg_add').datagrid('getRows').length-1;
 			            $('#dg_add').datagrid('selectRow', editIndex)
 			                    .datagrid('beginEdit', editIndex);
@@ -417,6 +417,8 @@
 					$('#dg_list').datagrid('selectRow', listIndex);
 				}
 		}
+	   	 
+	   	//cellHeigh(index);
 	 }
 	
 	/**

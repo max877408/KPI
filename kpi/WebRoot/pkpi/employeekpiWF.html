@@ -13,45 +13,19 @@
 <script type="text/javascript" src="../scripts/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="../scripts/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="../scripts/common/wf-parame.js" ></script>
-<script type="text/javascript" src="../scripts/pkpi/employeekpi_score.js"></script>
+<script type="text/javascript" src="../scripts/pkpi/employeekpiWf.js"></script>
 <script type="text/javascript" src="../scripts/common/search-tool.js"></script>
 <script type="text/javascript" src="../scripts/common/toolbar.js"></script>
-<script type="text/javascript" src="../scripts/common/workflow.js" ></script>
+<script type="text/javascript" src="../scripts/common/workflow.js" defer="defer"></script>
 
 </head>
-<body>
-	<div id="tb"
-		style="padding:2px 5px; padding-top:12px !important; height:40px">
-		
-		 <table cellpadding="5">
-           	<tr>
-               <td>关键任务:</td>
-                <td>	                   	
-               	   <input class="easyui-textbox" style="width:180px" id="keyTask">
-                </td>
-                <td>年份：</td>
-                <td>
-                	<select class="easyui-combobox" panelHeight="auto"
-						style="width:100px" name="kpiYear">						
-					</select>
-                </td> 
-                <td>月份：</td>
-                <td>
-                	<select class="easyui-combobox" panelHeight="auto"
-						style="width:100px" name="kpiMonth">
-						
-					</select>
-                </td>
-                <td><a href="#" class="easyui-linkbutton" iconCls="icon-search" style="width:80px" id="btSearch">查找</a></td>
-            </tr>
-         </table>		
-	</div>
+<body> 
 	
 	<table id="dg_list" title="员工月度评价" class="easyui-datagrid" 
 		 data-options="
                 iconCls: 'icon-edit',              
                 singleSelect: true,               
-                onClickCell: onListClickCell" 
+                onClickCell: onClickCell" 
 		 toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="false" singleSelect="true">
 		<thead data-options="frozen:true">
             <tr>
@@ -71,10 +45,10 @@
 				<th  data-options="field:'yearTarget'" width="60px">目标值</th>				
 				<th  data-options="field:'standard'" width="100px">衡量标准</th>					
 				
-				<th field="finishValue" width="60px" data-options="styler:cellStyler,editor:'text'">完成值</th>
-				<th field="finishDesc" width="100px" data-options="styler:cellStyler,editor:'text'">完成情况说明</th>
-				<th field="seftScore" width="60px" data-options="styler:cellStyler,editor:'text'">自评分</th>
-				<th field="examScore" width="100px" >考核得分</th>
+				<th field="finishValue" width="60px" >完成值</th>
+				<th field="finishDesc" width="100px" >完成情况说明</th>
+				<th field="seftScore" width="60px" >自评分</th>
+				<th field="examScore" width="100px" data-options="styler:cellStyler,editor:'text'">考核得分</th>
 				<th field="remark" width="200px" >备注</th>
 				
 				<th field="responsiblePerson" width="100px">责任人</th>
@@ -82,13 +56,6 @@
 			</tr>
 		</thead>
 	</table>
-
-	<div id="toolbar">		
-		<a href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-save" plain="true" onclick="saveEmployeeMonthKpi()">保存</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton"
-			iconCls="icon-save" plain="true" onclick="saveEmployeeApprove()">提交审批</a>
-	</div> 	
-
+	
 </body>
 </html>
