@@ -11,6 +11,7 @@
     <result column="end_time" property="endTime" jdbcType="VARCHAR" />
     <result column="ower" property="ower" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="sort"   property="sort" jdbcType="INTEGER" />
     <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -69,19 +70,29 @@
 	        </if>
 		</where>			
 		ORDER BY
-			p.create_time DESC,key_item
+			p.create_time ,sort,key_item
 		LIMIT #{start} ,#{rows}			
    </select>
   
-  <select id="getKpiGroupList"  resultMap="BaseResultMap">
+  <select id="getKpiGroupList" parameterType="com.fantasia.base.bean.PageData" resultMap="BaseResultMap">
 		SELECT
 			*			
 		FROM
 			kpi_group_year p	
-		WHERE
-			key_task = #{0}
+		<where>		
+			ower = '1' 	and status = '1'
+			<if test="keyTask != null and keyTask !=''">
+				and key_task = #{keyTask}
+			</if>			
+			<if test="startTime != null" >
+	        	and start_time &gt;= #{startTime}
+	        </if>
+	        <if test="endTime != null" >
+	        	and end_time &lt;= #{endTime}
+	        </if>
+		</where>	
 		ORDER BY
-			p.create_time DESC,key_item
+			p.create_time DESC,sort,key_item
   </select>
   
   <select id="searchKpiGroupList"  resultMap="BaseResultMap">
@@ -93,7 +104,7 @@
 			p.STATUS = 1 and keyTask like '%#{0}%' 
 			and startTime = #{1} and end_time = #{2}
 		ORDER BY
-			p.create_time DESC
+			p.create_time DESC,sort
 		
   </select>
   
@@ -123,6 +134,9 @@
       </if>
       <if test="ower != null" >
         ower,
+      </if>
+      <if test="sort != null" >
+        sort,
       </if>
       <if test="status != null" >
         status,
@@ -167,6 +181,9 @@
       </if>
       <if test="ower != null" >
         #{ower,jdbcType=VARCHAR},
+      </if>
+       <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},

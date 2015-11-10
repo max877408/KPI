@@ -21,6 +21,8 @@ public class KpiGroupYear {
 
     private String status;
     
+    private int sort;
+    
     private String auditStatus;
 
     private String createBy;
@@ -101,9 +103,17 @@ public class KpiGroupYear {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
-    }
+    }    
     
-    public String getAuditStatus() {
+    public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
+
+	public String getAuditStatus() {
 		return auditStatus;
 	}
 

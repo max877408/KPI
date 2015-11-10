@@ -35,12 +35,8 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 		data.setRows(list);
 		
 		//TotalRows 
-		PageData totalPage = new PageData();
-		totalPage.setKeyTask(page.getKeyTask());
-		totalPage.setStartTime(page.getStartTime());
-		totalPage.setEndTime(page.getEndTime());
-		totalPage.setStart(0);
-		totalPage.setYear(page.getYear());
+		PageData totalPage = page;		
+		totalPage.setStart(0);		
 		totalPage.setRows(PageData.MAX_ROWS);
 		list = kpiGroupYearMapper.getKpiGroup(totalPage);	
 		data.setTotal(list.size());
@@ -53,8 +49,11 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 	 * @return
 	 */
 	@Override
-	public List<KpiGroupYear> getKpiGroupList(String keyTask){
-		return kpiGroupYearMapper.getKpiGroupList(keyTask);
+	public List<KpiGroupYear> getKpiGroupList(String year,String keyTask){
+		PageData pageData = new PageData();
+		pageData.setKeyTask(keyTask);
+		pageData.setYear(Integer.parseInt(year));
+		return kpiGroupYearMapper.getKpiGroupList(pageData);
 	}
 	
 	/**
@@ -73,6 +72,7 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 	 */
 	@Override
 	public List<KpiGroupYear> SaveKpiGroup(List<KpiGroupYear> list) {
+		int i = 1;
 		for (KpiGroupYear kpiGroupYear : list) {
 			if(StringUtils.isNotEmpty(kpiGroupYear.getId())){			
 				kpiGroupYear.setModifyBy(DbcContext.getUserId());
@@ -82,12 +82,14 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 				kpiGroupYearMapper.update(kpiGroupYear);
 			}
 			else{
-				kpiGroupYear.setId(Utils.getGUID());				
+				kpiGroupYear.setId(Utils.getGUID());
+				kpiGroupYear.setSort(i);
 				kpiGroupYear.setCreateBy(DbcContext.getUserId());
 				kpiGroupYear.setCreateTime(new Date());
 				kpiGroupYear.setStatus("1");
 				
 				kpiGroupYearMapper.insert(kpiGroupYear);
+				i++;
 			}
 			
 		}

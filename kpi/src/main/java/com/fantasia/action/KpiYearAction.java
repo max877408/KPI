@@ -145,8 +145,8 @@ public class KpiYearAction extends BaseAction {
 	 */
 	@RequestMapping(value = "/getKpiGroupList")
 	@ResponseBody
-	public List<KpiGroupYear> getKpiGroupList(String keyTask){
-		return kpiGroupService.getKpiGroupList(keyTask);
+	public List<KpiGroupYear> getKpiGroupList(String year,String keyTask){
+		return kpiGroupService.getKpiGroupList(year,keyTask);
 	}
 	
 	/**

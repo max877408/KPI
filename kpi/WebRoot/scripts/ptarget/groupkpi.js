@@ -199,11 +199,12 @@
 	var dg_index = 1;
 	function editKpi() {
 		var row = $('#dg_list').datagrid('getSelected');
+		var year = $("select[comboname=kpiYear]").combobox("getValue");
 		if (row) {			
 			
 			$('#dg_add').datagrid({
 				 striped: true, //行背景交换
-				 url:"../kpiYear/getKpiGroupList.action?keyTask=" + row.keyTask,
+				 url:"../kpiYear/getKpiGroupList.action?year="+year+"&keyTask=" + row.keyTask,
 				 onLoadSuccess : function(data) {
 					 tooBar.menuStatus(row.auditStatus);
 					 if(data.rows.length == 0 && dg_index == 1){
@@ -354,11 +355,12 @@
 	 */
 	function viewKpi() {
 		var row = $('#dg_list').datagrid('getSelected');
+		var year = $("select[comboname=kpiYear]").combobox("getValue");
 		if (row) {			
 			
 			$('#dg_add').datagrid({
 				 striped: true, //行背景交换
-				 url:"../kpiYear/getKpiGroupList.action?keyTask=" + row.keyTask,
+				 url:"../kpiYear/getKpiGroupList.action?year="+year+"&keyTask=" + row.keyTask,
 				 onLoadSuccess : function(data) {
 					 tooBar.menuStatus(row.auditStatus);					
 				 }

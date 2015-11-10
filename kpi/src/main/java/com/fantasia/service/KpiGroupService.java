@@ -22,7 +22,7 @@ public interface KpiGroupService {
 	 * @param keyTask
 	 * @return
 	 */
-	public List<KpiGroupYear> getKpiGroupList(String keyTask);
+	public List<KpiGroupYear> getKpiGroupList(String year,String keyTask);
 	
 	/**
 	 * 查询关键任务列表

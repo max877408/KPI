@@ -14,7 +14,7 @@ public interface KpiGroupYearMapper {
 	 * @param keyTask
 	 * @return
 	 */
-	public List<KpiGroupYear> getKpiGroupList(String keyTask);	
+	public List<KpiGroupYear> getKpiGroupList(PageData page);	
 	
 	/**
 	 * 查找年度关键任务

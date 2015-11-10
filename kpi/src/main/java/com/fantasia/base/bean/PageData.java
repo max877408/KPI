@@ -39,12 +39,12 @@ public class PageData extends WorkFlowData {
 	/**
 	 * 开始时间
 	 */
-	public Date startTime;
+	public String startTime;
 	
 	/**
 	 * 结束时间
 	 */
-	public Date endTime;
+	public String endTime;
 	
 	/**
 	 * 月份
@@ -136,8 +136,8 @@ public class PageData extends WorkFlowData {
 		this.start = start;
 	}
 
-	public Date getStartTime() {
-		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+	public String getStartTime() {
+		/*SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		Date startTime;
 		try {
 			startTime = sdf.parse(getYear() + "-01-01");			
@@ -145,15 +145,18 @@ public class PageData extends WorkFlowData {
 			_log.error("日期转换失败",e);
 			return null;
 		}
-		return startTime ;
+		return startTime ;*/
+		
+		String startTime = getYear() + "-01-01";
+		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
-		SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+	public String getEndTime() {
+		/*SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 		Date endTime;
 		try {			
 			endTime = sdf.parse(getYear() + "-12-31");			
@@ -161,10 +164,12 @@ public class PageData extends WorkFlowData {
 			_log.error("日期转换失败",e);
 			return null;
 		}
+		return endTime;*/
+		String endTime = getYear() + "-12-31";
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 
