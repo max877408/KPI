@@ -488,6 +488,7 @@
 	 */
 	function saveDeptPbcTask() {
 		var year = $("select[comboname=kpiYear]").combobox("getValue");
+		var month = $("select[comboname=kpiMonth]").combobox("getValue");
 		var orderId = "";
 		var taskName = "";
 		var taskId = "";
@@ -507,6 +508,7 @@
 			if (r) {
 				$.post('../kpiMonth/saveDeptPbcApprove.action?status=2', {
 					year : year,
+					month:month,
 					orderId:orderId,
 					taskId:taskId,
 					taskName:taskName

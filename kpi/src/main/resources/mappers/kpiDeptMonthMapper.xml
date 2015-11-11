@@ -327,7 +327,7 @@
         exam_score = #{examScore,jdbcType=DOUBLE},
       </if>
       <if test="remark != null" >
-        remark = CONCAT(remark ,#{remark,jdbcType=VARCHAR}),
+        remark = CONCAT(IFNULL(remark,'') ,#{remark,jdbcType=VARCHAR}),
       </if>
       <if test="isScore != null" >
         is_score = #{isScore,jdbcType=VARCHAR},

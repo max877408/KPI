@@ -56,7 +56,7 @@ public class DeptMonthProcess  extends WorkFlowBase implements SflowProcess  {
 		if(curNode.equals("1")){
 			
 			//不同意
-			if(methodStr.equalsIgnoreCase("-1")){
+			if(methodStr != null && methodStr.equalsIgnoreCase("-1")){
 				/*PageData page = new PageData();
 				page.setYear(getKpiYear(orderId, taskName));
 				page.setStatus("1");
@@ -64,14 +64,13 @@ public class DeptMonthProcess  extends WorkFlowBase implements SflowProcess  {
 				page.setModifyBy(DbcContext.getUserId());
 				page.setModifyTime(new Date());
 				kpiDeptYearMapper.updateTask(page);*/
-				
 			}
 		}
 		//人力专员提交审批
 		if(curNode.equals("2")){
 			
 			//同意
-			if(methodStr.equalsIgnoreCase("0")){
+			if(methodStr != null && methodStr.equalsIgnoreCase("0")){
 				
 				PageData page = new PageData();
 				page.setStart(0);

@@ -95,7 +95,7 @@
 	<where>	
 			Y.audit_status = '3' and d.audit_status = '3'  
 			<!-- status 不为空，则表示员工月度评价提交 -->
-			<if test="status = 0">
+			<if test="status != null">
 				AND (M.audit_status = '3' or M.audit_status = '5' or M.audit_status = '6')
 			</if>
 			<if test="keyTask != null">
@@ -281,7 +281,7 @@
         exam_score = #{examScore,jdbcType=DOUBLE},
       </if>
       <if test="remark != null" >
-         remark = CONCAT(remark ,#{remark,jdbcType=VARCHAR}),
+         remark = CONCAT(IFNULL(remark,'') ,#{remark,jdbcType=VARCHAR}),
       </if>
       <if test="isScore != null" >
         is_score = #{isScore,jdbcType=VARCHAR},

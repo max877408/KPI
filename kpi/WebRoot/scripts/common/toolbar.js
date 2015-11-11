@@ -91,10 +91,10 @@
 	 * 单元格行高
 	 */
 	function cellHeigh(index){		
-		setHeight();
+		/*setHeight();
 		$(".datagrid-btable").eq(1).find("input[type=text]").click(function(){
-			setHeight(index);
-		})
+			//setHeight(index);
+		})*/
 	}
 	
 	function setHeight(index){

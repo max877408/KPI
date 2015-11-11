@@ -12,7 +12,7 @@
 		    	 return false;
 		    	// $('#dg_list').datagrid("unselectRow",rowIndex);
 		     },
-		     url:'../kpiMonth/getKpiDeptMonthScore.action',
+		     url:'../kpiMonth/getKpiDeptMonthScore.action?status=2',
 			 onLoadSuccess : function(data) {				 
 				onLoadSuccess(data);	
 				
