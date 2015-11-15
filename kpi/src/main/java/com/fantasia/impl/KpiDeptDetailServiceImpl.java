@@ -41,7 +41,7 @@ public class KpiDeptDetailServiceImpl implements KpiDeptDetailService {
 					}
 					else{
 						kpiDeptYearDetail.setId(Utils.getGUID());	
-						kpiDeptYearDetail.setCreateBy(DbcContext.getAdminId());
+						kpiDeptYearDetail.setCreateBy(DbcContext.getUserId());
 						kpiDeptYearDetail.setCreateTime(new Date());
 						kpiDeptYearDetail.setStatus("1");
 						kpiDeptYearDetailMapper.insert(kpiDeptYearDetail);
@@ -56,6 +56,16 @@ public class KpiDeptDetailServiceImpl implements KpiDeptDetailService {
 	@Override
 	public List<KpiDeptYearDetail> getKpiDeptDetailById(String id) {
 		return kpiDeptYearDetailMapper.getKpiDeptDetailById(id);
+	}
+	
+	/**
+	 * 根据id获取部门关键节点
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public KpiDeptYearDetail selectById(String id){
+		return kpiDeptYearDetailMapper.selectById(id);
 	}
 	
 	/**

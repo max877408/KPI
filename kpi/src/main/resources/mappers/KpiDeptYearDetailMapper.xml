@@ -31,7 +31,7 @@
 	        </if>
 	        <if test="userId != null" >
         		and lead_person = #{userId}
-            </if>        
+            </if> 
 		</where>			
 		ORDER BY
 			d.create_time ASC;
@@ -45,6 +45,17 @@
 		LEFT JOIN kpi_dept_year y ON y.ID = d.dept_kpi_id
 		WHERE
 			y.id = #{0}
+		ORDER BY
+			d.create_time DESC;	
+	</select>
+	
+	<select id="selectById"  resultMap="BaseResultMap">
+		SELECT
+			d.*
+		FROM
+			kpi_dept_year_detail d		
+		WHERE
+			d.id = #{0}
 		ORDER BY
 			d.create_time ASC;	
 	</select>

@@ -30,6 +30,8 @@ import com.fantasia.service.KpiDeptDetailService;
 import com.fantasia.service.KpiDeptService;
 import com.fantasia.snakerflow.process.KpiWorkFlow;
 import com.fantasia.util.DateTimeUtil;
+import com.fantasia.validation.DataTimeValidate;
+import com.fantasia.validation.KpiYearValidation;
 import com.fantasia.workflow.KpiFlowService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,7 +75,11 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 		ResultMsg resultMsg = new ResultMsg();
 		String deptKpi = "";
 		
+		//部门年度计划关键节点
 		List<KpiDeptYearDetail> kpiDeptDetail = new ArrayList<KpiDeptYearDetail>();
+		
+		//年度关键任务	
+		KpiGroupYear kpiGroupYear = null;
 
 		try {
 			
@@ -83,7 +89,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 				KpiDeptYearBean kpiBean = objectMapper.readValue(listData.getData(),KpiDeptYearBean.class);
 								
 				//年度关键任务			
-				KpiGroupYear kpiGroupYear = new KpiGroupYear();
+				kpiGroupYear = new KpiGroupYear();
 				kpiGroupYear.setId(kpiBean.getId());				
 				kpiGroupYear.setKeyTask(kpiBean.getKeyTask());
 				kpiGroupYear.setKeyItem(kpiBean.getKeyItem());
@@ -104,26 +110,30 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 				}
 				else{					
 					kpiGroupYear.setEndTime(DateTimeUtil.shortDateString());
-				}	
+				}
 				
-				//部门新增
-				kpiGroupYear.setAuditStatus("2");
-				kpiGroupYear.setOwer("2");
-							
+				DataTimeValidate.valiateTime(kpiGroupYear.getStartTime(),kpiGroupYear.getEndTime());
+				//KpiYearValidation.validateYearKeyTaskStatus(kpiGroupYear.getStartTime(),kpiGroupYear.getStartTime());
+						
 				
-				if(StringUtils.isEmpty(kpiBean.getGroupId())){
+				if(StringUtils.isEmpty(kpiBean.getGroupId())){					
 					kpiGroupYear.setId(Utils.getGUID());				
 					kpiGroupYear.setCreateBy(DbcContext.getUserId());
 					kpiGroupYear.setCreateTime(new Date());
+					//部门新增
+					kpiGroupYear.setAuditStatus("2");
+					kpiGroupYear.setOwer("2");
+					
 					kpiGroupYearMapper.insert(kpiGroupYear);
 					
 					kpiBean.setGroupId(kpiGroupYear.getId());
 				}
 				else{
+					kpiGroupYear.setId(kpiBean.getGroupId());
 					kpiGroupYear.setModifyBy(DbcContext.getUserId());
 					kpiGroupYear.setModifyTime(new Date());
 					
-					kpiGroupYearMapper.updateDeptId(kpiGroupYear);
+					//kpiGroupYearMapper.updateDeptId(kpiGroupYear);
 				}
 				
 				deptKpi = SaveKpiDept(kpiBean);				
@@ -138,6 +148,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 						listData.getInserted(),
 						new TypeReference<List<KpiDeptYearDetail>>() {
 						});
+				KpiYearValidation.validateYearDept(kpiGroupYear, kpiDeptDetail);
 				kpiDeptDetailService.SaveKpiDetail(kpiDeptDetail,deptKpi);
 			}
 
@@ -150,6 +161,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 						listData.getUpdated(),
 						new TypeReference<List<KpiDeptYearDetail>>() {
 						});
+				KpiYearValidation.validateYearDept(kpiGroupYear, kpiDeptDetail);
 				kpiDeptDetailService.SaveKpiDetail(kpiDeptDetail,deptKpi);
 			}
 
@@ -162,9 +174,16 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 						listData.getDeleted(),
 						new TypeReference<List<KpiDeptYearDetail>>() {
 						});
+				KpiYearValidation.validateYearDept(kpiGroupYear, kpiDeptDetail);
 				kpiDeptDetailService.bachDeleDeptKpi(kpiDeptDetail);
 			}
-		} catch (Exception e) {
+		} 
+		 catch (ServiceException e) {
+				_log.error(e.getDescribe());
+				resultMsg.setCode("101");
+				resultMsg.setErrorMsg(e.getDescribe());
+		}
+		catch (Exception e) {
 			_log.error(e.getMessage());
 			resultMsg.setCode("101");
 			resultMsg.setErrorMsg(e.getMessage());			
@@ -183,6 +202,7 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 		
 		if(!StringUtils.isEmpty(kpiDeptYear)){	
 			record.setGroupId(kpiDeptYear.getGroupId());
+			record.setDept(DbcContext.getUser().getDeptName());
 			record.setWeight(kpiDeptYear.getWeight());
 			record.setContent(kpiDeptYear.getContent());
 			record.setYearTarget(kpiDeptYear.getYearTarget());
@@ -228,17 +248,8 @@ public class KpiDeptServiceImpl implements KpiDeptService {
 		}
 		
 		List<KpiDeptYearBean> list = kpiDeptYearMapper.getKpiDept(page);
-		data.setRows(list);
+		data.setRows(list);		
 		
-		//TotalRows 
-		/*PageData totalPage = new PageData();
-		totalPage.setKeyTask(page.getKeyTask());
-		totalPage.setStartTime(page.getStartTime());
-		totalPage.setEndTime(page.getEndTime());
-		totalPage.setYear(page.getYear());
-		totalPage.setStart(0);
-		totalPage.setDeptId(page.getDeptId());
-		totalPage.setRows(PageData.MAX_ROWS);*/
 		page.setStart(0);
 		page.setRows(PageData.MAX_ROWS);
 		list = kpiDeptYearMapper.getKpiDept(page);

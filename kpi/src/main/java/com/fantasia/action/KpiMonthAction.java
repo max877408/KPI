@@ -1,5 +1,7 @@
 package com.fantasia.action;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,7 @@ import com.fantasia.base.bean.ListData;
 import com.fantasia.base.bean.PageData;
 import com.fantasia.base.bean.ResultData;
 import com.fantasia.base.bean.ResultMsg;
+import com.fantasia.bean.KpiDeptYearBean;
 import com.fantasia.core.DbcContext;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiDeptMonthService;
@@ -49,7 +52,10 @@ public class KpiMonthAction extends BaseAction {
 		}
 		else{
 			if(!DbcContext.isDeptChare()){
-				return null;
+				ResultData data = new ResultData();
+				data.setRows(new ArrayList<KpiDeptYearBean>());
+				data.setTotal(0);
+				return data;
 			}
 		}
 		return kpiDeptMonthService.getKpiDeptMonth(page);
@@ -131,7 +137,10 @@ public class KpiMonthAction extends BaseAction {
 		}
 		else{
 			if(!DbcContext.isDeptChare()){
-				return null;
+				ResultData data = new ResultData();
+				data.setRows(new ArrayList<KpiDeptYearBean>());
+				data.setTotal(0);
+				return data;
 			}
 		}
 		return  kpiDeptMonthService.getKpiDeptMonthScore(page);		

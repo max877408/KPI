@@ -45,10 +45,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							var iframeUrl = '${ctx }' + node.form + '?processId=${processId}&orderId=${orderId}&taskName=' + node.name;
 							if(taskName == node.name || (taskName == '' && i == 0)) {
 								iscurrent = true;
-								iframeUrl += '&taskId=${taskId}&readonly=1';
+								iframeUrl += '&taskId=${taskId}&readonly=1&iscurrent=1';
 							} else {
 								iscurrent = false;
-								iframeUrl += '&readonly=0';
+								iframeUrl += '&readonly=0&iscurrent=0';
 							}				            
 				            addTab(node.displayName,iframeUrl);					            
 				           

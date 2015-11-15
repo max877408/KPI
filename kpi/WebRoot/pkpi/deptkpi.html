@@ -97,7 +97,14 @@
 			<div class="easyui-panel" title="基本信息" style="width:700px">
 				<input type="hidden" name="id">
 				<div style="padding:10px 60px 20px 60px">
-					<table cellpadding="5">					
+					<table cellpadding="5">		
+						<tr>
+			                   <td>员工月度PBC类型:</td>
+			                   <td colspan="3">	                   	
+			                  		<label><input name="pbc" type="radio" value="1" checked="checked"/>计划外</label> 
+			                  		<label><input name="pbc" type="radio" value="0" />计划内</label> 
+			                   </td>
+			            </tr>			
 						<tr>
 							<td>具体事项:</td>
 							<td colspan="3"><input class="easyui-textbox" name="detailItem"

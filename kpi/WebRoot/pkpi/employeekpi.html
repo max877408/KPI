@@ -54,18 +54,18 @@
 		 toolbar="#toolbar" pagination="true" rownumbers="true" fitColumns="false" singleSelect="true">
 		<thead data-options="frozen:true">
             <tr>
-                <th field="id"hidden="true">id</th>	
-                <th field="kpiId"hidden="true">kpiId</th>	
+                <th field="id" hidden="true">id</th>	
+                <th field="kpiId" hidden="true">kpiId</th>	
                 	
-                <th field="keyTask" width="120px" data-options="formatter:cellFormat">关键任务</th>
-				<th field="keyItem" width="120px" data-options="formatter:cellFormat">主要事项</th>
-				<th field="detailItem" width="120px" data-options="formatter:cellFormat">具体事项</th>	
-				<th field="keyPoint" width="130px" data-options="formatter:cellFormat">关键节点(部门)</th>	
+                <th field="keyTask" width="120px" >关键任务</th>
+				<th field="keyItem" width="120px" >主要事项</th>
+				<th field="detailItem" width="120px" >具体事项</th>	
+				<th field="keyPoint" width="130px" data-options="styler:cellStyler">关键节点(部门)</th>	
             </tr>
         </thead>
 		<thead>
 			<tr>
-				<th field="workStage" width="150px" >考核指标名称</th>	
+				<th field="workStage" width="150px" data-options="styler:cellStyler">考核指标名称</th>	
 				<th  data-options="field:'weight',editor:'text',styler:cellStyler" width="80px" >权重</th>
 				<th  data-options="field:'yearTarget',editor:'text',styler:cellStyler" width="120px">目标值</th>				
 				<th  data-options="field:'standard',editor:'text',styler:cellStyler" width="180px">衡量标准</th>					
@@ -93,31 +93,38 @@
 		<form id="fm" method="post" novalidate>			
 			
 	 	  <table cellpadding="5">
-	            	<tr>
-	                    <td>具体事项:</td>
-	                    <td colspan="3">	                   	
-	                   	 <input type="text" name="detailItem" class="easyui-textbox" data-options="multiline:true" readonly="readonly"
-								style="height:35px;width:400px">
-	                    </td>
-	                </tr>
-	                <tr>
-	                    <td>关键节点:</td>
-	                    <td colspan="3"> 
-	                      <input type="text" name="keyPoint" class="easyui-textbox" data-options="multiline:true" readonly="readonly"
-								style="height:35px;width:400px">	                      
-	                   	</td>
-	                </tr>
-	                
-	                 <tr>
-	                    <td>开始日期:</td>
-	                    <td > 	                     
-	                       <input type="text" name="startTime" class="easyui-textbox" readonly="readonly">
-	                   	</td>
-	                   	 <td>结束日期:</td>
-	                    <td > 	                      
-	                      <input type="text" name="endTime" class="easyui-textbox" readonly="readonly">
-	                   	</td>
-	                </tr>	                
+ 	  		<tr>
+                   <td>员工月度PBC类型:</td>
+                   <td colspan="3">	                   	
+                  		<label><input name="pbc" type="radio" value="1" checked="checked"/>计划外</label> 
+                  		<label><input name="pbc" type="radio" value="0" />计划内</label> 
+                   </td>
+            </tr>
+           	<tr>
+                   <td>具体事项:</td>
+                   <td colspan="3">	                   	
+                  	 <input type="text" name="detailItem" class="easyui-textbox" data-options="multiline:true" readonly="readonly"
+						style="height:35px;width:400px">
+                   </td>
+               </tr>
+               <tr>
+                   <td>关键节点:</td>
+                   <td colspan="3"> 
+                     <input type="text" name="keyPoint" class="easyui-textbox" data-options="multiline:true" readonly="readonly"
+						style="height:35px;width:400px">	                      
+                  	</td>
+               </tr>
+               
+                <tr>
+                   <td>开始日期:</td>
+                   <td > 	                     
+                      <input type="text" name="startTime" class="easyui-textbox" readonly="readonly">
+                  	</td>
+                  	 <td>结束日期:</td>
+                   <td > 	                      
+                     <input type="text" name="endTime" class="easyui-textbox" readonly="readonly">
+                  	</td>
+               </tr>	                
 	       </table> 	     
 	         
 	         <br/>

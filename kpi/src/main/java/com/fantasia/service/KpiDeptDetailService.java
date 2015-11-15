@@ -21,6 +21,13 @@ public interface KpiDeptDetailService {
 	public List<KpiDeptYearDetail> getKpiDeptDetailById(String id);
 	
 	/**
+	 * 根据id获取部门关键节点
+	 * @param id
+	 * @return
+	 */
+	public KpiDeptYearDetail selectById(String id);
+	
+	/**
 	 * 批量删除部门年度计划
 	 * @param list
 	 */

@@ -1,11 +1,11 @@
-*{font-size:12px; font-family:Tahoma,Verdana,Î¢ÈíÑÅºÚ,ÐÂËÎÌå}
+*{font-size:12px; font-family:Tahoma,Verdana,Î¢ï¿½ï¿½ï¿½Åºï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½}
 body{background:#D2E0F2;overflow:hidden;}
 a{ color:Black; text-decoration:none;}
 a:hover{ color:Red; text-decoration:underline;}
-.textbox03 {border: #878787 1px solid;padding: 4px 3px;font:Verdana, Geneva, sans-serif,ËÎÌå;line-height: 14px; background-color: #fff;  height: auto; font-size: 14px;  font-weight: bold; width: 190px; }
+.textbox03 {border: #878787 1px solid;padding: 4px 3px;font:Verdana, Geneva, sans-serif,ï¿½ï¿½ï¿½ï¿½;line-height: 14px; background-color: #fff;  height: auto; font-size: 14px;  font-weight: bold; width: 190px; }
 
-.txt01{font:Verdana, Geneva, sans-serif,ËÎÌå;padding:3px 2px 2px 2px; border-width:1px; border-color:#ddd;  color:#000;}
-.txt {border: #878787 1px solid;padding: 4px 3px;font:Verdana, Geneva, sans-serif,ËÎÌå;line-height: 14px; background-color: #fff;  height: auto; font-size: 14px;}
+.txt01{font:Verdana, Geneva, sans-serif,ï¿½ï¿½ï¿½ï¿½;padding:3px 2px 2px 2px; border-width:1px; border-color:#ddd;  color:#000;}
+.txt {border: #878787 1px solid;padding: 4px 3px;font:Verdana, Geneva, sans-serif,ï¿½ï¿½ï¿½ï¿½;line-height: 14px; background-color: #fff;  height: auto; font-size: 14px;}
 .footer{text-align:center;color:#15428B; margin:0px; padding:0px;line-height:23px; font-weight:bold;}
 
 .easyui-accordion ul{list-style-type:none;margin:0px; padding:10px;}
@@ -40,8 +40,8 @@ a:hover{ color:Red; text-decoration:underline;}
 .icon-edit{ background-position:-380px -320px;}
 .icon-magic{ background-position:0px -500px;}
 .icon-database{ background-position:-20px -140px;}
-.icon-expand{ background:url('/images/coll2.gif') no-repeat;}
-.icon-collapse{ background:url('/images/coll3.gif') no-repeat;} 
+.icon-expand{ background:url('../images/coll2.gif') no-repeat;}
+.icon-collapse{ background:url('../images/coll3.gif') no-repeat;} 
 
 #css3menu li {
 	float: left;

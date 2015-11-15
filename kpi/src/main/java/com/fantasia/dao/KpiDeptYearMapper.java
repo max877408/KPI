@@ -26,6 +26,12 @@ public interface KpiDeptYearMapper {
 	public void delDeptKpiGroup(String id);
 	
 	/**
+	 * 根据group_id 删除部门年度计划
+	 * @param id
+	 */
+	public void delKpiDept(String id);
+	
+	/**
 	 * 任务下发，更新状态
 	 * @param page
 	 */

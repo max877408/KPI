@@ -16,6 +16,13 @@ public interface KpiDeptYearDetailMapper {
 
 	public List<KpiDeptYearDetail> getKpiDeptDetailById(String id);
 	
+	/**
+	 * 根据id获取部门关键节点
+	 * @param id
+	 * @return
+	 */
+	public KpiDeptYearDetail selectById(String id);
+	
 	public void insert(KpiDeptYearDetail record);
 
 	public void update(KpiDeptYearDetail record);

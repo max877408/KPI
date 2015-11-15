@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.fantasia.base.bean.PageData;
 import com.fantasia.base.bean.ResultData;
 import com.fantasia.base.bean.ResultMsg;
+import com.fantasia.bean.KpiDeptYear;
 import com.fantasia.bean.KpiGroupYear;
 import com.fantasia.core.DbcContext;
 import com.fantasia.core.Utils;
+import com.fantasia.dao.KpiDeptYearMapper;
 import com.fantasia.dao.KpiGroupYearMapper;
 import com.fantasia.exception.ServiceException;
 import com.fantasia.service.KpiGroupService;
@@ -24,6 +26,9 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 	
 	@Autowired
 	private KpiGroupYearMapper kpiGroupYearMapper;
+	
+	@Autowired
+	private KpiDeptYearMapper kpiDeptYearMapper;
 
 
 	@Override
@@ -92,8 +97,37 @@ public class KpiGroupServiceImpl implements KpiGroupService {
 				i++;
 			}
 			
+			SaveKpiDept(kpiGroupYear);			
 		}
 		return list;
+	}
+	
+	/**
+	 * 保存部门年度计划
+	 * 先删除,再新增
+	 * @param KpiDeptYearBean
+	 * @return
+	 */
+	public void SaveKpiDept(KpiGroupYear kpiGroupYear){
+		
+		kpiDeptYearMapper.delKpiDept(kpiGroupYear.getId());
+		
+		String[] dept = kpiGroupYear.getDept().split(",");
+		if(dept != null && dept.length > 0){
+			for(int i = 0; i< dept.length;i++){
+				KpiDeptYear record = new KpiDeptYear();
+				
+				record.setGroupId(kpiGroupYear.getId());	
+				record.setDept(dept[i]);
+				record.setAuditStatus("1");	
+				record.setId(Utils.getGUID());
+				record.setStatus("1");
+				record.setCreateBy(DbcContext.getUserId());
+				record.setCreateTime(new Date());
+					
+				kpiDeptYearMapper.insert(record);
+			}
+		}		
 	}
 	
 	/**

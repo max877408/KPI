@@ -53,7 +53,7 @@ public class KpiEmployeeMonthBean {
 
 	private String responsiblePerson;
 
-	private Double finishValue;
+	private String finishValue;
 
 	private String finishDesc;
 
@@ -222,11 +222,11 @@ public class KpiEmployeeMonthBean {
 		this.responsiblePerson = responsiblePerson;
 	}
 
-	public Double getFinishValue() {
+	public String getFinishValue() {
 		return finishValue;
 	}
 
-	public void setFinishValue(Double finishValue) {
+	public void setFinishValue(String finishValue) {
 		this.finishValue = finishValue;
 	}
 

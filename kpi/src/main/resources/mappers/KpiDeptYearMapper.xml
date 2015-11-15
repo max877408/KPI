@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.fantasia.bean.KpiDeptYear" >
     <id column="ID" property="id" jdbcType="VARCHAR" />
     <result column="group_id" property="groupId" jdbcType="VARCHAR" />
+    <result column="dept" property="dept" jdbcType="VARCHAR" />
     <result column="weight" property="weight" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="year_target" property="yearTarget" jdbcType="VARCHAR" />
@@ -46,14 +47,14 @@
   
    <select id="getKpiDept"  resultMap="DeptMap">
 		SELECT
-			p.key_task, 
+			p.key_task,
 			p.key_item,
 			p.detail_item,
-			p.dept,
+			y.dept,
 			p.start_time,
 			p.end_time,
 			y.id,
-		    p.id as group_id,
+			p.id AS group_id,
 			y.weight,
 			y.content,
 			y.year_target,
@@ -63,8 +64,8 @@
 			y.responsible_person,
 			y.audit_status
 		FROM
-			kpi_group_year p
-		LEFT JOIN kpi_dept_year y ON p.ID = y.group_id	
+			kpi_dept_year y 
+		LEFT JOIN  kpi_group_year p ON p.ID = y.group_id
 		<where>	
 		   p.audit_status = '2' AND  P.STATUS = '1'	 			
 			<if test="keyTask != null and keyTask !=''">
@@ -77,7 +78,7 @@
 	        	and end_time &lt;= #{endTime}
 	        </if>
 	        <if test="deptId != null" >
-	        	and p.dept = #{deptId}
+	        	and y.dept = #{deptId}
 	        </if>
 	        
 		</where>
@@ -98,10 +99,10 @@
 			y.difficulty,
 			y.responsible_person
 		FROM
-			kpi_group_year p
-		LEFT JOIN kpi_dept_year y ON p.ID = y.group_id	
+			kpi_dept_year y 
+		LEFT JOIN kpi_group_year p ON p.ID = y.group_id	
 		WHERE
-			p.id = #{0}
+			y.id = #{0} 
 		ORDER BY
 			p.create_time DESC,sort,key_item		
 	</select>
@@ -115,6 +116,9 @@
       </if>
       <if test="groupId != null" >
         group_id,
+      </if>
+      <if test="dept != null" >
+        dept,
       </if>
       <if test="weight != null" >
         weight,
@@ -162,6 +166,9 @@
       </if>
       <if test="groupId != null" >
         #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null" >
+        #{dept,jdbcType=VARCHAR},
       </if>
       <if test="weight != null" >
         #{weight,jdbcType=VARCHAR},
@@ -248,7 +255,7 @@
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where group_id = #{groupId,jdbcType=VARCHAR}
+    where group_id = #{groupId,jdbcType=VARCHAR} and dept = #{dept,jdbcType=VARCHAR}
   </update>
   
   <update id="updateById" parameterType="com.fantasia.bean.KpiDeptYear" >
@@ -316,12 +323,9 @@
 	        </if>
 	        <if test="endTime != null" >
 	        	and end_time &lt;= #{endTime}
-	        </if> 
-	        <if test="deptId != null" >
-	        	and dept = #{deptId}
-	        </if> 
+	        </if> 	       
 		</where>     	
-    )   
+    ) and dept = #{deptId} 
   </update>
  
   <delete id="delDeptKpiGroup" parameterType="java.lang.String">
@@ -336,6 +340,12 @@
     set  status = '0' 
     where id = #{id,jdbcType=VARCHAR}
    
+  </delete>
+  
+  <!-- 根据group_id 删除部门年度计划 -->
+  <delete id="delKpiDept" parameterType="java.lang.String">  
+    delete from  kpi_dept_year    
+    where group_id = #{id,jdbcType=VARCHAR}   
   </delete>
  
 </mapper>

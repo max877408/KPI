@@ -6,6 +6,8 @@ public class KpiDeptYear {
     private String id;
 
     private String groupId;
+    
+    private String dept;
 
     private String weight;
 
@@ -56,8 +58,16 @@ public class KpiDeptYear {
     public void setGroupId(String groupId) {
         this.groupId = groupId == null ? null : groupId.trim();
     }
+    
+    public String getDept() {
+		return dept;
+	}
 
-    public String getWeight() {
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
+	public String getWeight() {
         return weight;
     }
 

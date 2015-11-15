@@ -31,6 +31,7 @@ import com.fantasia.service.KpiEmployeeService;
 import com.fantasia.service.PubUserService;
 import com.fantasia.snakerflow.process.KpiWorkFlow;
 import com.fantasia.util.StringUtils;
+import com.fantasia.validation.KpiYearValidation;
 import com.fantasia.workflow.KpiFlowService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -112,6 +113,7 @@ public class KpiEmployeeServiceImpl implements KpiEmployeeService {
 						listData.getInserted(),
 						new TypeReference<List<KpiEmployeeYear>>() {
 						});
+				KpiYearValidation.validateYearEmployee(listData.getData(), kpiEmployee);
 				SaveKpiEmployee(kpiEmployee,deptKpi);
 			}
 
@@ -123,6 +125,7 @@ public class KpiEmployeeServiceImpl implements KpiEmployeeService {
 				kpiEmployee = (List<KpiEmployeeYear>) objectMapper.readValue(listData.getUpdated(),
 						new TypeReference<List<KpiEmployeeYear>>() {
 						});
+				KpiYearValidation.validateYearEmployee(listData.getData(), kpiEmployee);
 				SaveKpiEmployee(kpiEmployee,deptKpi);
 			}
 
@@ -135,9 +138,16 @@ public class KpiEmployeeServiceImpl implements KpiEmployeeService {
 						listData.getDeleted(),
 						new TypeReference<List<KpiEmployeeYear>>() {
 						});
+				KpiYearValidation.validateYearEmployee(listData.getData(), kpiEmployee);
 				deleteKpiEmployee(kpiEmployee);
 			}
-		} catch (Exception e) {
+		} 
+		catch (ServiceException e) {
+			_log.error(e.getDescribe());
+			resultMsg.setCode("101");
+			resultMsg.setErrorMsg(e.getDescribe());			
+		}
+		catch (Exception e) {
 			_log.error(e.getMessage());
 			resultMsg.setCode("101");
 			resultMsg.setErrorMsg(e.getMessage());			

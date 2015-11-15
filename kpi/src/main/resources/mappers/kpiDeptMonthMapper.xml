@@ -11,7 +11,7 @@
     <result column="kpi_month" property="kpiMonth" jdbcType="INTEGER" />
     <result column="kpi_year" jdbcType="INTEGER" property="kpiYear" />
     <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
-    <result column="finish_value" property="finishValue" jdbcType="DOUBLE" />
+    <result column="finish_value" property="finishValue" jdbcType="VARCHAR" />
     <result column="finish_desc" property="finishDesc" jdbcType="VARCHAR" />
     <result column="seft_score" property="seftScore" jdbcType="DOUBLE" />
     <result column="exam_score" property="examScore" jdbcType="DOUBLE" />
@@ -46,7 +46,7 @@
     <result column="kpi_month" property="kpiMonth" jdbcType="INTEGER" />
     <result column="kpi_year" jdbcType="INTEGER" property="kpiYear" />
     <result column="responsible_person" property="responsiblePerson" jdbcType="VARCHAR" />
-    <result column="finish_value" property="finishValue" jdbcType="DOUBLE" />
+    <result column="finish_value" property="finishValue" jdbcType="VARCHAR" />
     <result column="finish_desc" property="finishDesc" jdbcType="VARCHAR" />
     <result column="seft_score" property="seftScore" jdbcType="DOUBLE" />
     <result column="exam_score" property="examScore" jdbcType="DOUBLE" />
@@ -255,7 +255,7 @@
         #{responsiblePerson,jdbcType=VARCHAR},
       </if>
       <if test="finishValue != null" >
-        #{finishValue,jdbcType=DOUBLE},
+        #{finishValue,jdbcType=VARCHAR},
       </if>
       <if test="finishDesc != null" >
         #{finishDesc,jdbcType=VARCHAR},
@@ -315,7 +315,7 @@
         responsible_person = #{responsiblePerson,jdbcType=VARCHAR},
       </if>
       <if test="finishValue != null" >
-        finish_value = #{finishValue,jdbcType=DOUBLE},
+        finish_value = #{finishValue,jdbcType=VARCHAR},
       </if>
       <if test="finishDesc != null" >
         finish_desc = #{finishDesc,jdbcType=VARCHAR},

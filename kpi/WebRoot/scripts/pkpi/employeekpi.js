@@ -6,7 +6,7 @@
 		
 		var dg_list = $('#dg_list').datagrid({
 			 striped: true, //行背景交换
-			 nowrap: false, //单元格是否可以换行
+			 nowrap: true, //单元格是否可以换行
 			 fit: false,
 			 checkOnSelect: false,
 			 pageSize: 15, //每页显示的记录条数，默认为10     
@@ -39,6 +39,17 @@
 				$(div).each(function(){
 					$(this).parent().attr("title",$(this).text());
 				})
+				
+				if (data.total == 0) {
+                    //添加一个新数据行，第一列的值为你需要的提示信息，然后将其他列合并到第一列来，注意修改colspan参数为你columns配置的总列数
+                    $(this).datagrid('appendRow', { keyTask: '<div style="text-align:center;color:red">没有相关记录！</div>' }).datagrid('mergeCells', { index: 0, field: 'keyTask', colspan:2 })
+                    //隐藏分页导航条，这个需要熟悉datagrid的html结构，直接用jquery操作DOM对象，easyui datagrid没有提供相关方法隐藏导航条
+                    $(this).closest('div.datagrid-wrap').find('div.datagrid-pager').hide();
+                }
+                //如果通过调用reload方法重新加载数据有数据时显示出分页导航容器
+                else{
+               	 $(this).closest('div.datagrid-wrap').find('div.datagrid-pager').show();
+                }
 			 }
 		});	
 		
@@ -210,7 +221,7 @@
       
      }
      function onClickCell(index, field){
-    	 if (editIndex != index) {
+    	//if (editIndex != index) {
  			if (endEditing()) {
  				$('#dg_add').datagrid('selectRow', index).datagrid('beginEdit',
  						index);
@@ -222,54 +233,33 @@
  			} else {
  				$('#dg_add').datagrid('selectRow', editIndex);
  			}
- 		}
+ 		//}
      }
      
     /**
     * 菜单工具栏
-    */  
-    var dg_index = 1;	
-	function editEmployeeKpi() {
-		var row = $('#dg_list').datagrid('getSelected');
-		if (row) {		
-			
-			toolOp.loadData(row.id);			
-			
-			$('#dg_add').datagrid({
-				 striped: true, //行背景交换
-				 url:"../kpiYear/getKpiEmployeeDetail.action?id=" + row.id,
-				 onLoadSuccess : function(data) {
-					 if(data.rows.length == 0 && dg_index == 1){
-						 dg_index++;
-						//新增默认行	
-						$('#dg_add').datagrid('loadData', { total: 0, rows: [] }); 
-						var data_add = [];
-						for(var i =1 ; i<= 9; i++){
-							data_add.push({
-								"id" :"",
-								"workStage" : "",
-								"taskDivision":"",	
-								"workContent":"",		
-								"stageResult":"",		
-								"startTime" : "",
-								"endTime" : ""
-							})
-						}
-						$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
-						dg_index = 1;
-					 }
-					 else{
-						 //alert('11111111');
-					 }								
-				 }
-			});	
-				
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle','制定员工月度pbc');
-	        $('#fm').form('clear');			
+    */      	
+	function editEmployeeKpi() {			
+		
+		//新增默认行	
+		$('#dg_add').datagrid('loadData', { total: 0, rows: [] }); 
+		var data_add = [];
+		for(var i =1 ; i<= 9; i++){
+			data_add.push({
+				"id" :"",
+				"workStage" : "",
+				"taskDivision":"",	
+				"workContent":"",		
+				"stageResult":"",		
+				"startTime" : "",
+				"endTime" : ""
+			})
 		}
-		else{
-			$.messager.alert("提示", "请选择一条记录！");
-		}	
+		$('#dg_add').datagrid('loadData', { total: data_add.length, rows: data_add });
+			
+		$('#dlg').dialog('open').dialog('center').dialog('setTitle','新增员工月度pbc');
+        $('#fm').form('clear');			
+		
 	}
 	
 	function endEdit(){
@@ -374,18 +364,18 @@
 	 * @param field
 	 */	
 	function onListClickCell(index, field){
-	   	 if (listIndex != index) {
-				if (endListEditing()) {
-					$('#dg_list').datagrid('selectRow', index).datagrid('beginEdit',index);
-					 var ed = $('#dg_list').datagrid('getEditor', {index:index,field:field});
-					 if (ed){
-	                     ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
-	                 }
-					 listIndex = index;
-				} else {
-					$('#dg_list').datagrid('selectRow', listIndex);
-				}
-		}
+	   	//if (listIndex != index) {
+			if (endListEditing()) {
+				$('#dg_list').datagrid('selectRow', index).datagrid('beginEdit',index);
+				 var ed = $('#dg_list').datagrid('getEditor', {index:index,field:field});
+				 if (ed){
+                     ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                 }
+				 listIndex = index;
+			} else {
+				$('#dg_list').datagrid('selectRow', listIndex);
+			}
+		//}
 	 }
 	
 	/**
@@ -455,6 +445,7 @@
 	 */
 	function saveEmployeePbcTask() {
 		var year = $("select[comboname=kpiYear]").combobox("getValue");
+		var month = $("select[comboname=kpiMonth]").combobox("getValue");
 		var orderId = "";
 		var taskName = "";
 		var taskId = "";
@@ -472,8 +463,9 @@
 		$.messager.confirm('确认','提交申请之后,员工月度pbc将不可编辑!',
 			function(r) {
 			if (r) {
-				$.post('../kpiMonth/saveEmployeePbcApprove.action?status=2', {
+				$.post('../kpiMonth/saveEmployeePbcApprove.action', {
 					year : year,
+					month:month,
 					orderId:orderId,
 					taskId:taskId,
 					taskName:taskName

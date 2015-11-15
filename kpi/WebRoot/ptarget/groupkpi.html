@@ -45,7 +45,7 @@
 	</div>
 	<table id="dg_list" title="年度关键任务" class="easyui-datagrid" url="../kpiYear/getKpiGroup"
 		 toolbar="#toolbar" pagination="true"
-		rownumbers="true" fitColumns="false" singleSelect="true">
+		rownumbers="true" fitColumns="true"  singleSelect="true" style="height: 200px">
 		<thead data-options="frozen:true">
             <tr>
                 <th field="id" hidden="true">id</th>
@@ -74,7 +74,7 @@
 		<a	href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
 			iconCls="icon-remove" plain="true" onclick="destroyKpi()">删除</a> 
 		<a	href="javascript:void(0)" class="easyui-linkbutton" style="display: none;"
-			iconCls="icon-save" plain="true" onclick="saveTask()">任务下发</a>
+			iconCls="icon-remove" plain="true" onclick="saveTask()">任务下发</a>
 	</div>
 
 	<div id="dlg" class="easyui-dialog"
@@ -86,7 +86,7 @@
 				<label>关键任务:</label> 
 				<input name="keyTask" class="easyui-textbox"
 					data-options="multiline:true" style="height:40px;width:400px; "
-					required="true">
+					required="true" >
 			</div>
 
 			<table id="dg_add" title="请在下面列表中填写主要事项" rownumbers="true"
@@ -112,6 +112,7 @@
 	                                textField:'deptName',
 	                                multiple:true,
 	                                method:'get',
+	                                editable:false,
 	                                url:'../user/dept',	                             
 	                                required:false
 	                            }

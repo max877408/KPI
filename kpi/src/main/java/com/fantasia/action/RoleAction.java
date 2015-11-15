@@ -42,8 +42,18 @@ public class RoleAction extends BaseAction {
 		List<PubRole> list = pubRoleService.queryRoleList(pubRole);
 		
 		if(list != null && list.size() > 0){
-			rtnMsg.setCode("100");
-			rtnMsg.setErrorMsg("角色已存在!");
+			if(!pubRole.getId().equalsIgnoreCase(list.get(0).getId())){
+				rtnMsg.setCode("100");
+				rtnMsg.setErrorMsg("角色已存在!");
+			}
+			else{
+				if(StringUtils.isEmpty(pubRole.getId())){
+					pubRoleService.insert(pubRole);
+				}
+				else{
+					pubRoleService.update(pubRole);
+				}
+			}
 		}
 		else{
 			if(StringUtils.isEmpty(pubRole.getId())){

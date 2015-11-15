@@ -4,7 +4,7 @@
 		var dg_list = $('#dg_list').datagrid({
 			 striped: true, //行背景交换
 			 nowrap: false, //单元格是否可以换行
-			 fit: false,
+			 fit: false,				
 			 checkOnSelect: false,
 			 pageSize: 15, //每页显示的记录条数，默认为10     
 		     pageList: [15, 20, 30, 40, 50, 100],
@@ -20,7 +20,19 @@
 				  }
 				 else{
 					 tooBar.menuStatus('1');
-				 }	
+				 }				 
+				 
+				 if (data.total == 0) {
+                     //添加一个新数据行，第一列的值为你需要的提示信息，然后将其他列合并到第一列来，注意修改colspan参数为你columns配置的总列数
+                     $(this).datagrid('appendRow', { keyTask: '<div style="text-align:center;color:red">没有相关记录！</div>' }).datagrid('mergeCells', { index: 0, field: 'keyTask', colspan:2 })
+                     //隐藏分页导航条，这个需要熟悉datagrid的html结构，直接用jquery操作DOM对象，easyui datagrid没有提供相关方法隐藏导航条
+                     $(this).closest('div.datagrid-wrap').find('div.datagrid-pager').hide();
+                 }
+                 //如果通过调用reload方法重新加载数据有数据时显示出分页导航容器
+                 else{
+                	 $(this).closest('div.datagrid-wrap').find('div.datagrid-pager').show();
+                 }
+                	
 			 }
 		});
 		
@@ -102,7 +114,8 @@
 	
 		var $dg = $("#dg_add");
 
-		var dg_add = $('#dg_add').datagrid({					
+		var dg_add = $('#dg_add').datagrid({	
+			checkOnSelect: false,
 			toolbar : [ {
 				text : "添加",
 				iconCls : "icon-add",
@@ -155,7 +168,7 @@
 	
 	}
 	function onClickCell(index, field) {
-		if (editIndex != index) {
+		//if (editIndex != index) {
 			if (endEditing()) {
 				$('#dg_add').datagrid('selectRow', index).datagrid('beginEdit',
 						index);
@@ -167,7 +180,7 @@
 			} else {
 				$('#dg_add').datagrid('selectRow', editIndex);
 			}
-		}
+		//}
 	}
 	
 	/*
@@ -247,8 +260,9 @@
 	}
 	
 	function saveKpiGroup() {
-		endEdit();
+		endEdit();		
 		var $dg = $("#dg_add");
+		//$dg.datagrid("clearSelections");
 		if ($dg.datagrid('getChanges').length) {
 			
 			//设置主要事项
@@ -299,6 +313,9 @@
 						$('#dlg').dialog('close'); // close the dialog
 						$('#dg_list').datagrid('reload'); // reload the user data
 					}
+					else{
+						$.messager.alert("提示",rsp.errorMsg);
+					}
 				}, "JSON").error(function() {
 					$.messager.alert("提示", "提交错误了！");
 				});
@@ -315,6 +332,9 @@
 					$.messager.alert("提示", "提交成功！");
 					$('#dlg').dialog('close'); // close the dialog
 					$('#dg_list').datagrid('reload'); // reload the user data
+				}
+				else{
+					$.messager.alert("提示",rsp.errorMsg);
 				}
 			}, "JSON").error(function() {
 				$.messager.alert("提示", "提交错误了！");
@@ -389,11 +409,7 @@
 						$.messager.alert("提示", "操作成功！");
 						$('#dg_list').datagrid('reload');
 						//
-					} else {
-						/*$.messager.show({ // show error message
-							title : 'Error',
-							msg : result.errorMsg
-						});*/
+					} else {					
 						$.messager.alert("提示", result.errorMsg);
 					}
 				}, 'json');
