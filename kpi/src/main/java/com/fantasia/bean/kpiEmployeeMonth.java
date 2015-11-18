@@ -35,8 +35,6 @@ public class kpiEmployeeMonth {
 
     private String status;
     
-    private int sort ;
-    
     private String auditStatus;
 
     public String getAuditStatus() {
@@ -178,16 +176,8 @@ public class kpiEmployeeMonth {
     public String getStatus() {
         return status;
     }
-    
-    public int getSort() {
-		return sort;
-	}
-    
-	public void setSort(int sort) {
-		this.sort = sort;
-	}
 
-	public void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
 

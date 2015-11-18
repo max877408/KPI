@@ -18,8 +18,6 @@ public class KpiEmployeeYear {
 	private String startTime;
 
 	private String endTime;
-	
-	private int sort;
 
 	public String getStartTime() {
 		return startTime;
@@ -111,14 +109,6 @@ public class KpiEmployeeYear {
 
 	public void setStatus(String status) {
 		this.status = status == null ? null : status.trim();
-	}
-
-	public int getSort() {
-		return sort;
-	}
-
-	public void setSort(int sort) {
-		this.sort = sort;
 	}
 
 	public String getCreateBy() {

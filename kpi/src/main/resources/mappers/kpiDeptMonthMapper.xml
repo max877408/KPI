@@ -18,7 +18,6 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_score" property="isScore" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
-    <result column="sort"   property="sort" jdbcType="INTEGER" />
     <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -81,8 +80,8 @@
 		m.audit_status
 	FROM
 		KPI_DEPT_MONTH M
-	LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON M.KPI_ID  = D.ID
-	LEFT JOIN KPI_DEPT_YEAR Y ON  D.DEPT_KPI_ID = Y.ID 
+	LEFT JOIN KPI_DEPT_YEAR Y ON  M.KPI_ID = Y.ID 
+	LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON D.DEPT_KPI_ID = Y.ID
 	LEFT JOIN KPI_GROUP_YEAR G ON Y.GROUP_ID = G.ID
 	<where>	
 			Y.audit_status = '3' AND M.STATUS = '1'	
@@ -96,11 +95,11 @@
 	        	and  M.KPI_MONTH = #{month}
 	        </if>
 	        <if test="deptId != null" >
-	        	and M.dept_Id = #{deptId}
+	        	and G.dept = #{deptId}
 	        </if>
 	        
 	</where>	
-	ORDER BY G.DETAIL_ITEM,M.sort
+	ORDER BY G.KEY_TASK,G.KEY_ITEM,D.KEY_POINT,M.CREATE_TIME DESC
 	LIMIT #{start} ,#{rows}
   </select>
   
@@ -135,8 +134,8 @@
 		END AS audit_status		
 	FROM
 		KPI_DEPT_MONTH M
-	LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON M.KPI_ID  = D.ID
-	LEFT JOIN KPI_DEPT_YEAR Y ON  D.DEPT_KPI_ID = Y.ID 
+	LEFT JOIN KPI_DEPT_YEAR Y ON  M.KPI_ID = Y.ID 
+	LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON D.DEPT_KPI_ID = Y.ID
 	LEFT JOIN KPI_GROUP_YEAR G ON Y.GROUP_ID = G.ID
 	<where>	
 			Y.audit_status = '3' 
@@ -154,11 +153,11 @@
 	        	and  M.KPI_MONTH = #{month}
 	        </if>
 	        <if test="deptId != null" >
-	        	and M.dept_Id = #{deptId}
+	        	and G.dept = #{deptId}
 	        </if>
 	        
 	</where>	
-	ORDER BY G.DETAIL_ITEM,M.sort
+	ORDER BY G.KEY_TASK,G.KEY_ITEM,D.KEY_POINT,M.CREATE_TIME DESC
 	LIMIT #{start} ,#{rows}
   </select>
   
@@ -213,9 +212,6 @@
       </if>
       <if test="status != null" >
         status,
-      </if>
-      <if test="sort != null" >
-        sort,
       </if>
       <if test="createBy != null" >
         create_by,
@@ -279,9 +275,6 @@
       <if test="status != null" >
         #{status,jdbcType=CHAR},
       </if>
-      <if test="sort != null" >
-        #{sort,jdbcType=INTEGER},
-      </if>
       <if test="createBy != null" >
         #{createBy,jdbcType=VARCHAR},
       </if>
@@ -341,7 +334,7 @@
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
-      </if>      
+      </if>
       <if test="auditStatus != null" >
         audit_status = #{auditStatus,jdbcType=CHAR},
       </if>

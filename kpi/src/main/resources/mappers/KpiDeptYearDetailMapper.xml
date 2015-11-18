@@ -9,7 +9,6 @@
     <result column="start_time" property="startTime" jdbcType="VARCHAR" />
     <result column="end_time" property="endTime" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
-    <result column="sort"   property="sort" jdbcType="INTEGER" />
     <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -38,7 +37,7 @@
 			d.create_time ASC;
 	</select>
 	
-   <select id="getKpiDeptDetailById"  resultMap="BaseResultMap">
+  	<select id="getKpiDeptDetailById"  resultMap="BaseResultMap">
 		SELECT
 			d.*
 		FROM
@@ -47,7 +46,7 @@
 		WHERE
 			y.id = #{0}
 		ORDER BY
-			d.sort;	
+			d.create_time DESC;	
 	</select>
 	
 	<select id="selectById"  resultMap="BaseResultMap">
@@ -85,9 +84,6 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="sort != null" >
-        sort,
-      </if>
       <if test="createBy != null" >
         create_by,
       </if>
@@ -122,9 +118,6 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
-      </if>
-      <if test="sort != null" >
-        #{sort,jdbcType=INTEGER},
       </if>
       <if test="createBy != null" >
         #{createBy,jdbcType=VARCHAR},

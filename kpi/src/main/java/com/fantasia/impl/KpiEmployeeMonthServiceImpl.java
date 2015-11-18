@@ -146,29 +146,28 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 			SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 			for (KpiEmployeeYearBean kpiEmployeeYear : list) {
 				try {
+					Date startDate = sdf.parse(kpiEmployeeYear.getStartTime()) ;
+					Date endDate = sdf.parse(kpiEmployeeYear.getEndTime()) ;
+					Calendar startTime = Calendar.getInstance();
+					startTime.setTime(startDate);
+					Calendar endTime = Calendar.getInstance();
+					endTime.setTime(endDate);
+					
+					
+					if(startTime.get(Calendar.YEAR)== endTime.get(Calendar.YEAR)){
+						for(int month = (startTime.get(Calendar.MONTH)+1); month <= (endTime.get(Calendar.MONTH) + 1); month++){
+							kpiEmployeeMonth record = new kpiEmployeeMonth();
 							
-					//获取员工年度工作阶段
-					List<KpiEmployeeYear> lstDetail = kpiEmployeeYearMapper.getKpiEmployeeDetail(kpiEmployeeYear.getId());
-					int j = 0;
-					if(lstDetail != null && lstDetail.size() > 0){
-						for (KpiEmployeeYear temp : lstDetail) {
-							
-							Date startDate = sdf.parse(temp.getStartTime()) ;
-							Date endDate = sdf.parse(temp.getEndTime()) ;
-							Calendar startTime = Calendar.getInstance();
-							startTime.setTime(startDate);
-							Calendar endTime = Calendar.getInstance();
-							endTime.setTime(endDate);							
-							
-							if(startTime.get(Calendar.YEAR)== endTime.get(Calendar.YEAR)){
-								for(int month = (startTime.get(Calendar.MONTH)+1); month <= (endTime.get(Calendar.MONTH) + 1); month++){
-									kpiEmployeeMonth record = new kpiEmployeeMonth();
-							
+							//获取年度计划明细
+							 List<KpiEmployeeYear> lstDetail = kpiEmployeeYearMapper.getKpiEmployeeDetail(kpiEmployeeYear.getId());
+							if(lstDetail != null && lstDetail.size() > 0){
+								for (KpiEmployeeYear temp : lstDetail) {
+									
 									//任务分工
 									if(!StringUtils.isEmpty(temp.getTaskDivision())){
 										String[] taskDivision = temp.getTaskDivision().split(",");
 										for(int i=0; i< taskDivision.length; i++){
-											record.setKpiId(temp.getId());
+											record.setKpiId(temp.getKpiId());
 											record.setUserId(taskDivision[i]);
 											record.setKpiMonth(month);
 											record.setKpiYear(startTime.get(Calendar.YEAR));
@@ -176,16 +175,34 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 											record.setCreateBy(DbcContext.getUserId());
 											record.setCreateTime(new Date());
 											record.setStatus("1");
-											record.setSort(j);
 											kpiEmployeeMonthMapper.insert(record);
 										}
 									}									
 								}
 							}
 							
-							j++;				
+						/*	String resPerson = kpiEmployeeYear.getResponsiblePerson();
+							if(!StringUtils.isEmpty(resPerson)){
+								String[] pers = resPerson.split(",");
+								for(int i=0 ; i< pers.length ; i++){
+									
+									//月度绩效不存在则新增
+									List<KpiDeptMonthBean> temp = kpiEmployeeMonthMapper.getKpiEmpoyeeMonth(page);
+									if(temp == null || temp.size() == 0){
+										record.setKpiId(kpiEmployeeYear.getId());
+										record.setUserId(pers[i]);
+										record.setKpiMonth(month);
+										record.setKpiYear(startTime.get(Calendar.YEAR));
+										record.setId(Utils.getGUID());									
+										record.setCreateBy(DbcContext.getUserId());
+										record.setCreateTime(new Date());
+										record.setStatus("1");
+										kpiEmployeeMonthMapper.insert(record);
+									}
+								}
+							}*/								
 						}
-				 }
+					}
 				} catch (ParseException e) {
 					_log.error("date convert error",e);
 					e.printStackTrace();
@@ -193,7 +210,6 @@ public class KpiEmployeeMonthServiceImpl implements KpiEmployeeMonthService {
 			}
 		}
 	}
-	
 	/**
 	 * 查询员工月度PBC
 	 * @param page

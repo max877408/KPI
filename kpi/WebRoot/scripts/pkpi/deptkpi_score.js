@@ -184,7 +184,7 @@
  		} 	
     	 
  		if ($('#dg_list').datagrid('validateRow', editIndex)) { 			
-              //$('#dg_list').datagrid('endEdit', editIndex);
+              $('#dg_list').datagrid('endEdit', editIndex);
               editIndex = undefined;
               return true;
  		} else {

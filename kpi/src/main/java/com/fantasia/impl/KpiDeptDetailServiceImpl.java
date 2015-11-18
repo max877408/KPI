@@ -25,7 +25,6 @@ public class KpiDeptDetailServiceImpl implements KpiDeptDetailService {
 	@Override
 	public void SaveKpiDetail(List<KpiDeptYearDetail> list,String deptKpi) {
 		if(list != null && list.size() > 0){
-			int i = 0;
 			for (KpiDeptYearDetail kpiDeptYearDetail : list) {
 				if(!StringUtils.isAnyoneEmpty(kpiDeptYearDetail.getKeyPoint(),
 											kpiDeptYearDetail.getLeadPerson(),
@@ -45,9 +44,7 @@ public class KpiDeptDetailServiceImpl implements KpiDeptDetailService {
 						kpiDeptYearDetail.setCreateBy(DbcContext.getUserId());
 						kpiDeptYearDetail.setCreateTime(new Date());
 						kpiDeptYearDetail.setStatus("1");
-						kpiDeptYearDetail.setSort(i);						
 						kpiDeptYearDetailMapper.insert(kpiDeptYearDetail);
-						i++;
 					}
 				}
 							
