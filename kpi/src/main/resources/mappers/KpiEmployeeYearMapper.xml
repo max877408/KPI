@@ -11,6 +11,7 @@
     <result column="start_time" property="startTime" jdbcType="VARCHAR" />
     <result column="end_time" property="endTime" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="sort"   property="sort" jdbcType="INTEGER" />
     <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -85,7 +86,7 @@
 	        	and d.lead_person = #{userId}
 	        </if>	        
 		</where>
-		ORDER BY p.key_task, p.key_item, p.detail_item,d.create_time DESC		   
+		ORDER BY p.detail_item,d.sort		   
 		   
 		LIMIT #{start} ,#{rows}		
   </select>
@@ -109,7 +110,7 @@
 		LEFT JOIN kpi_group_year p ON p.ID = y.group_id
 		WHERE
 			p.STATUS = 1 and d.id = #{0}
-		ORDER BY d.create_time DESC			
+		ORDER BY d.sort 			
 	</select>
 
   <select id="getKpiEmployeeDetail"  resultMap="BaseResultMap">
@@ -119,7 +120,7 @@
 			kpi_employee_year y		
 		WHERE
 			y.STATUS = 1 and y.kpi_id = #{0}
-		ORDER BY y.create_time DESC		
+		ORDER BY y.sort 		
   </select>
    
   <insert id="insert" parameterType="com.fantasia.bean.KpiEmployeeYear" >
@@ -148,6 +149,9 @@
       </if>
       <if test="endTime != null" >
         end_time,
+      </if>
+      <if test="sort != null" >
+        sort,
       </if>
       <if test="status != null" >
         status,
@@ -189,6 +193,9 @@
       </if>
       <if test="endTime != null" >
         #{endTime,jdbcType=DATE},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},

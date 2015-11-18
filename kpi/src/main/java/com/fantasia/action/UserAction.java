@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -45,13 +46,24 @@ public class UserAction extends BaseAction {
 	@RequestMapping(value = "/login")
 	@ResponseBody
 	public ResultMsg login(PubUser user){		
+		ResultMsg  resultMsg = new ResultMsg();	
+		if(StringUtils.isEmpty(user.getToken())){
+			resultMsg.setCode("101");
+			resultMsg.setErrorMsg("请输入用户名!");
+			return resultMsg;
+		}
 		
 		PubUser pubUser  = pubUserMapper.queryUser(user.getToken());
-		pubUser.setToken(user.getToken());
-		UserPermission.loginUsers.put(user.getToken(), pubUser);
-		
-		ResultMsg  resultMsg = new ResultMsg();		
-		CookieTool.addCookie(response, "token", user.getToken(), Integer.MAX_VALUE);
+		if(pubUser != null){
+			pubUser.setToken(user.getToken());
+			UserPermission.loginUsers.put(pubUser.getId(), pubUser);
+				
+			CookieTool.addCookie(response, "token", pubUser.getId(), Integer.MAX_VALUE);
+		}
+		else{
+			resultMsg.setCode("101");
+			resultMsg.setErrorMsg("用户或密码不正确!");
+		}
 		
 		return resultMsg;
 	}

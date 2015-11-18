@@ -35,6 +35,8 @@ public class kpiDeptMonth {
 
     private String status;
     
+    private int sort;
+    
     private String auditStatus;
 
     public String getAuditStatus() {
@@ -179,9 +181,17 @@ public class kpiDeptMonth {
 
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
-    }
+    }    
 
-    public String getCreateBy() {
+    public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
+
+	public String getCreateBy() {
         return createBy;
     }
 

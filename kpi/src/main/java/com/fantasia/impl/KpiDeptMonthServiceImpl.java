@@ -28,6 +28,7 @@ import com.fantasia.core.Utils;
 import com.fantasia.dao.KpiDeptYearMapper;
 import com.fantasia.dao.kpiDeptMonthMapper;
 import com.fantasia.exception.ServiceException;
+import com.fantasia.service.KpiDeptDetailService;
 import com.fantasia.service.KpiDeptMonthService;
 import com.fantasia.snakerflow.process.KpiWorkFlow;
 import com.fantasia.workflow.KpiFlowService;
@@ -42,6 +43,9 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 
 	@Autowired
 	private KpiDeptYearMapper kpiDeptYearMapper;
+	
+	@Autowired
+	private KpiDeptDetailService kpiDeptDetailService;
 
 	@Autowired
 	private KpiWorkFlow kpiWorkFlow;
@@ -54,75 +58,7 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 	private static Logger _log = LoggerFactory
 			.getLogger(KpiDeptMonthServiceImpl.class);
 
-	/**
-	 * 新增部门月度考核指标
-	 * 
-	 * @param list
-	 */
-	public void inertDeptMonthKpi(List<KpiDeptYearDetail> list) {
-		if (list != null && list.size() > 0) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			for (KpiDeptYearDetail kpiDeptYearDetail : list) {
-				try {
-					Date startDate = sdf
-							.parse(kpiDeptYearDetail.getStartTime());
-					Date endDate = sdf.parse(kpiDeptYearDetail.getEndTime());
-					Calendar startTime = Calendar.getInstance();
-					startTime.setTime(startDate);
-					Calendar endTime = Calendar.getInstance();
-					endTime.setTime(endDate);
-
-					if (startTime.get(Calendar.YEAR) == endTime
-							.get(Calendar.YEAR)) {
-						for (int month = startTime.get(Calendar.MONTH) + 1; month <= endTime
-								.get(Calendar.MONTH) + 1; month++) {
-							kpiDeptMonth record = new kpiDeptMonth();
-							record.setId(Utils.getGUID());
-							record.setKpiId(kpiDeptYearDetail.getId());
-							record.setKpiMonth(month);
-							record.setKpiYear(startTime.get(Calendar.YEAR));
-							record.setCreateBy(DbcContext.getAdminId());
-							record.setCreateTime(new Date());
-							record.setStatus("1");
-							kpiDeptMonthMapper.insert(record);
-						}
-					} else {
-						// 跨年情况
-						for (int month = startTime.get(Calendar.MONTH) + 1; month <= 12; month++) {
-							kpiDeptMonth record = new kpiDeptMonth();
-							record.setId(Utils.getGUID());
-							record.setKpiId(kpiDeptYearDetail.getId());
-							record.setKpiMonth(++month);
-							record.setKpiYear(startTime.get(Calendar.YEAR));
-							record.setCreateBy(DbcContext.getAdminId());
-							record.setCreateTime(new Date());
-							record.setStatus("1");
-							kpiDeptMonthMapper.insert(record);
-						}
-
-						for (int month = 1; month <= endTime
-								.get(Calendar.MONTH) + 1; month++) {
-							kpiDeptMonth record = new kpiDeptMonth();
-							record.setId(Utils.getGUID());
-							record.setKpiId(kpiDeptYearDetail.getId());
-							record.setKpiMonth(month);
-							record.setKpiYear(endTime.get(Calendar.YEAR));
-							record.setResponsiblePerson(kpiDeptYearDetail
-									.getLeadPerson());
-							record.setCreateBy(DbcContext.getAdminId());
-							record.setCreateTime(new Date());
-							record.setStatus("1");
-							kpiDeptMonthMapper.insert(record);
-						}
-					}
-
-				} catch (ParseException e) {
-					_log.error("date convert error", e);
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+	
 
 	/**
 	 * 新增部门月度考核指标
@@ -134,45 +70,55 @@ public class KpiDeptMonthServiceImpl implements KpiDeptMonthService {
 		page.setStart(0);
 		page.setRows(PageData.MAX_ROWS);
 
-		// 查询部门年度计划
+		// 查询员工年度计划
 		List<KpiDeptYearBean> list = kpiDeptYearMapper.getKpiDept(page);
 
 		if (list != null && list.size() > 0) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			for (KpiDeptYearBean kpiDeptYearDetail : list) {
-				try {
-					Date startDate = sdf
-							.parse(kpiDeptYearDetail.getStartTime());
-					Date endDate = sdf.parse(kpiDeptYearDetail.getEndTime());
-					Calendar startTime = Calendar.getInstance();
-					startTime.setTime(startDate);
-					Calendar endTime = Calendar.getInstance();
-					endTime.setTime(endDate);
+				
+				//获取部门年度计划关键节点
+				List<KpiDeptYearDetail> detaillist =kpiDeptDetailService.getKpiDeptDetailById(kpiDeptYearDetail.getId());
+				if(detaillist != null && detaillist.size() > 0){
+					int i = 0;
+					for (KpiDeptYearDetail deptDetail : detaillist) {
+						try {
+							Date startDate = sdf.parse(deptDetail.getStartTime());
+							Date endDate = sdf.parse(deptDetail.getEndTime());
+							Calendar startTime = Calendar.getInstance();
+							startTime.setTime(startDate);
+							Calendar endTime = Calendar.getInstance();
+							endTime.setTime(endDate);
 
-					if (startTime.get(Calendar.YEAR) == endTime
-							.get(Calendar.YEAR)) {
-						for (int month = startTime.get(Calendar.MONTH) + 1; month <= endTime
-								.get(Calendar.MONTH) + 1; month++) {
-							kpiDeptMonth record = new kpiDeptMonth();
-							record.setId(Utils.getGUID());
-							record.setKpiId(kpiDeptYearDetail.getId());
-							record.setDeptId(page.getDeptId());
-							record.setKpiMonth(month);
-							record.setKpiYear(startTime.get(Calendar.YEAR));
-							record.setCreateBy(DbcContext.getAdminId());
-							record.setCreateTime(new Date());
-							record.setStatus("1");
-							kpiDeptMonthMapper.insert(record);
+							//根据当前部门关键节点拆分部门月度计划
+							if (startTime.get(Calendar.YEAR) == endTime.get(Calendar.YEAR)) {
+								for (int month = startTime.get(Calendar.MONTH) + 1; month <= endTime
+										.get(Calendar.MONTH) + 1; month++) {
+									kpiDeptMonth record = new kpiDeptMonth();
+									record.setId(Utils.getGUID());
+									record.setKpiId(deptDetail.getId());
+									record.setDeptId(page.getDeptId());
+									record.setKpiMonth(month);
+									record.setKpiYear(startTime.get(Calendar.YEAR));
+									record.setCreateBy(DbcContext.getAdminId());
+									record.setCreateTime(new Date());
+									record.setStatus("1");
+									record.setSort(i);
+									kpiDeptMonthMapper.insert(record);
+								}
+							}
+							i++;
+						} catch (ParseException e) {
+							_log.error("date convert error", e);
+							e.printStackTrace();
 						}
 					}
-
-				} catch (ParseException e) {
-					_log.error("date convert error", e);
-					e.printStackTrace();
 				}
 			}
 		}
 	}
+	
+	
 
 	/**
 	 * 查询部门月度PBC

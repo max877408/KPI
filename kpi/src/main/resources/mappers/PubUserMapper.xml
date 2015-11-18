@@ -56,7 +56,7 @@
 		LEFT JOIN pub_user_role r ON r.user_id = p.ID
 		LEFT JOIN pub_role pr ON pr.ID = r.role_id
 		WHERE
-			p. STATUS = 1 and p.user_name != '' and p.id = #{0}
+			p. STATUS = 1 and p.user_name = #{0}
 		ORDER BY
 			p.dept_id		
 	</select>

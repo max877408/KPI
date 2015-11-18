@@ -18,6 +18,7 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="is_score" property="isScore" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="sort"   property="sort" jdbcType="INTEGER" />
     <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -87,8 +88,8 @@
 		m.remark	
 	FROM
 		KPI_EMPLOYEE_MONTH M
-        LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON M.KPI_ID = D.ID
-		LEFT JOIN KPI_EMPLOYEE_YEAR E ON E.KPI_ID = D.ID
+        LEFT JOIN KPI_EMPLOYEE_YEAR E ON M.KPI_ID = E.ID
+        LEFT JOIN KPI_DEPT_YEAR_DETAIL D ON E.KPI_ID  = D.ID
 		AND E.TASK_DIVISION  LIKE '%${userId}%'
 		LEFT JOIN KPI_DEPT_YEAR Y ON Y.ID = D.dept_kpi_id
 		LEFT JOIN KPI_GROUP_YEAR G ON Y.GROUP_ID = G.ID
@@ -110,9 +111,8 @@
 	        <if test="userId != null" >
 	        	and m.user_id = #{userId}
 	        </if>
-	</where>
-	
-	ORDER BY G.KEY_TASK,G.KEY_ITEM,	G.DETAIL_ITEM,M.CREATE_TIME DESC			
+	</where>	
+	ORDER BY G.KEY_TASK,G.KEY_ITEM,	G.DETAIL_ITEM,M.sort			
 	LIMIT #{start} ,#{rows}
   </select>
 
@@ -163,6 +163,9 @@
       </if>
       <if test="isScore != null" >
         is_score,
+      </if>
+      <if test="sort != null" >
+        sort,
       </if>
       <if test="status != null" >
         status,
@@ -225,6 +228,9 @@
       </if>
       <if test="isScore != null" >
         #{isScore,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},

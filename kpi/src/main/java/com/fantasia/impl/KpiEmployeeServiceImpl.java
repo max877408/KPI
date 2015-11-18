@@ -163,6 +163,7 @@ public class KpiEmployeeServiceImpl implements KpiEmployeeService {
 	 */
 	private void SaveKpiEmployee(List<KpiEmployeeYear> list,String deptKpi){
 		if(list != null && list.size() > 0){
+			int i = 0;
 			for (KpiEmployeeYear kpiEmployeeYear : list) {
 				if(!org.springframework.util.StringUtils.isEmpty(kpiEmployeeYear.getId())){				
 					kpiEmployeeYear.setModifyBy(DbcContext.getUserId());
@@ -176,7 +177,9 @@ public class KpiEmployeeServiceImpl implements KpiEmployeeService {
 					kpiEmployeeYear.setKpiId(deptKpi);
 					kpiEmployeeYear.setCreateBy(DbcContext.getUserId());
 					kpiEmployeeYear.setCreateTime(new Date());
+					kpiEmployeeYear.setSort(i);
 					kpiEmployeeYearMapper.insert(kpiEmployeeYear);
+					i++;
 				}				
 			}
 			
